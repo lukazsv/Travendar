@@ -106,12 +106,15 @@
       <span data-i18n="emptyText"></span><br>
       <span data-i18n="emptyAdd"></span> <button class="link" type="button" id="demoBtn" data-i18n="loadDemo"></button>.
     </div>
-    <button class="add-btn" id="addBtn" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-      <span data-i18n="addTrip"></span>
-    </button>
-    <div class="footer-links">
-      <button class="link" type="button" id="clearBtn" data-i18n="clearTrips"></button>
+    <!-- Stays pinned to the bottom of the trips column on wider screens (layout.css). -->
+    <div class="trips-actions">
+      <button class="add-btn" id="addBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-i18n="addTrip"></span>
+      </button>
+      <div class="footer-links">
+        <button class="link" type="button" id="clearBtn" data-i18n="clearTrips"></button>
+      </div>
     </div>
   </main>
 
