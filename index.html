@@ -53,6 +53,7 @@
 <link rel="stylesheet" href="src/styles/trips.css">
 <link rel="stylesheet" href="src/styles/settings.css">
 <link rel="stylesheet" href="src/styles/country-picker.css">
+<link rel="stylesheet" href="src/styles/date-picker.css">
 <link rel="stylesheet" href="src/styles/footer.css">
 <link rel="stylesheet" href="src/styles/layout.css">
 
@@ -74,7 +75,9 @@
   </header>
 
   <section class="preview" data-i18n-aria="preview">
-    <canvas id="cv" width="1080" height="1920" role="img"></canvas>
+    <button class="cv-zoom" id="zoomBtn" type="button" data-i18n-aria="zoomPreview">
+      <canvas id="cv" width="1080" height="1920" role="img"></canvas>
+    </button>
     <div class="actions">
       <button class="btn primary" id="downloadBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
@@ -229,6 +232,40 @@
     </div>
     <div class="picker-search"><input type="search" id="pickerSearch" data-i18n-ph="search" autocomplete="off" enterkeyhint="done"></div>
     <div class="picker-list" id="pickerList"></div>
+  </div>
+</dialog>
+
+<dialog id="datePicker" class="date-dialog" aria-labelledby="datePickerTitle">
+  <div class="dp">
+    <div class="picker-head">
+      <h2 id="datePickerTitle" tabindex="-1"></h2>
+      <button class="close-btn" type="button" id="datePickerClose" data-i18n-aria="done">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+      </button>
+    </div>
+    <div class="dp-summary">
+      <div class="dp-field"><span data-i18n="from"></span><strong id="dpStart"></strong></div>
+      <div class="dp-field"><span data-i18n="to"></span><strong id="dpEnd"></strong></div>
+    </div>
+    <div class="dp-body">
+      <button class="close-btn dp-nav dp-prev" type="button" id="dpPrev" data-i18n-aria="prevMonth">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5" /></svg>
+      </button>
+      <button class="close-btn dp-nav dp-next" type="button" id="dpNext" data-i18n-aria="nextMonth">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5" /></svg>
+      </button>
+      <div class="dp-months" id="dpMonths"></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Enlarged view of the image, opened by tapping the preview; swipe or tap to close. -->
+<dialog id="lightbox" class="lightbox" data-i18n-aria="previewAlt">
+  <div class="lightbox-frame" id="lightboxFrame" tabindex="-1">
+    <button class="lightbox-close" type="button" id="lightboxClose" data-i18n-aria="done">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
+    </button>
+    <canvas id="lightboxCanvas" width="1080" height="1920" role="img"></canvas>
   </div>
 </dialog>
 

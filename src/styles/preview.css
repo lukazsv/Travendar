@@ -16,14 +16,24 @@
   padding: 28px;
 }
 
-#cv {
+/* The image is wrapped in a button that opens it full screen (see ui/lightbox.js). */
+.cv-zoom {
   display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 14px;
+  cursor: zoom-in;
   /* Fit the 9:16 image to the viewport height:
      viewport − app padding (40) − panel padding (56) − panel border (2) − gap + button (64) */
   width: min(100%, calc((100vh - 162px) * 9 / 16));
   width: min(100%, calc((100dvh - 162px) * 9 / 16));
+}
+#cv {
+  display: block;
+  width: 100%;
   height: auto;
-  border-radius: 14px;
+  border-radius: inherit;
   box-shadow: var(--canvas-shadow);
 }
 
@@ -35,7 +45,7 @@
 }
 
 @media (max-width: 860px) {
-  #cv {
+  .cv-zoom {
     width: min(100%, calc(64vh * 9 / 16));
     width: min(100%, calc(64svh * 9 / 16));
     border-radius: 12px;
@@ -47,4 +57,93 @@
     flex: 1;
     padding: 0 14px;
   }
+}
+
+/* ---- Enlarged view (lightbox) ---- */
+
+/* The dialog covers the viewport (transparent) so a tap anywhere closes it; the frame
+   holds the image and the ✕ and is what follows the finger when swiping. */
+dialog.lightbox {
+  --lightbox-width: min(90vw, calc(82vh * 9 / 16));
+  --drag: 0; /* 0…1 while swiping, fades the backdrop (set from lightbox.js) */
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  touch-action: none; /* the swipe is handled in JS; no page scroll or zoom meanwhile */
+}
+@supports (height: 1dvh) {
+  dialog.lightbox {
+    --lightbox-width: min(90vw, calc(82dvh * 9 / 16));
+  }
+}
+dialog.lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+dialog.lightbox::backdrop {
+  background: rgba(10, 10, 9, calc(0.72 * (1 - var(--drag, 0))));
+  backdrop-filter: blur(6px);
+}
+
+.lightbox-frame {
+  position: relative;
+  width: var(--lightbox-width);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.lightbox.dragging .lightbox-frame {
+  transition: none;
+}
+.lightbox.closing .lightbox-frame {
+  opacity: 0;
+}
+#lightboxCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Red ✕ above the top-right corner of the image, no border. */
+.lightbox-close {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: -18px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  color: #ff453a;
+}
+.lightbox-close svg {
+  width: 22px;
+  height: 22px;
+}
+.lightbox-close:hover {
+  color: #ff6961;
+}
+/* No ring around the ✕; keyboard focus is shown as a soft round highlight instead. */
+.lightbox-close:focus {
+  outline: none;
+}
+.lightbox-close:focus-visible {
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+}
+.lightbox-frame:focus {
+  outline: none; /* focused on open only so the ✕ does not get focus (and a highlight) on touch */
 }

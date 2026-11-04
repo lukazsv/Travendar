@@ -7,6 +7,23 @@ import { isISODate, parseISODate } from './dates.js';
 /** Safety cap so a typo like year 20026 cannot freeze the page. */
 const MAX_TRIP_DAYS = 1500;
 
+/**
+ * Grid column (0–6) of the 1st of a month in a week that starts on Monday, or on
+ * Sunday when `weekStartsSunday` is true. Used by the image and the date picker.
+ * @param {number} year
+ * @param {number} month  0–11
+ * @param {boolean} weekStartsSunday
+ */
+export function firstColumnOfMonth(year, month, weekStartsSunday) {
+  const weekday = new Date(year, month, 1).getDay(); // 0 = Sunday
+  return weekStartsSunday ? weekday : (weekday + 6) % 7;
+}
+
+/** Number of days in a month (0–11). */
+export function daysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
 /** Key used for a day in the day map: month (0–11) × 100 + day of month. */
 export const dayKey = (month, day) => month * 100 + day;
 

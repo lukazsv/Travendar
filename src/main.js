@@ -11,9 +11,11 @@ import { onFlagImageLoad } from './render/flags.js';
 import { initPreview, drawNow, scheduleDraw } from './ui/preview.js';
 import { initTrips, renderTrips, updateStats } from './ui/trips.js';
 import { initCountryPicker, refreshCountryPicker } from './ui/country-picker.js';
+import { initDateRangePicker, refreshDateRangePicker } from './ui/date-range-picker.js';
 import { initSettings, syncSettings } from './ui/settings.js';
 import { initLanguageMenu } from './ui/language-menu.js';
 import { initExport } from './ui/export.js';
+import { initLightbox } from './ui/lightbox.js';
 import { initBackup } from './ui/backup.js';
 import { registerServiceWorker } from './pwa.js';
 
@@ -21,15 +23,18 @@ applyI18n();
 initPreview();
 initTrips();
 initCountryPicker();
+initDateRangePicker();
 initSettings();
 initLanguageMenu();
 initExport();
+initLightbox();
 initBackup(syncSettings);
 
 onChange(change => {
   if (change.lang) applyI18n();
   if (change.trips || change.lang || change.year || change.flagStyle) renderTrips();
   if (change.lang || change.flagStyle) refreshCountryPicker();
+  if (change.lang) refreshDateRangePicker();
   updateStats();
   scheduleDraw();
 });

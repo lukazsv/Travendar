@@ -1,9 +1,9 @@
 /**
  * Trip list: one card per trip with a country button, start/end dates and a delete button.
  *
- * The list is rebuilt by renderTrips() when trips are added/removed or their country,
- * the year or the language changes. Typing a date does NOT rebuild it (that would steal
- * focus from the date input); only that card's summary line is updated.
+ * Dates are chosen in the date range picker (two clicks: start, then end). Adding a trip
+ * walks through the country picker and then straight into the date picker.
+ * The list is rebuilt by renderTrips() after every change to trips, the year or the language.
  */
 
 import { state, commit, newId } from '../state.js';
@@ -13,7 +13,8 @@ import { buildDayMap, travelStats } from '../core/calendar.js';
 import { COUNTRY_BY_CODE } from '../core/countries.js';
 import { flagHTML } from '../render/flags.js';
 import { openCountryPicker } from './country-picker.js';
-import { ICON_CHEVRON, ICON_GLOBE, ICON_TRASH } from './icons.js';
+import { openDateRangePicker, formatShortDate } from './date-range-picker.js';
+import { ICON_CALENDAR, ICON_CHEVRON, ICON_GLOBE, ICON_TRASH } from './icons.js';
 import { showToast } from './toast.js';
 import { byId, escapeHtml as esc } from '../utils/html.js';
 
@@ -46,8 +47,6 @@ export function initTrips() {
   statsEl = byId('stats');
 
   listEl.addEventListener('click', onListClick);
-  listEl.addEventListener('input', onDateInput);
-  listEl.addEventListener('change', onDateInput);
 
   byId('addBtn').addEventListener('click', addTrip);
   byId('demoBtn').addEventListener('click', loadDemoTrips);
@@ -80,11 +79,20 @@ function tripCard(trip) {
       <button class="icon-btn" type="button" data-act="delete" aria-label="${esc(t('deleteTrip'))}">${ICON_TRASH}</button>
     </div>
     <div class="dates">
-      <label class="field"><span>${esc(t('from'))}</span><input type="date" data-field="start" value="${esc(trip.start || '')}"></label>
-      <label class="field"><span>${esc(t('to'))}</span><input type="date" data-field="end" value="${esc(trip.end || '')}" min="${esc(trip.start || '')}"></label>
+      ${dateButton(trip, 'start', t('from'))}
+      ${dateButton(trip, 'end', t('to'))}
     </div>
     <div class="trip-meta"></div>
   </li>`;
+}
+
+/** One of the two date fields of a card; both open the range picker. */
+function dateButton(trip, part, label) {
+  const value = isISODate(trip[part]) ? formatShortDate(trip[part]) : '';
+  return `<button class="date-field" type="button" data-act="dates" data-part="${part}" aria-label="${esc(`${label}: ${value || t('noDate')}`)}">
+    <span class="date-label">${esc(label)}</span>
+    <span class="date-value${value ? '' : ' empty'}">${esc(value || t('noDate'))}${ICON_CALENDAR}</span>
+  </button>`;
 }
 
 /** The small line under a trip: its length, or what is missing / wrong. */
@@ -112,6 +120,7 @@ function onListClick(e) {
   if (!button) return;
   const id = button.closest('.trip').dataset.id;
   if (button.dataset.act === 'pick') pickCountryFor(id);
+  if (button.dataset.act === 'dates') pickDatesFor(id, button.dataset.part);
   if (button.dataset.act === 'delete') deleteTrip(id);
 }
 
@@ -130,27 +139,8 @@ function deleteTrip(id) {
   });
 }
 
-function onDateInput(e) {
-  const input = e.target.closest('input[data-field]');
-  if (!input) return;
-  const li = input.closest('.trip');
-  const trip = findTrip(li.dataset.id);
-  trip[input.dataset.field] = input.value;
-
-  // Moving the start past the end drags the end along, so the range stays valid.
-  if (input.dataset.field === 'start') {
-    const endInput = li.querySelector('[data-field="end"]');
-    endInput.min = input.value;
-    if (isISODate(input.value) && (!isISODate(trip.end) || trip.end < input.value)) {
-      trip.end = input.value;
-      endInput.value = input.value;
-    }
-  }
-  updateSummary(li, trip);
-  commit();
-}
-
-function pickCountryFor(tripId) {
+/** @param {{ thenDates?: boolean }} [options]  continue with the date picker (new trips) */
+function pickCountryFor(tripId, { thenDates = false } = {}) {
   const usedCodes = [...new Set(state.trips.map(trip => trip.code).filter(Boolean))];
   openCountryPicker({
     usedCodes,
@@ -159,12 +149,29 @@ function pickCountryFor(tripId) {
       if (!trip) return;
       trip.code = code;
       commit({ trips: true });
+      if (thenDates) pickDatesFor(tripId, 'start');
+    },
+  });
+}
+
+/** @param {'start'|'end'} part  which date the user clicked; the picker starts by setting it */
+function pickDatesFor(tripId, part) {
+  const trip = findTrip(tripId);
+  if (!trip) return;
+  openDateRangePicker({
+    start: trip.start,
+    end: trip.end,
+    focus: part,
+    onApply: (start, end) => {
+      Object.assign(trip, { start, end });
+      commit({ trips: true });
     },
   });
 }
 
 /**
- * Adds a trip with sensible default dates and opens the country picker for it:
+ * Adds a trip and walks through the country picker and then the date picker. Until the user
+ * picks dates, it gets sensible defaults:
  * the day after the latest trip ends (if that is in the selected year), else today
  * (if the selected year is the current one), else 1 January.
  */
@@ -193,7 +200,7 @@ function addTrip() {
   listEl
     .querySelector(`[data-id="${trip.id}"]`)
     ?.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
-  pickCountryFor(trip.id);
+  pickCountryFor(trip.id, { thenDates: true });
 }
 
 function loadDemoTrips() {

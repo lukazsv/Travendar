@@ -8,7 +8,7 @@
  */
 
 import { IMAGE_WIDTH as W, IMAGE_HEIGHT as H, CANVAS_FONT, EMOJI_FONT } from '../config.js';
-import { dayKey } from '../core/calendar.js';
+import { dayKey, firstColumnOfMonth, daysInMonth } from '../core/calendar.js';
 import { flagEmoji } from '../core/countries.js';
 
 /** Grid geometry in image pixels: 3 columns × 4 rows of months, 7 × 6 day cells each. */
@@ -101,12 +101,11 @@ export function paintCalendar(ctx, o) {
     ctx.fillText(o.monthNames[month], alignedX(o.monthAlign, bx, colW), by + MONTH_BASELINE);
 
     // Days: column of the 1st depends on the weekday and on the first day of the week.
-    const weekday = new Date(o.year, month, 1).getDay(); // 0 = Sunday
-    const firstCol = o.weekStartsSunday ? weekday : (weekday + 6) % 7;
-    const daysInMonth = new Date(o.year, month + 1, 0).getDate();
+    const firstCol = firstColumnOfMonth(o.year, month, o.weekStartsSunday);
+    const monthLength = daysInMonth(o.year, month);
 
     ctx.font = DAY_FONT;
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= monthLength; day++) {
       const cell = firstCol + day - 1;
       const cx = bx + cellW * ((cell % 7) + 0.5);
       const cy = by + titleH + rowH * (Math.floor(cell / 7) + 0.5);
