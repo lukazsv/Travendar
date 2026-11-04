@@ -4,7 +4,7 @@
  *   ≥ 1180 px  three columns: settings | preview | trips — the page itself does not scroll,
  *              each side column scrolls on its own.
  *   861–1179   two columns: trips + settings stacked | sticky preview — the page scrolls.
- *   ≤ 860 px   one column: preview, Customize button (folds the settings), trips.
+ *   ≤ 860 px   one column: trips, preview, Customize button (folds the settings).
  */
 
 .app {
@@ -63,16 +63,17 @@ header { grid-area: head; padding: 2px 2px 0; }
   .app {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto;
-    grid-template-areas: "head" "preview" "customize" "settings" "trips";
+    grid-template-areas: "head" "trips" "preview" "customize" "settings";
     padding: 18px 16px calc(32px + env(safe-area-inset-bottom));
   }
   header { padding-bottom: 16px; }
-  .preview { position: static; height: auto; padding: 20px 16px; }
+  .trips-col { padding-bottom: 0; }
+  .trips-col > .group-title:first-child { margin-top: 12px; }
+  .preview { position: static; height: auto; margin-top: 24px; padding: 20px 16px; }
 
-  /* Settings are folded behind the Customize button, right above the trips. */
+  /* Settings are folded behind the Customize button, right under the preview. */
   .customize-btn { display: flex; grid-area: customize; margin-top: 16px; }
   .app:not(.settings-open) .settings { display: none; }
   .settings { padding-bottom: 4px; }
   .settings > .group-title:first-child { margin-top: 20px; }
-  .trips-col > .group-title:first-child { margin-top: 28px; }
 }
