@@ -92,7 +92,7 @@
   color: var(--muted);
 }
 .trip-meta.err {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ---- Add / empty state / footer ---- */

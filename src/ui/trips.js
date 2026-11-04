@@ -36,6 +36,7 @@ const DEMO_TRIPS = [
 
 let listEl, emptyEl, statsEl;
 
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const findTrip = id => state.trips.find(trip => trip.id === id);
 
 export function initTrips() {
@@ -176,7 +177,9 @@ function addTrip() {
   state.trips.push(trip);
   commit({ trips: true });
 
-  listEl.querySelector(`[data-id="${trip.id}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  listEl
+    .querySelector(`[data-id="${trip.id}"]`)
+    ?.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
   pickCountryFor(trip.id);
 }
 

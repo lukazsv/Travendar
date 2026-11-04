@@ -84,7 +84,13 @@ function showStep(key) {
   render();
   list.scrollTop = 0;
   // Focus the search box only with a mouse/trackpad; on touch it would pop up the keyboard.
-  if (matchMedia('(pointer: fine)').matches) search.focus();
+  if (matchMedia('(pointer: fine)').matches) {
+    search.focus();
+  } else {
+    // Touch / screen readers: the tapped button was just replaced, so move focus to the
+    // title instead of losing it; it also announces the new step ("Europa").
+    title.focus();
+  }
 }
 
 function render() {

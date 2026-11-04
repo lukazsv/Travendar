@@ -14,10 +14,11 @@
   --line: #e4e1da; /* borders and dividers */
   --line-strong: #cfcbc2; /* hovered borders, dashed outlines */
   --text: #1a1917;
-  --muted: #78746b; /* secondary text, icons */
+  --muted: #6f6b62; /* secondary text, icons — ≥ 4.5:1 on --bg, --surface and --soft (WCAG AA) */
   --ink: #1a1917; /* filled controls (primary button, selected segment) */
   --on-ink: #ffffff; /* text on --ink */
-  --accent: #e8553a; /* links, focus rings, highlights */
+  --accent: #e8553a; /* focus rings, icons, large text (≥ 3:1) */
+  --accent-text: #bb3e26; /* small accent text such as links and errors (≥ 4.5:1) */
   --dot: rgba(26, 25, 23, 0.09);
 
   --canvas-shadow: 0 1px 2px rgba(26, 25, 23, 0.06), 0 12px 32px rgba(26, 25, 23, 0.12);
@@ -38,6 +39,7 @@
     --ink: #ecebe7;
     --on-ink: #111110;
     --accent: #ff7052;
+    --accent-text: #ff7052;
     --dot: rgba(236, 235, 231, 0.08);
     --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 32px rgba(0, 0, 0, 0.5);
     --pop-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -57,6 +59,7 @@
   --ink: #ecebe7;
   --on-ink: #111110;
   --accent: #ff7052;
+  --accent-text: #ff7052;
   --dot: rgba(236, 235, 231, 0.08);
   --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 32px rgba(0, 0, 0, 0.5);
   --pop-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);

@@ -74,7 +74,7 @@
   </header>
 
   <section class="preview" data-i18n-aria="preview">
-    <canvas id="cv" width="1080" height="1920" role="img" data-i18n-aria="previewAlt"></canvas>
+    <canvas id="cv" width="1080" height="1920" role="img"></canvas>
     <div class="actions">
       <button class="btn primary" id="downloadBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
@@ -119,7 +119,7 @@
         <span data-i18n="year"></span>
         <div class="stepper">
           <button type="button" id="yearPrev" data-i18n-aria="prevYear">‹</button>
-          <output id="yearOut"></output>
+          <output id="yearOut" aria-live="polite"></output>
           <button type="button" id="yearNext" data-i18n-aria="nextYear">›</button>
         </div>
       </div>
@@ -224,7 +224,7 @@
   <div class="picker">
     <div class="picker-head">
       <button class="close-btn back-btn" type="button" id="pickerBack" data-i18n-aria="back" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg></button>
-      <h2 id="pickerTitle"></h2>
+      <h2 id="pickerTitle" tabindex="-1"></h2>
       <button class="close-btn" type="button" id="pickerClose" data-i18n-aria="done"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="picker-search"><input type="search" id="pickerSearch" data-i18n-ph="search" autocomplete="off" enterkeyhint="done"></div>
