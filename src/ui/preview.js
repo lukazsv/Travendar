@@ -85,4 +85,4 @@ export async function renderJpeg() {
 }
 
 /** File name for the exported image. */
-export const exportFileName = () => `travel-year-${state.year}.jpg`;
+export const exportFileName = () => `travendar-${state.year}.jpg`;

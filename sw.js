@@ -13,7 +13,7 @@
  */
 
 const CACHE_VERSION = 'v3';
-const CACHE_NAME = `travel-year-${CACHE_VERSION}`;
+const CACHE_NAME = `travendar-${CACHE_VERSION}`;
 
 const PRECACHE = [
   './',
@@ -101,7 +101,7 @@ self.addEventListener('activate', event => {
       .keys()
       .then(keys =>
         Promise.all(
-          keys.filter(key => key.startsWith('travel-year-') && key !== CACHE_NAME).map(key => caches.delete(key)),
+          keys.filter(key => key.startsWith('travendar-') && key !== CACHE_NAME).map(key => caches.delete(key)),
         ),
       )
       .then(() => self.clients.claim()),

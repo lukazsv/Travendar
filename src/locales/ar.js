@@ -16,7 +16,7 @@ export default {
   saved: 'تم حفظ صورة JPG',
   saveFailed: 'تعذّر حفظ الصورة',
   shareFailed: 'تعذّرت المشاركة',
-  thanks: 'شكرًا لاستخدامك Travel Year!',
+  thanks: 'شكرًا لاستخدامك Travendar!',
   donate: 'اشترِ لي قهوة',
   donatePitch: 'أنا طالب من بولندا {flag} وأجمع المال للسفر. كل إكرامية تساعدني على تحقيق أحلامي!', // {flag} = the Polish flag
   customize: 'تخصيص',
@@ -76,7 +76,7 @@ export default {
   importData: 'استيراد',
   exported: 'تم حفظ ملف النسخة الاحتياطية',
   importDone: 'تم تحميل البيانات من الملف',
-  importFailed: 'هذا ليس ملف نسخة احتياطية صالحًا لـ Travel Year',
+  importFailed: 'هذا ليس ملف نسخة احتياطية صالحًا لـ Travendar',
   importConfirm: 'هل تريد استبدال رحلاتك وإعداداتك الحالية ببيانات الملف؟',
 
   // Footer
@@ -86,7 +86,7 @@ export default {
   creditFlags: 'الأعلام:',
   creditContributors: 'والمساهمون',
   licenseNote: 'الشيفرة بترخيص MIT',
-  donateFooter: 'هل أعجبك Travel Year؟ اشترِ لي قهوة',
+  donateFooter: 'هل أعجبك Travendar؟ اشترِ لي قهوة',
 
   // Country picker
   pickContinent: 'اختر قارة',

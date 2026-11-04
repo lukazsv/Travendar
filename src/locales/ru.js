@@ -12,7 +12,7 @@ export default {
   saved: 'Изображение JPG сохранено',
   saveFailed: 'Не удалось сохранить изображение',
   shareFailed: 'Не удалось поделиться',
-  thanks: 'Спасибо, что пользуешься Travel Year!',
+  thanks: 'Спасибо, что пользуешься Travendar!',
   donate: 'Угости меня кофе',
   donatePitch:
     'Я студент из Польши {flag} и коплю деньги на путешествия. Любые чаевые помогают мне осуществлять мечты!', // {flag} = the Polish flag
@@ -73,7 +73,7 @@ export default {
   importData: 'Импорт',
   exported: 'Файл резервной копии сохранён',
   importDone: 'Данные загружены из файла',
-  importFailed: 'Это не файл резервной копии Travel Year',
+  importFailed: 'Это не файл резервной копии Travendar',
   importConfirm: 'Заменить текущие поездки и настройки данными из файла?',
 
   // Footer
@@ -83,7 +83,7 @@ export default {
   creditFlags: 'Флаги:',
   creditContributors: 'и участники',
   licenseNote: 'код под лицензией MIT',
-  donateFooter: 'Нравится Travel Year? Угости меня кофе',
+  donateFooter: 'Нравится Travendar? Угости меня кофе',
 
   // Country picker
   pickContinent: 'Выбери континент',

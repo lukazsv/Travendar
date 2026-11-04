@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { sanitizeState } from '../src/state.js';
 import { MAX_TRIPS } from '../src/config.js';
 
-test('rejects data that is not a Travel Year state', () => {
+test('rejects data that is not a Travendar state', () => {
   for (const raw of [null, undefined, 42, 'text', [], {}, { trips: 'nope' }]) {
     assert.equal(sanitizeState(raw), null, JSON.stringify(raw));
   }

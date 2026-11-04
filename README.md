@@ -1,4 +1,4 @@
-# Travel Year
+# Travendar
 
 Make your **travel year** image, as in the popular social-media trend: a full-year calendar where every day you spent abroad shows that country's flag instead of the date. The image has the clean look of a phone calendar's year view and is saved as a 1080 × 1920 JPG, ready for stories and short-video apps.
 
@@ -134,7 +134,7 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 
 **Untrusted data.** Everything read from `localStorage` or from an imported backup file goes through `sanitizeState()` in `state.js`: only known fields with valid values are kept (known country codes, `YYYY-MM-DD` dates, simple ids, `#rrggbb` colours, at most 1000 trips). Text inserted into HTML is always passed through `escapeHtml()`. Keep both rules when adding fields.
 
-**Backup files** look like `{ "format": "travel-year-backup", "version": 1, "exportedAt": "…", "data": { …state… } }`. If the state shape changes incompatibly, bump `BACKUP_VERSION` in `config.js` and migrate older files in `ui/backup.js`.
+**Backup files** look like `{ "format": "travendar-backup", "version": 1, "exportedAt": "…", "data": { …state… } }`. If the state shape changes incompatibly, bump `BACKUP_VERSION` in `config.js` and migrate older files in `ui/backup.js`.
 
 **The image.** `render/calendar-renderer.js` lays everything out on a fixed 1080 × 1920 grid and scales it with the canvas transform. The same function draws the export and the theme thumbnails. It reads only its arguments, never the global state. The day → country mapping is computed by `core/calendar.js`.
 

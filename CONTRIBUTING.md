@@ -1,4 +1,4 @@
-# Contributing to Travel Year
+# Contributing to Travendar
 
 Thanks for helping! This guide covers the setup, the checks every change must pass and how changes get merged. The [README](README.md) explains how the code is organised.
 

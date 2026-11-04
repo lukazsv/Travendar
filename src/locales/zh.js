@@ -12,7 +12,7 @@ export default {
   saved: 'JPG 图片已保存',
   saveFailed: '无法保存图片',
   shareFailed: '无法分享',
-  thanks: '感谢使用 Travel Year！',
+  thanks: '感谢使用 Travendar！',
   donate: '请我喝杯咖啡',
   donatePitch: '我是来自波兰 {flag} 的学生，正在攒钱去旅行。每一笔打赏都在帮助我实现梦想！', // {flag} = the Polish flag
   customize: '自定义',
@@ -72,7 +72,7 @@ export default {
   importData: '导入',
   exported: '备份文件已保存',
   importDone: '已从文件载入数据',
-  importFailed: '这不是有效的 Travel Year 备份文件',
+  importFailed: '这不是有效的 Travendar 备份文件',
   importConfirm: '要用文件中的数据替换当前的旅行和设置吗？',
 
   // Footer
@@ -82,7 +82,7 @@ export default {
   creditFlags: '旗帜：',
   creditContributors: '及贡献者',
   licenseNote: '代码采用 MIT 许可证',
-  donateFooter: '喜欢 Travel Year？请我喝杯咖啡',
+  donateFooter: '喜欢 Travendar？请我喝杯咖啡',
 
   // Country picker
   pickContinent: '选择大洲',

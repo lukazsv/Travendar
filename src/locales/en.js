@@ -12,7 +12,7 @@ export default {
   saved: 'JPG image saved',
   saveFailed: 'Could not save the image',
   shareFailed: 'Could not share',
-  thanks: 'Thanks for using Travel Year!',
+  thanks: 'Thanks for using Travendar!',
   donate: 'Buy me a coffee',
   donatePitch: 'I’m a student from Poland {flag} saving up to travel. Every tip helps me make my dreams come true!', // {flag} = the Polish flag
   customize: 'Customize',
@@ -72,7 +72,7 @@ export default {
   importData: 'Import',
   exported: 'Backup file saved',
   importDone: 'Data loaded from the file',
-  importFailed: 'This is not a valid Travel Year backup file',
+  importFailed: 'This is not a valid Travendar backup file',
   importConfirm: 'Replace your current trips and settings with the data from the file?',
 
   // Footer
@@ -82,7 +82,7 @@ export default {
   creditFlags: 'Flags:',
   creditContributors: 'and contributors',
   licenseNote: 'code under the MIT License',
-  donateFooter: 'Like Travel Year? Buy me a coffee',
+  donateFooter: 'Like Travendar? Buy me a coffee',
 
   // Country picker
   pickContinent: 'Choose continent',

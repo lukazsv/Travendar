@@ -34,7 +34,7 @@ export function initExport() {
   shareBtn.addEventListener('click', async () => {
     try {
       const file = new File([await renderJpeg()], exportFileName(), { type: 'image/jpeg' });
-      await navigator.share({ files: [file], title: `Travel Year ${state.year}` });
+      await navigator.share({ files: [file], title: `Travendar ${state.year}` });
       offerDonation(t('thanks'));
     } catch (err) {
       if (err?.name !== 'AbortError') showToast(t('shareFailed')); // AbortError = user closed the share sheet
