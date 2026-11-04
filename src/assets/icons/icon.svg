@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Travel Year app icon: a year title (coral bar) above a grid of days, with a trip (coral cells).
+       Source for all PNG icons; see scripts/make-assets.html. Colours match src/styles/tokens.css. -->
+  <rect width="512" height="512" rx="112" fill="#1a1917"/>
+  <rect x="124" y="122" width="168" height="48" rx="24" fill="#e8553a"/>
+  <g fill="#ecebe7">
+    <circle cx="148" cy="244" r="24"/><circle cx="220" cy="244" r="24"/><circle cx="292" cy="244" r="24"/><circle cx="364" cy="244" r="24"/>
+    <circle cx="148" cy="316" r="24"/>
+    <circle cx="148" cy="388" r="24"/><circle cx="220" cy="388" r="24"/><circle cx="292" cy="388" r="24"/><circle cx="364" cy="388" r="24"/>
+  </g>
+  <g fill="#e8553a">
+    <rect x="190" y="294" width="60" height="44" rx="10"/><rect x="262" y="294" width="60" height="44" rx="10"/><rect x="334" y="294" width="60" height="44" rx="10"/>
+  </g>
+</svg>
