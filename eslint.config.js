@@ -3,7 +3,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 
 export default [
-  { ignores: ['node_modules/', 'src/core/continent-shapes.js'] },
+  { ignores: ['node_modules/', 'dist/', 'src/core/continent-shapes.js'] },
   js.configs.recommended,
   {
     files: ['**/*.js'],
@@ -20,5 +20,5 @@ export default [
   // The service worker is a classic script with service-worker globals.
   { files: ['sw.js'], languageOptions: { sourceType: 'script', globals: globals.serviceworker } },
   // Tests and tooling run in Node.
-  { files: ['tests/**/*.js', 'eslint.config.js'], languageOptions: { globals: globals.node } },
+  { files: ['tests/**/*.js', 'scripts/**/*.js', 'eslint.config.js'], languageOptions: { globals: globals.node } },
 ];

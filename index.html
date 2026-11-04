@@ -19,15 +19,16 @@
 <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)">
 
 <!--
-  Link previews (Open Graph / X). Most apps need an ABSOLUTE og:image URL:
-  once the domain is known, replace "src/assets/og-image.png" with "https://<domain>/src/assets/og-image.png"
-  and add <meta property="og:url" content="https://<domain>/">.
+  Link previews (Open Graph / X). Most apps need ABSOLUTE URLs here. They must match SITE_URL
+  in src/config.js (tests/site.test.js checks it).
 -->
+<link rel="canonical" href="https://travendar.pages.dev/">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://travendar.pages.dev/">
 <meta property="og:site_name" content="Travendar">
 <meta property="og:title" content="Travendar – Twój rok w podróżach">
 <meta property="og:description" content="Zaznacz swoje podróże, a dni w kalendarzu zamienią się we flagi odwiedzonych krajów. Zapisz obrazek i pochwal się swoim rokiem.">
-<meta property="og:image" content="src/assets/og-image.png">
+<meta property="og:image" content="https://travendar.pages.dev/src/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Kalendarz roku 2026, w którym dni podróży są oznaczone flagami krajów">
@@ -38,7 +39,7 @@
   Content Security Policy: the page may load scripts, styles, fonts and images from its own
   origin only (data: is allowed for the small inline SVG icon in the search box).
   Everything is self-hosted, so any new external service must be added here on purpose.
-  Hosting-level headers (frame-ancestors, HSTS…) are set by the host, not here.
+  Hosting-level headers (frame-ancestors, HSTS…) are set in _headers.
 -->
 <meta http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">

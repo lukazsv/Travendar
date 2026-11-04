@@ -40,6 +40,7 @@ npm run check        # lint + format check + unit tests + offline file list — 
 | Script | Purpose |
 | --- | --- |
 | `npm start` | Local server on <http://localhost:8000> |
+| `npm run build` | Copy the published files into `dist/` (what the host serves) |
 | `npm test` | Unit tests in `tests/` (Node's built-in test runner) |
 | `npm run lint` | ESLint |
 | `npm run format` / `format:check` | Prettier (HTML and Markdown are formatted by hand) |
@@ -48,13 +49,24 @@ GitHub Actions (`.github/workflows/ci.yml`) runs `npm run check` on every pull r
 
 ## Deploying
 
-Publish **only `index.html`, `manifest.webmanifest`, `sw.js` and the `src/` folder** (it includes the fonts, icons and flag images) to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel…). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. Git-based hosts such as Netlify, Cloudflare Pages and GitHub Pages skip `.git` automatically. `scripts/` is for development only.
+The site is hosted on **Cloudflare Pages** (free plan: unlimited bandwidth, custom headers, automatic HTTPS). Its address is in `SITE_URL` in `src/config.js`, currently `https://travendar.pages.dev/`.
 
-> GitHub Pages on a free plan works only for public repositories.
+`npm run build` copies only what is published into `dist/`: `index.html`, `manifest.webmanifest`, `sw.js`, `src/`, `_headers`, `robots.txt` and `sitemap.xml`. Development files (`scripts/`, `tests/`, docs, package files) stay off the site. CI runs the same build.
 
-The service worker (offline mode) only runs over HTTPS or on `localhost`, which every host above provides.
+**First setup** (once, in the Cloudflare dashboard):
 
-**Before the first public release**, set the absolute address of the share image in `index.html` (`og:image`, plus `og:url`), e.g. `https://example.com/src/assets/og-image.png`. Link previews in most messengers ignore relative URLs. Also replace the placeholders `SITE_URL` (printed on the image) and `DONATE_URL` (your buycoffee.to profile) in `src/config.js`.
+1. *Workers & Pages* → *Create* → *Pages* → *Connect to Git*, authorise GitHub and pick this repository (Cloudflare can be limited to this one repository).
+2. Project name: `travendar` (this gives `travendar.pages.dev`). Production branch: `main`.
+3. Framework preset: *None*. Build command: `npm run build`. Build output directory: `dist`.
+4. *Save and Deploy*. Every push to `main` publishes the site; every other branch and pull request gets its own preview address (not indexed by search engines).
+
+**Headers.** `_headers` sets the security headers (the CSP also as a header, plus `frame-ancestors`, HSTS, `nosniff`, referrer and permissions policies) and keeps `sw.js` from being cached. `tests/site.test.js` checks that its CSP matches the `<meta>` one in `index.html`.
+
+**Changing the domain** (e.g. to `travendar.app`): add it under the project's *Custom domains*, then update `SITE_URL` in `src/config.js`, `og:url`, `og:image` and `canonical` in `index.html`, `robots.txt` and `sitemap.xml`. `npm test` fails until they all match. The `pages.dev` address keeps working.
+
+Any other static host works too, as long as it publishes `dist/` and applies `_headers` (Netlify uses the same format). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. The service worker (offline mode) only runs over HTTPS or on `localhost`.
+
+**Before the first public release**, replace the `DONATE_URL` placeholder (your buycoffee.to profile) in `src/config.js`.
 
 ## Project structure
 
@@ -62,6 +74,8 @@ The service worker (offline mode) only runs over HTTPS or on `localhost`, which 
 index.html                    Markup only: links the styles and loads src/main.js; icons, sharing tags, CSP
 manifest.webmanifest          Web app manifest (name, icons, colours) for installing the app
 sw.js                         Service worker: offline support (must stay in the site root)
+_headers                      HTTP security headers for the host (Cloudflare Pages / Netlify)
+robots.txt, sitemap.xml       For search engines; contain the site address
 src/
   main.js                     Entry point: initialises the UI and reacts to state changes
   config.js                   Constants: image size, fonts, built-in themes, languages, limits
@@ -115,6 +129,7 @@ scripts/
   download_flags.py              Downloads the Twemoji flag PNGs into src/assets/flags/
   make-assets.html               Generates the PNG icons and og-image.png in the browser
   check_precache.py              Checks that sw.js lists every file needed offline
+  build-site.js                  npm run build: copies the published files into dist/
 .github/workflows/ci.yml      CI: lint, format check, tests, precache check
 package.json                  Dev tooling and npm scripts (no runtime dependencies)
 eslint.config.js, .prettierrc.json, .editorconfig   Code style
