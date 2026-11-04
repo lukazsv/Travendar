@@ -3,13 +3,16 @@
  * Also produces the JPEG for export.
  */
 
-import { IMAGE_WIDTH, JPEG_QUALITY } from '../config.js';
+import { IMAGE_WIDTH, JPEG_QUALITY, SITE_URL } from '../config.js';
 import { state, themeColors } from '../state.js';
 import { t } from '../i18n.js';
 import { buildDayMap, travelStats } from '../core/calendar.js';
 import { paintCalendar } from '../render/calendar-renderer.js';
 import { usesEmojiFlags, getFlagImage, preloadFlagImages } from '../render/flags.js';
 import { byId } from '../utils/html.js';
+
+/** The site address as printed on the image: host only, e.g. "example.com". */
+const SITE_LABEL = new URL(SITE_URL).host;
 
 let canvas;
 /** @type {HTMLCanvasElement[]} */
@@ -32,6 +35,7 @@ export function drawNow() {
     days,
     emojiFlags: usesEmojiFlags(),
     getFlagImage,
+    siteLabel: state.showSiteUrl ? SITE_LABEL : '',
   };
 
   paintCalendar(canvas.getContext('2d'), { ...common, colors: themeColors(state.theme), scale: 1 });

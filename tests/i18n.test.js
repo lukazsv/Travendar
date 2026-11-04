@@ -47,6 +47,7 @@ test('plurals and interpolated texts produce text containing the number', () => 
     }
     assert.ok(dict.outsideYear(2026).includes('2026'), `${lang}.outsideYear`);
     assert.ok(dict.countryLabel('X').includes('X'), `${lang}.countryLabel`);
+    assert.equal(dict.donatePitch.split('{flag}').length, 2, `${lang}.donatePitch needs one {flag}`);
   }
 });
 

@@ -9,8 +9,8 @@ The app runs entirely in the browser: no backend, no account, no build step.
 - **Trips**: pick a country (first a continent, then its countries A–Z, or search) and the dates in a two-click range calendar (first click = start, second = end). Days of trips that overlap go to the trip that starts later. Deleting a trip or clearing the list can be undone.
 - **Live preview** of the image while you edit.
 - **Themes**: Dark, Light (classic calendar look) and Custom, with your own background, text and accent colours.
-- **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
-- **Export**: *Save JPG*, plus *Share* on phones (saves straight to Photos through the share sheet).
+- **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, the site address at the bottom of the image (on by default; switching it off slides open a short note asking to keep it), and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
+- **Export**: *Save JPG*, plus *Share* on phones (saves straight to Photos through the share sheet). After a successful save or share a dialog in the middle of the screen confirms it and asks for a tip on buycoffee.to (*Buy me a coffee*); it stays open until closed with ✕ or Esc. The same link is in the footer.
 - **13 languages**: Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish and Ukrainian. The browser's preferred language is picked automatically (English if none is supported); country names come from the browser in the chosen language.
 - **Responsive**: three columns on wide screens, two on laptops and tablets, one on phones (settings folded behind *Customize*).
 - **Installable and offline**: add it to the home screen / install it as an app; after the first visit it also works without internet.
@@ -54,7 +54,7 @@ Publish **only `index.html`, `manifest.webmanifest`, `sw.js` and the `src/` fold
 
 The service worker (offline mode) only runs over HTTPS or on `localhost`, which every host above provides.
 
-**Before the first public release**, set the absolute address of the share image in `index.html` (`og:image`, plus `og:url`), e.g. `https://example.com/src/assets/og-image.png`. Link previews in most messengers ignore relative URLs.
+**Before the first public release**, set the absolute address of the share image in `index.html` (`og:image`, plus `og:url`), e.g. `https://example.com/src/assets/og-image.png`. Link previews in most messengers ignore relative URLs. Also replace the placeholders `SITE_URL` (printed on the image) and `DONATE_URL` (your buycoffee.to profile) in `src/config.js`.
 
 ## Project structure
 
@@ -88,6 +88,7 @@ src/
     settings.js               Year, theme and custom colours, Advanced, Customize button
     language-menu.js          Globe menu in the header
     export.js                 Save JPG and Share buttons
+    donate.js                 "Saved" dialog with the buycoffee.to tip request
     lightbox.js               Full-screen view of the image (tap the preview)
     backup.js                 Export / import of trips and settings as JSON
     toast.js                  Status messages
@@ -154,6 +155,7 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 | Change UI colours or fonts | `src/styles/tokens.css` |
 | Change the image colours of Dark / Light | `IMAGE_THEMES` in `src/config.js` |
 | Change the image layout (sizes, spacing, fonts) | constants at the top of `src/render/calendar-renderer.js` |
+| Change the site address on the image or the donation page | `SITE_URL` and `DONATE_URL` in `src/config.js` (both are placeholders until release) |
 | Add a setting | default + validation in `state.js`, markup in `index.html`, binding in `ui/settings.js`, use it in `ui/preview.js` → renderer |
 | Move a country to another continent | `src/core/continents.js` |
 | Add a country | `COUNTRY_CODES` in `src/core/countries.js`, a continent in `continents.js`, then `python3 scripts/download_flags.py` |
@@ -194,7 +196,7 @@ Current Chrome, Edge, Safari (macOS / iOS 15.4+) and Firefox. The app relies on 
 
 ## Privacy
 
-Trips and settings stay in the browser's `localStorage`. The page makes no requests to other services: fonts and flag images are served from the site itself, and there are no analytics. As with any website, the hosting provider sees visitors' IP addresses in its logs. The same explanation is shown to users in the footer — update it (`privacyText` in `i18n.js`) if this ever changes.
+Trips and settings stay in the browser's `localStorage`. The page makes no requests to other services: fonts and flag images are served from the site itself, and there are no analytics. As with any website, the hosting provider sees visitors' IP addresses in its logs. The donation link is an ordinary link: buycoffee.to is contacted only when someone opens it. The same explanation is shown to users in the footer — update it (`privacyText` in `i18n.js`) if this ever changes.
 
 ## Credits
 

@@ -12,6 +12,9 @@ export default {
   saved: 'JPG 画像を保存しました',
   saveFailed: '画像を保存できませんでした',
   shareFailed: '共有できませんでした',
+  thanks: 'Travel Year をご利用いただきありがとうございます！',
+  donate: 'コーヒーをおごる',
+  donatePitch: 'ポーランド {flag} の学生で、旅行のためにお金を貯めています。いただいたチップは夢を叶える力になります！', // {flag} = the Polish flag
   customize: 'カスタマイズ',
   language: '言語',
 
@@ -55,6 +58,8 @@ export default {
   colorAccent: 'アクセント',
   advanced: '詳細設定',
   weekSunday: '週の始まりを日曜日にする',
+  siteUrlOnImage: '画像にサイトのアドレスを表示',
+  siteUrlHint: '画像にサイトのアドレスを残していただくと、完全無料のこのプロジェクトを続ける助けになります',
   alignYear: '年の配置',
   alignMonths: '月の配置',
   alignLeft: '左揃え',
@@ -77,6 +82,7 @@ export default {
   creditFlags: '国旗：',
   creditContributors: 'および貢献者',
   licenseNote: 'コードは MIT ライセンス',
+  donateFooter: 'Travel Year が気に入ったら、コーヒーをおごってください',
 
   // Country picker
   pickContinent: '大陸を選択',

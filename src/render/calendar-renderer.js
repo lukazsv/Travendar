@@ -28,6 +28,9 @@ const MONTH_FONT = `700 62px ${CANVAS_FONT}`;
 const MONTH_BASELINE = 62; // relative to the month block
 const DAY_FONT = `600 27px ${CANVAS_FONT}`;
 const TITLE_INSET = GRID.cellW * 0.12; // keeps titles visually aligned with the day columns
+const SITE_FONT = `500 24px ${CANVAS_FONT}`;
+const SITE_BASELINE = H - 22; // in the free strip below the last month row
+const SITE_OPACITY = 0.45; // readable, but quieter than the calendar
 
 /** Size and vertical offset that make an emoji flag fill a day cell; measured once. */
 let emojiMetrics = null;
@@ -66,6 +69,7 @@ function alignedX(align, left, width) {
  * @property {'left'|'center'|'right'} monthAlign
  * @property {Map<number, string>} days        From buildDayMap(): day → country code.
  * @property {boolean} emojiFlags              Draw flags as emoji (else as images).
+ * @property {string} siteLabel                Site address shown at the bottom; '' for none.
  * @property {(code: string) => HTMLImageElement & { failed?: boolean }} getFlagImage
  */
 
@@ -122,6 +126,17 @@ export function paintCalendar(ctx, o) {
       ctx.fillStyle = o.colors.text;
       ctx.fillText(String(day), cx, cy + 1);
     }
+  }
+
+  if (o.siteLabel) {
+    ctx.save();
+    ctx.globalAlpha = SITE_OPACITY;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = o.colors.text;
+    ctx.font = SITE_FONT;
+    ctx.fillText(o.siteLabel, W / 2, SITE_BASELINE);
+    ctx.restore();
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 }

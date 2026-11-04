@@ -38,6 +38,18 @@ export function intlLocale(code) {
   return LANGUAGES.find(l => l.code === code)?.locale ?? code;
 }
 
+/**
+ * Public address of the site, printed small at the bottom of the image (Advanced → switch).
+ * TODO before release: replace the placeholder with the real domain (also og:url in index.html).
+ */
+export const SITE_URL = 'https://travel-year.example/';
+
+/**
+ * Donation page (buycoffee.to), offered after saving the image and in the footer.
+ * TODO before release: replace with your own profile, e.g. 'https://buycoffee.to/<name>'.
+ */
+export const DONATE_URL = 'https://buycoffee.to/';
+
 /** Used when none of the browser's preferred languages is supported. */
 export const DEFAULT_LANGUAGE = 'en';
 

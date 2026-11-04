@@ -19,6 +19,7 @@ test('keeps valid values', () => {
     yearAlign: 'right',
     monthAlign: 'center',
     weekSunday: true,
+    showSiteUrl: false,
     trips: [{ id: 'abc123', code: 'JP', start: '2027-08-01', end: '2027-08-10' }],
   };
   assert.deepEqual(sanitizeState(raw), raw);
@@ -43,6 +44,7 @@ test('replaces invalid settings with defaults', () => {
   assert.equal(s.flagStyle, 'native');
   assert.equal(s.yearAlign, 'center');
   assert.equal(s.weekSunday, false);
+  assert.equal(s.showSiteUrl, true);
 });
 
 test('neutralises trips that could inject markup or break rendering', () => {

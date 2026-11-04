@@ -47,6 +47,7 @@ import { detectLanguage } from './core/language.js';
  * @property {'left'|'center'|'right'} yearAlign
  * @property {'left'|'center'|'right'} monthAlign
  * @property {boolean} weekSunday            Week starts on Sunday instead of Monday.
+ * @property {boolean} showSiteUrl           Print the site address at the bottom of the image.
  * @property {Trip[]} trips
  */
 
@@ -76,6 +77,7 @@ function defaults() {
     yearAlign: 'center',
     monthAlign: 'left',
     weekSunday: false,
+    showSiteUrl: true,
     trips: [],
   };
 }
@@ -116,6 +118,7 @@ export function sanitizeState(raw) {
     yearAlign: pick(raw.yearAlign, ALIGNMENTS, base.yearAlign),
     monthAlign: pick(raw.monthAlign, ALIGNMENTS, base.monthAlign),
     weekSunday: raw.weekSunday === true,
+    showSiteUrl: raw.showSiteUrl !== false, // on unless switched off (also for data saved before it existed)
     trips: sanitizeTrips(raw.trips),
   };
 }
