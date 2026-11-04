@@ -18,7 +18,7 @@ You should get a first answer within 7 days. Once a fix is released, you will be
 
 ## Scope
 
-Travel Year is a static site with no server-side code and no accounts. Relevant reports include, for example:
+Travendar is a static site with no server-side code and no accounts. Relevant reports include, for example:
 
 - script injection through stored data, an imported backup file or a crafted link,
 - ways around the Content Security Policy in `index.html`,

@@ -93,7 +93,7 @@ const KNOWN_CODES = new Set(COUNTRY_CODES);
  * crafted file or tampered storage must not be able to smuggle markup in.
  *
  * @param {any} raw  Parsed JSON.
- * @returns {AppState | null}  null when `raw` does not look like Travel Year data at all.
+ * @returns {AppState | null}  null when `raw` does not look like Travendar data at all.
  */
 export function sanitizeState(raw) {
   if (!raw || typeof raw !== 'object' || !Array.isArray(raw.trips)) return null;

@@ -9,7 +9,7 @@ export const IMAGE_HEIGHT = 1920;
 export const JPEG_QUALITY = 0.95;
 
 /** localStorage key. Bump the version suffix only together with a migration in state.js. */
-export const STORAGE_KEY = 'travel-year.v1';
+export const STORAGE_KEY = 'travendar.v1';
 
 /**
  * UI languages. `name` is the language's own name (shown in the menu, which sorts them
@@ -42,7 +42,7 @@ export function intlLocale(code) {
  * Public address of the site, printed small at the bottom of the image (Advanced → switch).
  * TODO before release: replace the placeholder with the real domain (also og:url in index.html).
  */
-export const SITE_URL = 'https://travel-year.example/';
+export const SITE_URL = 'https://travendar.example/';
 
 /**
  * Donation page (buycoffee.to), offered after saving the image and in the footer.
@@ -61,7 +61,7 @@ export const YEAR_MAX = 2100;
 export const MAX_TRIPS = 1000;
 
 /** Backup files (Advanced → Backup). Bump `version` only together with a migration in backup.js. */
-export const BACKUP_FORMAT = 'travel-year-backup';
+export const BACKUP_FORMAT = 'travendar-backup';
 export const BACKUP_VERSION = 1;
 export const BACKUP_MAX_BYTES = 1_000_000;
 

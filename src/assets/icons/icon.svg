@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Travel Year app icon: a year title (coral bar) above a grid of days, with a trip (coral cells).
+  <!-- Travendar app icon: a year title (coral bar) above a grid of days, with a trip (coral cells).
        Source for all PNG icons; see scripts/make-assets.html. Colours match src/styles/tokens.css. -->
   <rect width="512" height="512" rx="112" fill="#1a1917"/>
   <rect x="124" y="122" width="168" height="48" rx="24" fill="#e8553a"/>

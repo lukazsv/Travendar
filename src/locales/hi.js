@@ -12,7 +12,7 @@ export default {
   saved: 'JPG तस्वीर सहेजी गई',
   saveFailed: 'तस्वीर सहेजी नहीं जा सकी',
   shareFailed: 'शेयर नहीं किया जा सका',
-  thanks: 'Travel Year इस्तेमाल करने के लिए धन्यवाद!',
+  thanks: 'Travendar इस्तेमाल करने के लिए धन्यवाद!',
   donate: 'मुझे एक कॉफ़ी पिलाइए',
   donatePitch:
     'मैं पोलैंड {flag} का एक छात्र हूँ और घूमने के लिए पैसे जमा कर रहा हूँ। हर टिप मुझे अपने सपने पूरे करने में मदद करती है!', // {flag} = the Polish flag
@@ -73,7 +73,7 @@ export default {
   importData: 'इम्पोर्ट',
   exported: 'बैकअप फ़ाइल सहेजी गई',
   importDone: 'फ़ाइल से डेटा लोड हो गया',
-  importFailed: 'यह Travel Year की मान्य बैकअप फ़ाइल नहीं है',
+  importFailed: 'यह Travendar की मान्य बैकअप फ़ाइल नहीं है',
   importConfirm: 'क्या मौजूदा यात्राओं और सेटिंग को फ़ाइल के डेटा से बदलना है?',
 
   // Footer
@@ -83,7 +83,7 @@ export default {
   creditFlags: 'झंडे:',
   creditContributors: 'और योगदानकर्ता',
   licenseNote: 'कोड MIT लाइसेंस के तहत',
-  donateFooter: 'Travel Year पसंद आया? मुझे एक कॉफ़ी पिलाइए',
+  donateFooter: 'Travendar पसंद आया? मुझे एक कॉफ़ी पिलाइए',
 
   // Country picker
   pickContinent: 'महाद्वीप चुनें',

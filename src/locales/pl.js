@@ -12,7 +12,7 @@ export default {
   saved: 'Zapisano obraz JPG',
   saveFailed: 'Nie udało się zapisać obrazu',
   shareFailed: 'Nie udało się udostępnić',
-  thanks: 'Dzięki, że korzystasz z Travel Year!',
+  thanks: 'Dzięki, że korzystasz z Travendar!',
   donate: 'Postaw mi kawę',
   donatePitch:
     'Jestem studentem z Polski {flag} i zbieram pieniądze na podróże. Każdy napiwek pomaga mi realizować moje marzenia!', // {flag} = the Polish flag
@@ -73,7 +73,7 @@ export default {
   importData: 'Importuj',
   exported: 'Zapisano plik z kopią',
   importDone: 'Wczytano dane z pliku',
-  importFailed: 'To nie jest poprawny plik kopii Travel Year',
+  importFailed: 'To nie jest poprawny plik kopii Travendar',
   importConfirm: 'Zastąpić obecne podróże i ustawienia danymi z pliku?',
 
   // Footer
@@ -83,7 +83,7 @@ export default {
   creditFlags: 'Flagi:',
   creditContributors: 'i współtwórcy',
   licenseNote: 'kod na licencji MIT',
-  donateFooter: 'Podoba Ci się Travel Year? Postaw mi kawę',
+  donateFooter: 'Podoba Ci się Travendar? Postaw mi kawę',
 
   // Country picker
   pickContinent: 'Wybierz kontynent',

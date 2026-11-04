@@ -3,7 +3,7 @@
  * (Advanced → Backup). Useful before clearing browser data or to move to another device.
  *
  * File format:
- *   { "format": "travel-year-backup", "version": 1, "exportedAt": "<ISO time>", "data": <AppState> }
+ *   { "format": "travendar-backup", "version": 1, "exportedAt": "<ISO time>", "data": <AppState> }
  *
  * Imported files are untrusted: they go through sanitizeState() like localStorage does.
  */
@@ -28,7 +28,7 @@ export function initBackup(onImported) {
       data: state,
     };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    downloadBlob(blob, `travel-year-backup-${toISODate(new Date())}.json`);
+    downloadBlob(blob, `travendar-backup-${toISODate(new Date())}.json`);
     showToast(t('exported'));
   });
 
@@ -64,6 +64,6 @@ async function readBackup(file) {
   const payload = json?.format === BACKUP_FORMAT ? json.data : json;
   if (json?.format === BACKUP_FORMAT && json.version > BACKUP_VERSION) throw new Error('Backup from a newer version');
   const next = sanitizeState(payload);
-  if (!next) throw new Error('Not a Travel Year backup');
+  if (!next) throw new Error('Not a Travendar backup');
   return next;
 }

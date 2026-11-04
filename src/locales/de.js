@@ -12,7 +12,7 @@ export default {
   saved: 'JPG-Bild gespeichert',
   saveFailed: 'Das Bild konnte nicht gespeichert werden',
   shareFailed: 'Teilen fehlgeschlagen',
-  thanks: 'Danke, dass du Travel Year nutzt!',
+  thanks: 'Danke, dass du Travendar nutzt!',
   donate: 'Spendier mir einen Kaffee',
   donatePitch:
     'Ich bin Student aus Polen {flag} und spare fürs Reisen. Jedes Trinkgeld hilft mir, meine Träume zu verwirklichen!', // {flag} = the Polish flag
@@ -74,7 +74,7 @@ export default {
   importData: 'Importieren',
   exported: 'Sicherungsdatei gespeichert',
   importDone: 'Daten aus der Datei geladen',
-  importFailed: 'Das ist keine gültige Travel-Year-Sicherungsdatei',
+  importFailed: 'Das ist keine gültige Travendar-Sicherungsdatei',
   importConfirm: 'Aktuelle Reisen und Einstellungen durch die Daten aus der Datei ersetzen?',
 
   // Footer
@@ -84,7 +84,7 @@ export default {
   creditFlags: 'Flaggen:',
   creditContributors: 'und Mitwirkende',
   licenseNote: 'Code unter MIT-Lizenz',
-  donateFooter: 'Gefällt dir Travel Year? Spendier mir einen Kaffee',
+  donateFooter: 'Gefällt dir Travendar? Spendier mir einen Kaffee',
 
   // Country picker
   pickContinent: 'Kontinent wählen',
