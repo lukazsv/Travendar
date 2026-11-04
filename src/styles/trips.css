@@ -48,4 +48,4 @@
 }
 .empty-icon svg { width: 24px; height: 24px; }
 
-.footer-links { display: flex; justify-content: space-between; margin: 18px 2px 0; font-size: 13px; }
+.footer-links { display: flex; justify-content: flex-end; margin: 18px 2px 0; font-size: 13px; }
