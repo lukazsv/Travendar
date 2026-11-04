@@ -9,8 +9,8 @@ Everything below will ship as **1.0.0** once the site is hosted and tested on re
 
 ### Added
 
-- **Trips**: country (picked by continent, then A–Z, or by search), start and end date; add, delete, load an example, clear all — with **Undo** for delete and clear.
-- **Image**: a 1080 × 1920 year calendar where travel days show the country's flag; live preview; **Save JPG** and **Share** (phones).
+- **Trips**: country (picked by continent, then A–Z, or by search) and dates in a range calendar — first click sets the start, second the end, months change instantly, keyboard support; add, delete, load an example, clear all — with **Undo** for delete and clear.
+- **Image**: a 1080 × 1920 year calendar where travel days show the country's flag; live preview that opens enlarged on tap (swipe any way to close); **Save JPG** and **Share** (phones).
 - **Themes**: Dark, Light and Custom (own background, text and accent colours) with live thumbnails.
 - **Advanced**: week starting on Sunday, year and month-name alignment, system or Twemoji flags, **JSON backup** export and import.
 - **Polish and English** interface; country names from the browser in both languages.

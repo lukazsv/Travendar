@@ -6,7 +6,7 @@ The app runs entirely in the browser: no backend, no account, no build step.
 
 ## Features
 
-- **Trips**: pick a country (first a continent, then its countries A–Z, or search), a start and an end date. Days of trips that overlap go to the trip that starts later. Deleting a trip or clearing the list can be undone.
+- **Trips**: pick a country (first a continent, then its countries A–Z, or search) and the dates in a two-click range calendar (first click = start, second = end). Days of trips that overlap go to the trip that starts later. Deleting a trip or clearing the list can be undone.
 - **Live preview** of the image while you edit.
 - **Themes**: Dark, Light (classic calendar look) and Custom, with your own background, text and accent colours.
 - **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
@@ -70,7 +70,8 @@ src/
   pwa.js                      Registers the service worker
   core/                       Logic with no DOM access (pure functions)
     dates.js                  'YYYY-MM-DD' helpers
-    calendar.js               Trips → which flag goes on which day; travel stats
+    calendar.js               Trips → which flag goes on which day; travel stats; month-grid helpers
+    date-range.js             Two-click range selection logic used by the date picker
     countries.js              Country list and names (Intl.DisplayNames), search, flag emoji
     continents.js             Which countries each continent lists (hand-maintained)
     continent-shapes.js       Continent outline icons (GENERATED, do not edit)
@@ -81,9 +82,11 @@ src/
     preview.js                Main canvas, theme thumbnails, JPEG rendering
     trips.js                  Trip list, add / delete / demo / clear
     country-picker.js         Continent → country dialog with search
+    date-range-picker.js      Calendar dialog for choosing a trip's start and end
     settings.js               Year, theme and custom colours, Advanced, Customize button
     language-menu.js          Globe menu in the header
     export.js                 Save JPG and Share buttons
+    lightbox.js               Full-screen view of the image (tap the preview)
     backup.js                 Export / import of trips and settings as JSON
     toast.js                  Status messages
     icons.js                  Inline SVG icons used from JS
@@ -100,7 +103,7 @@ src/
     tokens.css                Colours and fonts of the UI (light and dark)
     base.css                  Reset and document defaults
     components.css            Buttons, cards, rows, segmented control, switch, stepper, toast
-    header.css, preview.css, trips.css, settings.css, country-picker.css, footer.css
+    header.css, preview.css, trips.css, settings.css, country-picker.css, date-picker.css, footer.css
     layout.css                Page grid and responsive breakpoints (loaded last)
 tests/                        Unit tests for src/core, state validation and translations
 scripts/

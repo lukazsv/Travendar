@@ -55,19 +55,27 @@
   gap: 8px;
   margin-top: 10px;
 }
-.field {
+/* A label above a box with the date; the whole thing is one button that opens the picker. */
+.date-field {
   display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
 }
-.field span {
+.date-label {
   display: block;
+  margin: 0 2px 4px;
   font-size: 12px;
   font-weight: 500;
   color: var(--muted);
-  margin: 0 2px 4px;
 }
-.field input {
-  display: block;
-  width: 100%;
+.date-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   min-height: 42px;
   padding: 9px 11px;
   border: 1px solid var(--line);
@@ -77,13 +85,24 @@
   font-variant-numeric: tabular-nums;
   transition: border-color 0.15s;
 }
-.field input:hover {
+.date-value.empty {
+  color: var(--muted);
+}
+.date-field:hover .date-value {
   border-color: var(--line-strong);
 }
-.field input:focus {
+.date-field:focus-visible {
   outline: none;
+}
+.date-field:focus-visible .date-value {
   border-color: var(--ink);
   box-shadow: 0 0 0 1px var(--ink);
+}
+.cal-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--muted);
 }
 
 .trip-meta {

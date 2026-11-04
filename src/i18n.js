@@ -18,6 +18,7 @@ export const TRANSLATIONS = {
     tagline: 'Twój rok w podróżach',
     preview: 'Podgląd',
     previewAlt: 'Podgląd wygenerowanego obrazka',
+    zoomPreview: 'Powiększ obrazek',
     save: 'Zapisz JPG',
     share: 'Udostępnij',
     saved: 'Zapisano obraz JPG',
@@ -37,6 +38,11 @@ export const TRANSLATIONS = {
     emptyAdd: 'Dodaj pierwszą albo',
     loadDemo: 'wczytaj przykład',
     from: 'Od',
+    pickStartDate: 'Wybierz datę początku',
+    pickEndDate: 'Wybierz datę końca',
+    noDate: 'Wybierz',
+    prevMonth: 'Poprzedni miesiąc',
+    nextMonth: 'Następny miesiąc',
     to: 'Do',
     deleteTrip: 'Usuń podróż',
     chooseCountry: 'Wybierz kraj',
@@ -111,12 +117,14 @@ export const TRANSLATIONS = {
       return `${n} ${few ? 'kraje' : 'krajów'}`;
     },
     months: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+    weekdays: ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'], // Monday first
   },
 
   en: {
     tagline: 'Your year of travel',
     preview: 'Preview',
     previewAlt: 'Preview of the generated image',
+    zoomPreview: 'Enlarge the image',
     save: 'Save JPG',
     share: 'Share',
     saved: 'JPG image saved',
@@ -135,6 +143,11 @@ export const TRANSLATIONS = {
     emptyAdd: 'Add your first one or',
     loadDemo: 'load an example',
     from: 'From',
+    pickStartDate: 'Choose the start date',
+    pickEndDate: 'Choose the end date',
+    noDate: 'Select',
+    prevMonth: 'Previous month',
+    nextMonth: 'Next month',
     to: 'To',
     deleteTrip: 'Delete trip',
     chooseCountry: 'Choose country',
@@ -199,6 +212,7 @@ export const TRANSLATIONS = {
     days: n => (n === 1 ? '1 day' : `${n} days`),
     countries: n => (n === 1 ? '1 country' : `${n} countries`),
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], // Monday first
   },
 };
 
