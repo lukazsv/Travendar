@@ -371,13 +371,29 @@
     .settings > .group-title:first-child { margin-top: 28px; }
     .settings { padding-bottom: 20px; }
   }
+  .customize-btn {
+    display: none; align-items: center; gap: 12px; width: 100%; height: 50px; padding: 0 14px;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
+    font-size: 15px; font-weight: 600; text-align: left; transition: border-color .15s;
+  }
+  .customize-btn:hover { border-color: var(--line-strong); }
+  .customize-btn span { flex: 1; }
+  .customize-btn .tune { width: 20px; height: 20px; flex: none; }
+  .customize-btn .chev { transition: transform .2s; }
+  .customize-btn[aria-expanded="true"] { border-color: var(--ink); }
+  .customize-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
   @media (max-width: 860px) {
     .app {
       grid-template-columns: minmax(0, 1fr);
       grid-template-rows: auto;
-      grid-template-areas: "head" "preview" "trips" "settings";
+      grid-template-areas: "head" "preview" "customize" "settings" "trips";
       padding: 18px 16px calc(32px + env(safe-area-inset-bottom));
     }
+    /* Settings live behind the Customize button, right above the trips */
+    .customize-btn { display: flex; grid-area: customize; margin-top: 16px; }
+    .app:not(.settings-open) .settings { display: none; }
+    .settings { padding-bottom: 4px; }
+    .settings > .group-title:first-child { margin-top: 20px; }
     header { padding-bottom: 16px; }
     header h1 { font-size: 26px; }
     .preview { position: static; height: auto; padding: 20px 16px; }
@@ -434,6 +450,12 @@
     </div>
   </section>
 
+  <button class="customize-btn" id="customizeBtn" type="button" aria-expanded="false" aria-controls="settings">
+    <svg class="tune" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+    <span data-i18n="customize"></span>
+    <svg class="chev" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5.5L7 9l3.5-3.5"/></svg>
+  </button>
+
   <main class="trips-col">
     <div class="group-title"><span data-i18n="trips"></span><span class="stats" id="stats"></span></div>
     <ul class="trips" id="trips"></ul>
@@ -453,7 +475,7 @@
     </div>
   </main>
 
-  <aside class="settings">
+  <aside class="settings" id="settings">
     <div class="group-title"><span data-i18n="general"></span></div>
     <div class="card">
       <div class="row">
@@ -563,6 +585,7 @@
       tagline: 'Twój rok w podróżach',
       preview: 'Podgląd', previewAlt: 'Podgląd wygenerowanego obrazka',
       save: 'Zapisz JPG', share: 'Udostępnij',
+      customize: 'Dostosuj',
       trips: 'Podróże', emptyText: 'Nie masz jeszcze żadnych podróży.', emptyAdd: 'Dodaj pierwszą albo', loadDemo: 'wczytaj przykład',
       addTrip: 'Dodaj podróż',
       general: 'Ogólne', year: 'Rok', prevYear: 'Poprzedni rok', nextYear: 'Następny rok', language: 'Język',
@@ -571,7 +594,7 @@
       advanced: 'Zaawansowane', flags: 'Flagi', flagsNative: 'Systemowe',
       alignYear: 'Wyrównanie roku', alignMonths: 'Wyrównanie miesięcy',
       alignLeft: 'Do lewej', alignCenter: 'Do środka', alignRight: 'Do prawej',
-      weekSunday: 'Tydzień od niedzieli',
+      weekSunday: 'Zaczynaj tydzień od niedzieli',
       clearTrips: 'Wyczyść podróże', confirmClear: 'Usunąć wszystkie podróże?',
       pickContinent: 'Wybierz kontynent', back: 'Wstecz',
       continents: { europe: 'Europa', asia: 'Azja', africa: 'Afryka', namerica: 'Ameryka Północna', samerica: 'Ameryka Południowa', oceania: 'Australia i Oceania', antarctica: 'Antarktyda' },
@@ -593,6 +616,7 @@
       tagline: 'Your year of travel',
       preview: 'Preview', previewAlt: 'Preview of the generated image',
       save: 'Save JPG', share: 'Share',
+      customize: 'Customize',
       trips: 'Trips', emptyText: "You don't have any trips yet.", emptyAdd: 'Add your first one or', loadDemo: 'load an example',
       addTrip: 'Add trip',
       general: 'General', year: 'Year', prevYear: 'Previous year', nextYear: 'Next year', language: 'Language',
@@ -1153,6 +1177,13 @@
     { code: 'pl', name: 'Polski', flag: 'PL' },
     { code: 'en', name: 'English', flag: 'GB' },
   ];
+  // Phone layout: settings are folded behind the Customize button above the trips.
+  const customizeBtn = document.getElementById('customizeBtn');
+  customizeBtn.addEventListener('click', () => {
+    const open = document.querySelector('.app').classList.toggle('settings-open');
+    customizeBtn.setAttribute('aria-expanded', String(open));
+  });
+
   const langBtn = document.getElementById('langBtn');
   const langMenu = document.getElementById('langMenu');
   const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
