@@ -37,7 +37,7 @@ Also check your change by hand in the browser: light and dark mode, a wide windo
 - **Keep it dependency-free at runtime.** No frameworks, bundlers or CDNs. Bundle any new asset under `src/assets/` and keep the Content Security Policy in `index.html` strict.
 - **Logic goes to `src/core/`** (pure functions, no DOM) and gets a test in `tests/`.
 - **Untrusted data** (localStorage, imported files) must go through `sanitizeState()` in `src/state.js`; text put into HTML must go through `escapeHtml()`.
-- **UI texts** live in `src/i18n.js`, always in every language (a test checks this).
+- **UI texts** live in `src/locales/`, always in every language (a test checks this). Use logical CSS properties (`inset-inline-start`, `margin-inline-end`, `text-align: start`) so the right-to-left layout keeps working.
 - **Colours** come from `src/styles/tokens.css`; keep text contrast at WCAG AA (4.5:1).
 - **New or renamed files in `src/`**: update `PRECACHE` in `sw.js`.
 - **User-visible changes**: add a line to `CHANGELOG.md` under *Unreleased*.

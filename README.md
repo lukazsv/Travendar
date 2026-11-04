@@ -11,7 +11,7 @@ The app runs entirely in the browser: no backend, no account, no build step.
 - **Themes**: Dark, Light (classic calendar look) and Custom, with your own background, text and accent colours.
 - **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
 - **Export**: *Save JPG*, plus *Share* on phones (saves straight to Photos through the share sheet).
-- **Polish and English** UI. Country names come from the browser, so they are always translated.
+- **13 languages**: Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish and Ukrainian. The browser's preferred language is picked automatically (English if none is supported); country names come from the browser in the chosen language.
 - **Responsive**: three columns on wide screens, two on laptops and tablets, one on phones (settings folded behind *Customize*).
 - **Installable and offline**: add it to the home screen / install it as an app; after the first visit it also works without internet.
 - **Saved automatically** in the browser (`localStorage`). Nothing is sent anywhere and the page makes no requests to outside services (fonts and flags are bundled); the footer explains this to users and credits the flag images.
@@ -66,13 +66,15 @@ src/
   main.js                     Entry point: initialises the UI and reacts to state changes
   config.js                   Constants: image size, fonts, built-in themes, languages, limits
   state.js                    App state, validation of stored/imported data, persistence, change notifications
-  i18n.js                     Polish and English UI texts, t() and applyI18n()
+  i18n.js                     t(), applyI18n() (also sets <html dir> for right-to-left languages)
+  locales/                    One file of UI texts per language (ar, de, en, es, fr, hi, it, ja, pl, pt, ru, uk, zh) + plural.js
   pwa.js                      Registers the service worker
   core/                       Logic with no DOM access (pure functions)
     dates.js                  'YYYY-MM-DD' helpers
     calendar.js               Trips → which flag goes on which day; travel stats; month-grid helpers
     date-range.js             Two-click range selection logic used by the date picker
-    countries.js              Country list and names (Intl.DisplayNames), search, flag emoji
+    countries.js              Country list and names in any language (Intl.DisplayNames), search, flag emoji
+    language.js               Picks the UI language from the browser's preferences
     continents.js             Which countries each continent lists (hand-maintained)
     continent-shapes.js       Continent outline icons (GENERATED, do not edit)
   render/
@@ -141,14 +143,14 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 
 **Offline and install.** `src/pwa.js` registers `sw.js`, which caches the app on the first visit. It is *network first*: online, files always come fresh from the server (a deployment is picked up at once, old and new files never mix); offline, the cached copies are used. `sw.js` has a `PRECACHE` list of every file the app needs to start offline — when you add, rename or remove a file in `src/`, update it and run `python3 scripts/check_precache.py`.
 
-**Translations.** Static text in `index.html` uses `data-i18n="key"` (text), `data-i18n-aria` (aria-label) and `data-i18n-ph` (placeholder). Text built in JS uses `t('key')`.
+**Translations.** Each language has a file in `src/locales/` with the same keys (a test checks it). Static text in `index.html` uses `data-i18n="key"` (text), `data-i18n-aria` (aria-label) and `data-i18n-ph` (placeholder); text built in JS uses `t('key')`. Plurals use the browser's plural rules through `plural(locale, { one, few, many, other, … })`, so languages like Polish, Russian or Arabic get the right forms. On first visit the language comes from `navigator.languages` (`core/language.js`), falling back to English; Traditional Chinese is not matched because only Simplified is available. Arabic switches the page to right-to-left: CSS uses logical properties (`inset-inline-start`, `margin-inline-start`, `text-align: start`), so the layout mirrors by itself; the exported image always stays left to right.
 
 ## Common changes
 
 | Task | Where |
 | --- | --- |
-| Change a UI text | `src/i18n.js` (both languages) |
-| Add a UI language | add a block in `src/i18n.js`, then an entry in `LANGUAGES` in `src/config.js` |
+| Change a UI text | `src/locales/*.js` (every language) |
+| Add a UI language | copy `src/locales/en.js`, translate it, import it in `src/i18n.js`, add it to `LANGUAGES` in `src/config.js` and to `PRECACHE` in `sw.js` |
 | Change UI colours or fonts | `src/styles/tokens.css` |
 | Change the image colours of Dark / Light | `IMAGE_THEMES` in `src/config.js` |
 | Change the image layout (sizes, spacing, fonts) | constants at the top of `src/render/calendar-renderer.js` |
@@ -177,7 +179,7 @@ If a download script fails with `CERTIFICATE_VERIFY_FAILED` on macOS, prefix it 
 ## Conventions
 
 - **No build step, no runtime dependencies, no third-party requests.** Plain HTML, CSS and JavaScript (ES2021 modules), with every asset bundled. Do not add a framework, bundler or CDN without a good reason.
-- **Code and comments in English**; UI texts only in `i18n.js`.
+- **Code and comments in English**; UI texts only in `src/locales/`.
 - **Comments say why, not what.** Every module starts with a short description; exported functions have JSDoc with types.
 - **No DOM in `core/`**, and the renderer gets everything through its arguments. That keeps the logic easy to test.
 - **CSS**: colours come from the variables in `tokens.css`, never hard-coded in components. Responsive layout rules go in `layout.css`; component-specific breakpoints stay in the component's file.

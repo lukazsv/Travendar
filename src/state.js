@@ -9,6 +9,7 @@
 import {
   STORAGE_KEY,
   LANGUAGES,
+  DEFAULT_LANGUAGE,
   IMAGE_THEMES,
   ALIGNMENTS,
   FLAG_STYLES,
@@ -19,6 +20,7 @@ import {
 } from './config.js';
 import { COUNTRY_CODES } from './core/countries.js';
 import { isISODate } from './core/dates.js';
+import { detectLanguage } from './core/language.js';
 
 /**
  * @typedef {object} Trip
@@ -38,7 +40,7 @@ import { isISODate } from './core/dates.js';
 /**
  * @typedef {object} AppState
  * @property {number} year
- * @property {'pl'|'en'} lang
+ * @property {string} lang                 UI language code, one of LANGUAGES in config.js.
  * @property {'dark'|'light'|'custom'} theme
  * @property {Colors} custom                 Colours of the custom theme.
  * @property {'native'|'twemoji'} flagStyle
@@ -60,10 +62,14 @@ const isHexColor = value => typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(
 
 /** @returns {AppState} */
 function defaults() {
-  const browserLang = (navigator.language || '').toLowerCase().startsWith('pl') ? 'pl' : 'en';
+  const preferred = typeof navigator === 'undefined' ? [] : navigator.languages || [navigator.language];
   return {
     year: new Date().getFullYear(),
-    lang: browserLang,
+    lang: detectLanguage(
+      preferred,
+      LANGUAGES.map(l => l.code),
+      DEFAULT_LANGUAGE,
+    ),
     theme: 'dark',
     custom: { ...IMAGE_THEMES.dark },
     flagStyle: 'native',

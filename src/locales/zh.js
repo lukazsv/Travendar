@@ -1,0 +1,103 @@
+/** Chinese (Simplified) UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: '你的旅行之年',
+  preview: '预览',
+  previewAlt: '生成图片的预览',
+  zoomPreview: '放大图片',
+  save: '保存 JPG',
+  share: '分享',
+  saved: 'JPG 图片已保存',
+  saveFailed: '无法保存图片',
+  shareFailed: '无法分享',
+  customize: '自定义',
+  language: '语言',
+
+  // Trips
+  trips: '旅行',
+  addTrip: '添加旅行',
+  clearTrips: '清空旅行',
+  tripDeleted: '已删除旅行',
+  tripsCleared: '已清空所有旅行',
+  undo: '撤销',
+  emptyText: '你还没有任何旅行。',
+  emptyAdd: '添加第一次旅行，或',
+  loadDemo: '载入示例',
+  from: '开始',
+  to: '结束',
+  pickStartDate: '选择开始日期',
+  pickEndDate: '选择结束日期',
+  noDate: '选择',
+  prevMonth: '上个月',
+  nextMonth: '下个月',
+  deleteTrip: '删除旅行',
+  chooseCountry: '选择国家/地区',
+  countryLabel: name => `国家/地区：${name}`,
+  notChosen: '未选择',
+  fillDates: '请填写旅行日期',
+  endBeforeStart: '结束日期早于开始日期',
+  outsideYear: year => `不在 ${year} 年内`,
+  pickCountryHint: '请选择国家/地区',
+
+  // Settings
+  general: '常规',
+  year: '年份',
+  prevYear: '上一年',
+  nextYear: '下一年',
+  theme: '主题',
+  themeDark: '深色',
+  themeLight: '浅色',
+  themeCustom: '自定义',
+  colorBg: '背景',
+  colorText: '文字',
+  colorAccent: '强调色',
+  advanced: '高级',
+  weekSunday: '每周从星期日开始',
+  alignYear: '年份对齐',
+  alignMonths: '月份对齐',
+  alignLeft: '左对齐',
+  alignCenter: '居中',
+  alignRight: '右对齐',
+  flags: '旗帜',
+  flagsNative: '系统',
+  backup: 'JSON',
+  exportData: '导出',
+  importData: '导入',
+  exported: '备份文件已保存',
+  importDone: '已从文件载入数据',
+  importFailed: '这不是有效的 Travel Year 备份文件',
+  importConfirm: '要用文件中的数据替换当前的旅行和设置吗？',
+
+  // Footer
+  privacySummary: '隐私：你的旅行只保存在此浏览器中',
+  privacyText:
+    '旅行和设置只保存在此浏览器中。本网站没有账户，也没有访问统计，不连接任何外部服务（字体和旗帜都是网站的一部分），因此不会收集或发送任何数据。和所有网站一样，托管服务商可能会在日志中看到你的 IP 地址。请注意：发布这张图片会让别人知道你何时不在家。',
+  creditFlags: '旗帜：',
+  creditContributors: '及贡献者',
+  licenseNote: '代码采用 MIT 许可证',
+
+  // Country picker
+  pickContinent: '选择大洲',
+  back: '返回',
+  done: '关闭',
+  search: '搜索国家/地区',
+  used: '已使用',
+  noResults: '未找到国家/地区',
+  continents: {
+    europe: '欧洲',
+    asia: '亚洲',
+    africa: '非洲',
+    namerica: '北美洲',
+    samerica: '南美洲',
+    oceania: '澳大利亚和大洋洲',
+    antarctica: '南极洲',
+  },
+
+  // Plurals, the image and the date picker (Chinese has no plural forms)
+  days: plural('zh', { other: '{n} 天' }),
+  countries: plural('zh', { other: '{n} 个国家/地区' }),
+  months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+  weekdays: ['一', '二', '三', '四', '五', '六', '日'], // Monday first
+};

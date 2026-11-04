@@ -1,0 +1,103 @@
+/** Hindi UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'आपका यात्राओं भरा साल',
+  preview: 'पूर्वावलोकन',
+  previewAlt: 'बनाई गई तस्वीर का पूर्वावलोकन',
+  zoomPreview: 'तस्वीर बड़ी करें',
+  save: 'JPG सहेजें',
+  share: 'शेयर करें',
+  saved: 'JPG तस्वीर सहेजी गई',
+  saveFailed: 'तस्वीर सहेजी नहीं जा सकी',
+  shareFailed: 'शेयर नहीं किया जा सका',
+  customize: 'अनुकूलित करें',
+  language: 'भाषा',
+
+  // Trips
+  trips: 'यात्राएँ',
+  addTrip: 'यात्रा जोड़ें',
+  clearTrips: 'सभी यात्राएँ हटाएँ',
+  tripDeleted: 'यात्रा हटाई गई',
+  tripsCleared: 'सभी यात्राएँ हटा दी गईं',
+  undo: 'पूर्ववत करें',
+  emptyText: 'अभी तक आपकी कोई यात्रा नहीं है।',
+  emptyAdd: 'पहली यात्रा जोड़ें या',
+  loadDemo: 'उदाहरण लोड करें',
+  from: 'से',
+  to: 'तक',
+  pickStartDate: 'शुरू होने की तारीख चुनें',
+  pickEndDate: 'खत्म होने की तारीख चुनें',
+  noDate: 'चुनें',
+  prevMonth: 'पिछला महीना',
+  nextMonth: 'अगला महीना',
+  deleteTrip: 'यात्रा हटाएँ',
+  chooseCountry: 'देश चुनें',
+  countryLabel: name => `देश: ${name}`,
+  notChosen: 'नहीं चुना गया',
+  fillDates: 'यात्रा की तारीखें भरें',
+  endBeforeStart: 'खत्म होने की तारीख शुरू होने की तारीख से पहले है',
+  outsideYear: year => `${year} से बाहर`,
+  pickCountryHint: 'देश चुनें',
+
+  // Settings
+  general: 'सामान्य',
+  year: 'साल',
+  prevYear: 'पिछला साल',
+  nextYear: 'अगला साल',
+  theme: 'थीम',
+  themeDark: 'गहरी',
+  themeLight: 'हल्की',
+  themeCustom: 'अपनी',
+  colorBg: 'पृष्ठभूमि',
+  colorText: 'टेक्स्ट',
+  colorAccent: 'मुख्य रंग',
+  advanced: 'उन्नत',
+  weekSunday: 'हफ़्ता रविवार से शुरू करें',
+  alignYear: 'साल का संरेखण',
+  alignMonths: 'महीनों का संरेखण',
+  alignLeft: 'बाएँ',
+  alignCenter: 'बीच में',
+  alignRight: 'दाएँ',
+  flags: 'झंडे',
+  flagsNative: 'सिस्टम',
+  backup: 'JSON',
+  exportData: 'एक्सपोर्ट',
+  importData: 'इम्पोर्ट',
+  exported: 'बैकअप फ़ाइल सहेजी गई',
+  importDone: 'फ़ाइल से डेटा लोड हो गया',
+  importFailed: 'यह Travel Year की मान्य बैकअप फ़ाइल नहीं है',
+  importConfirm: 'क्या मौजूदा यात्राओं और सेटिंग को फ़ाइल के डेटा से बदलना है?',
+
+  // Footer
+  privacySummary: 'निजता: आपकी यात्राएँ सिर्फ़ इसी ब्राउज़र में रहती हैं',
+  privacyText:
+    'यात्राएँ और सेटिंग सिर्फ़ इसी ब्राउज़र में सहेजी जाती हैं। इस साइट पर न कोई खाता है, न विज़िट के आँकड़े, और यह किसी बाहरी सेवा से नहीं जुड़ती — फ़ॉन्ट और झंडे इसी का हिस्सा हैं — इसलिए यह न कुछ इकट्ठा करती है, न कहीं भेजती है। हर वेबसाइट की तरह, होस्टिंग कंपनी अपने लॉग में आपका IP पता देख सकती है। ध्यान रखें: तस्वीर पोस्ट करने से दूसरों को पता चलता है कि आप कब घर पर नहीं थे।',
+  creditFlags: 'झंडे:',
+  creditContributors: 'और योगदानकर्ता',
+  licenseNote: 'कोड MIT लाइसेंस के तहत',
+
+  // Country picker
+  pickContinent: 'महाद्वीप चुनें',
+  back: 'वापस',
+  done: 'बंद करें',
+  search: 'देश खोजें',
+  used: 'इस्तेमाल किए गए',
+  noResults: 'कोई देश नहीं मिला',
+  continents: {
+    europe: 'यूरोप',
+    asia: 'एशिया',
+    africa: 'अफ़्रीका',
+    namerica: 'उत्तरी अमेरिका',
+    samerica: 'दक्षिणी अमेरिका',
+    oceania: 'ऑस्ट्रेलिया और ओशिनिया',
+    antarctica: 'अंटार्कटिका',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('hi', { one: '{n} दिन', other: '{n} दिन' }),
+  countries: plural('hi', { one: '{n} देश', other: '{n} देश' }),
+  months: ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्तूबर', 'नवंबर', 'दिसंबर'],
+  weekdays: ['सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि'], // Monday first
+};

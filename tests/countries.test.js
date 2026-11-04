@@ -4,10 +4,13 @@ import {
   COUNTRY_CODES,
   COUNTRIES,
   COUNTRY_BY_CODE,
+  countryName,
+  searchText,
   normalizeForSearch,
   flagEmoji,
   sortByName,
 } from '../src/core/countries.js';
+import { LANGUAGES } from '../src/config.js';
 import { CONTINENTS } from '../src/core/continents.js';
 
 test('country codes are unique two-letter codes', () => {
@@ -15,10 +18,16 @@ test('country codes are unique two-letter codes', () => {
   for (const code of COUNTRY_CODES) assert.match(code, /^[A-Z]{2}$/);
 });
 
-test('every country has Polish and English names', () => {
-  assert.equal(COUNTRY_BY_CODE.PL.pl, 'Polska');
-  assert.equal(COUNTRY_BY_CODE.PL.en, 'Poland');
-  for (const c of COUNTRIES) assert.ok(c.pl && c.en, c.code);
+test('country names come from the browser in every UI language', () => {
+  assert.equal(countryName(COUNTRY_BY_CODE.PL, 'pl'), 'Polska');
+  assert.equal(countryName(COUNTRY_BY_CODE.PL, 'en'), 'Poland');
+  assert.equal(countryName(COUNTRY_BY_CODE.DE, 'de'), 'Deutschland');
+  assert.equal(countryName(COUNTRY_BY_CODE.JP, 'ja'), '日本');
+  // Portuguese uses the European variant (pt-PT), not Brazilian.
+  assert.equal(countryName(COUNTRY_BY_CODE.PL, 'pt'), 'Polónia');
+  for (const { code: lang } of LANGUAGES) {
+    for (const c of COUNTRIES) assert.ok(countryName(c, lang), `${lang}:${c.code}`);
+  }
 });
 
 test('every country belongs to at least one continent, and continents list only known codes', () => {
@@ -33,7 +42,14 @@ test('every country belongs to at least one continent, and continents list only 
 test('search ignores case and Polish diacritics', () => {
   assert.equal(normalizeForSearch('Łódź'), 'lodz');
   assert.equal(normalizeForSearch('ŻÓŁW'), 'zolw');
-  assert.ok(COUNTRY_BY_CODE.HU.search.includes(normalizeForSearch('wegry')));
+  assert.ok(searchText(COUNTRY_BY_CODE.HU, 'pl').includes(normalizeForSearch('wegry')));
+});
+
+test('search works in the UI language and in English', () => {
+  assert.ok(searchText(COUNTRY_BY_CODE.DE, 'ru').includes('германия'));
+  assert.ok(searchText(COUNTRY_BY_CODE.DE, 'ru').includes('germany'));
+  assert.ok(searchText(COUNTRY_BY_CODE.DE, 'ja').includes('ドイツ'));
+  assert.ok(searchText(COUNTRY_BY_CODE.ES, 'fr').includes('espagne'));
 });
 
 test('flagEmoji builds regional-indicator pairs', () => {

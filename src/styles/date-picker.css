@@ -48,10 +48,10 @@ dialog.date-dialog {
   z-index: 1;
 }
 .dp-prev {
-  left: 14px;
+  inset-inline-start: 14px;
 }
 .dp-next {
-  right: 14px;
+  inset-inline-end: 14px;
 }
 
 .dp-months {
@@ -98,10 +98,10 @@ dialog.date-dialog {
   background: var(--soft);
 }
 .dp-cell.range-start::before {
-  left: 50%;
+  inset-inline-start: 50%;
 }
 .dp-cell.range-end::before {
-  right: 50%;
+  inset-inline-end: 50%;
 }
 
 .day {

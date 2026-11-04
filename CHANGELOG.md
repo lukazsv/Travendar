@@ -13,7 +13,7 @@ Everything below will ship as **1.0.0** once the site is hosted and tested on re
 - **Image**: a 1080 × 1920 year calendar where travel days show the country's flag; live preview that opens enlarged on tap (swipe any way to close); **Save JPG** and **Share** (phones).
 - **Themes**: Dark, Light and Custom (own background, text and accent colours) with live thumbnails.
 - **Advanced**: week starting on Sunday, year and month-name alignment, system or Twemoji flags, **JSON backup** export and import.
-- **Polish and English** interface; country names from the browser in both languages.
+- **13 interface languages** — Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish, Ukrainian — chosen automatically from the browser (English otherwise) and listed alphabetically in the language menu; country names, month names and plurals in each language.
 - **Responsive layout**: three columns on wide screens, two on tablets/laptops, one on phones with settings folded behind *Customize*; on wider screens *Add trip* and *Clear trips* stay pinned below the trip list.
 - **Installable app (PWA)** that works offline after the first visit; app icon, favicon and link-preview image.
 - **Privacy**: everything stays in the browser; no accounts, analytics or third-party requests (fonts and flags are bundled). Footer with a privacy note and credits.

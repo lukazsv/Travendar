@@ -10,7 +10,7 @@ import { state, commit, newId } from '../state.js';
 import { t } from '../i18n.js';
 import { isISODate, parseISODate, toISODate, addDays, daysInclusive } from '../core/dates.js';
 import { buildDayMap, travelStats } from '../core/calendar.js';
-import { COUNTRY_BY_CODE } from '../core/countries.js';
+import { COUNTRY_BY_CODE, countryName } from '../core/countries.js';
 import { flagHTML } from '../render/flags.js';
 import { openCountryPicker } from './country-picker.js';
 import { openDateRangePicker, formatShortDate } from './date-range-picker.js';
@@ -69,7 +69,7 @@ export function updateStats() {
 /** @param {import('../state.js').Trip} trip */
 function tripCard(trip) {
   const country = COUNTRY_BY_CODE[trip.code];
-  const name = country ? country[state.lang] : '';
+  const name = country ? countryName(country, state.lang) : '';
   const label = country
     ? `${flagHTML(country.code)}<span class="cname">${esc(name)}</span>`
     : `${ICON_GLOBE}<span class="cname muted">${esc(t('chooseCountry'))}</span>`;

@@ -1,6 +1,6 @@
 /** Language menu behind the globe button in the header. */
 
-import { LANGUAGES } from '../config.js';
+import { LANGUAGES, DEFAULT_LANGUAGE } from '../config.js';
 import { state, commit } from '../state.js';
 import { flagHTML } from '../render/flags.js';
 import { ICON_CHECK } from './icons.js';
@@ -40,12 +40,25 @@ export function initLanguageMenu() {
   });
 }
 
+/**
+ * Menu order: the default language (English) first, then a divider, then the others in
+ * alphabetical order of their own names (Deutsch, Español, …). Scripts sort in Unicode
+ * order after Latin: Cyrillic, Arabic, Devanagari, CJK.
+ */
+const PINNED_LANGUAGE = LANGUAGES.find(l => l.code === DEFAULT_LANGUAGE);
+const OTHER_LANGUAGES = LANGUAGES.filter(l => l !== PINNED_LANGUAGE).sort((a, b) =>
+  new Intl.Collator('en').compare(a.name, b.name),
+);
+
+const menuItem = lang => `
+  <button class="lang-item" type="button" role="menuitemradio" lang="${lang.code}" data-lang="${lang.code}"
+          aria-checked="${lang.code === state.lang}">${flagHTML(lang.flag)}<span dir="${lang.dir}">${esc(lang.name)}</span>${ICON_CHECK}</button>`;
+
 function open() {
-  menu.innerHTML = LANGUAGES.map(
-    lang => `
-    <button class="lang-item" type="button" role="menuitemradio" lang="${lang.code}" data-lang="${lang.code}"
-            aria-checked="${lang.code === state.lang}">${flagHTML(lang.flag)}<span>${esc(lang.name)}</span>${ICON_CHECK}</button>`,
-  ).join('');
+  menu.innerHTML =
+    menuItem(PINNED_LANGUAGE) +
+    '<div class="lang-divider" role="separator"></div>' +
+    OTHER_LANGUAGES.map(menuItem).join('');
   menu.hidden = false;
   button.setAttribute('aria-expanded', 'true');
   (menu.querySelector('[aria-checked="true"]') || menu.firstElementChild).focus();
