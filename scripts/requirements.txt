@@ -1,3 +1,4 @@
 # Only needed for scripts/generate_continent_shapes.py — the app itself has no dependencies.
-shapely>=2.0
-numpy
+# Pinned to the versions the committed shapes were generated with.
+shapely==2.2.0
+numpy==2.5.4

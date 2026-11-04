@@ -1,6 +1,6 @@
 # Travel Year
 
-Make your **travel year** image, as in the TikTok trend: a full-year calendar where every day you spent abroad shows that country's flag instead of the date. The image follows the look of the iOS Calendar year view and is saved as a 1080 × 1920 JPG, ready for TikTok or Instagram Stories.
+Make your **travel year** image, as in the popular social-media trend: a full-year calendar where every day you spent abroad shows that country's flag instead of the date. The image has the clean look of a phone calendar's year view and is saved as a 1080 × 1920 JPG, ready for stories and short-video apps.
 
 The app runs entirely in the browser: no backend, no account, no build step.
 
@@ -8,26 +8,28 @@ The app runs entirely in the browser: no backend, no account, no build step.
 
 - **Trips**: pick a country (first a continent, then its countries A–Z, or search), a start and an end date. Days of trips that overlap go to the trip that starts later.
 - **Live preview** of the image while you edit.
-- **Themes**: Dark, Light (iOS look) and Custom, with your own background, text and accent colours.
-- **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags.
+- **Themes**: Dark, Light (classic calendar look) and Custom, with your own background, text and accent colours.
+- **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
 - **Export**: *Save JPG*, plus *Share* on phones (saves straight to Photos through the share sheet).
 - **Polish and English** UI. Country names come from the browser, so they are always translated.
 - **Responsive**: three columns on wide screens, two on laptops and tablets, one on phones (settings folded behind *Customize*).
-- **Saved automatically** in the browser (`localStorage`). Nothing is sent to a server.
+- **Saved automatically** in the browser (`localStorage`). Nothing is sent anywhere and the page makes no requests to outside services (fonts and flags are bundled); the footer explains this to users and credits the flag images.
 
 ## Running locally
 
 The app uses native ES modules, which browsers do not load from `file://`. Serve the folder with any static server:
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
 Then open <http://localhost:8000>. There is nothing to install and nothing to build: edit a file and reload the page.
 
+`--bind 127.0.0.1` keeps the server private to your computer. Without it, anyone on the same network can browse the whole folder (including `.git`). Drop it only while testing on a phone, on a network you trust, and open `http://<your computer's IP>:8000` there — type the `http://` part, or the phone will try HTTPS and fail.
+
 ## Deploying
 
-Upload the repository as it is to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel…). Only `index.html` and `src/` are needed at runtime; `scripts/` is for development.
+Publish **only `index.html` and the `src/` folder** (it includes the fonts and flag images) to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel…). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. Git-based hosts such as Netlify, Cloudflare Pages and GitHub Pages skip `.git` automatically. `scripts/` is for development only.
 
 > GitHub Pages on a free plan works only for public repositories.
 
@@ -37,8 +39,8 @@ Upload the repository as it is to any static host (GitHub Pages, Netlify, Cloudf
 index.html                    Markup only: links the styles and loads src/main.js
 src/
   main.js                     Entry point: initialises the UI and reacts to state changes
-  config.js                   Constants: image size, fonts, built-in themes, languages, URLs
-  state.js                    App state, localStorage persistence, change notifications
+  config.js                   Constants: image size, fonts, built-in themes, languages, limits
+  state.js                    App state, validation of stored/imported data, persistence, change notifications
   i18n.js                     Polish and English UI texts, t() and applyI18n()
   core/                       Logic with no DOM access (pure functions)
     dates.js                  'YYYY-MM-DD' helpers
@@ -48,7 +50,7 @@ src/
     continent-shapes.js       Continent outline icons (GENERATED, do not edit)
   render/
     calendar-renderer.js      Draws the image on a <canvas>
-    flags.js                  Emoji flag support detection, Twemoji images, flag HTML
+    flags.js                  Emoji flag support detection, flag images, flag HTML
   ui/                         One module per part of the interface
     preview.js                Main canvas, theme thumbnails, JPEG rendering
     trips.js                  Trip list, add / delete / demo / clear
@@ -56,19 +58,26 @@ src/
     settings.js               Year, theme and custom colours, Advanced, Customize button
     language-menu.js          Globe menu in the header
     export.js                 Save JPG and Share buttons
+    backup.js                 Export / import of trips and settings as JSON
     toast.js                  Status messages
     icons.js                  Inline SVG icons used from JS
   utils/
     html.js                   escapeHtml(), byId()
+    download.js               downloadBlob()
+  assets/
+    fonts/                    DM Sans and Inter (woff2) with their OFL licences
+    flags/                    Twemoji flag PNGs named <ISO code>.png, with LICENSE.md
   styles/                     CSS, loaded in this order by index.html:
+    fonts.css                 @font-face rules for the bundled fonts
     tokens.css                Colours and fonts of the UI (light and dark)
     base.css                  Reset and document defaults
     components.css            Buttons, cards, rows, segmented control, switch, stepper, toast
-    header.css, preview.css, trips.css, settings.css, country-picker.css
+    header.css, preview.css, trips.css, settings.css, country-picker.css, footer.css
     layout.css                Page grid and responsive breakpoints (loaded last)
 scripts/
   generate_continent_shapes.py   Rebuilds src/core/continent-shapes.js from map data
-  requirements.txt               Python dependencies of that script
+  requirements.txt               Python dependencies of that script (pinned)
+  download_flags.py              Downloads the Twemoji flag PNGs into src/assets/flags/
 ```
 
 ## How it works
@@ -82,9 +91,15 @@ commit({ year: true });   // → trip list re-rendered, stats updated, image red
 
 The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the page texts, the trip list and the country picker must be rebuilt. The image is always redrawn, at most once per animation frame (`scheduleDraw()`).
 
+**Untrusted data.** Everything read from `localStorage` or from an imported backup file goes through `sanitizeState()` in `state.js`: only known fields with valid values are kept (known country codes, `YYYY-MM-DD` dates, simple ids, `#rrggbb` colours, at most 1000 trips). Text inserted into HTML is always passed through `escapeHtml()`. Keep both rules when adding fields.
+
+**Backup files** look like `{ "format": "travel-year-backup", "version": 1, "exportedAt": "…", "data": { …state… } }`. If the state shape changes incompatibly, bump `BACKUP_VERSION` in `config.js` and migrate older files in `ui/backup.js`.
+
 **The image.** `render/calendar-renderer.js` lays everything out on a fixed 1080 × 1920 grid and scales it with the canvas transform. The same function draws the export and the theme thumbnails. It reads only its arguments, never the global state. The day → country mapping is computed by `core/calendar.js`.
 
-**Flags.** Apple and Android devices (and Firefox) draw emoji flags, so the image uses them as they are. Windows cannot, so `render/flags.js` detects that and uses [Twemoji](https://github.com/jdecked/twemoji) images instead. Before export the app waits for those images to load.
+**Flags.** Apple and Android devices (and Firefox) draw emoji flags, so the image uses them as they are. Windows cannot, so `render/flags.js` detects that and uses the bundled [Twemoji](https://github.com/jdecked/twemoji) images from `src/assets/flags/` instead. Before export the app waits for those images to load.
+
+**Security.** `index.html` sets a strict Content Security Policy: scripts, styles, fonts and images may come from the site itself only, so injected or third-party code cannot run. Together with `sanitizeState()` and `escapeHtml()` this covers the app's only inputs (stored data and backup files). Headers that only the server can send (HSTS, `frame-ancestors`, …) must be configured on the hosting.
 
 **Translations.** Static text in `index.html` uses `data-i18n="key"` (text), `data-i18n-aria` (aria-label) and `data-i18n-ph` (placeholder). Text built in JS uses `t('key')`.
 
@@ -99,6 +114,8 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 | Change the image layout (sizes, spacing, fonts) | constants at the top of `src/render/calendar-renderer.js` |
 | Add a setting | default + validation in `state.js`, markup in `index.html`, binding in `ui/settings.js`, use it in `ui/preview.js` → renderer |
 | Move a country to another continent | `src/core/continents.js` |
+| Add a country | `COUNTRY_CODES` in `src/core/countries.js`, a continent in `continents.js`, then `python3 scripts/download_flags.py` |
+| Use a new external resource (font, CDN, API) | avoid it if you can; otherwise allow it in the CSP in `index.html` and mention it in `privacyText` (`i18n.js`) |
 | Regenerate continent outlines | see below |
 
 ### Regenerating the continent outlines
@@ -111,11 +128,13 @@ python3 -m venv .venv
 .venv/bin/python scripts/generate_continent_shapes.py
 ```
 
-The script downloads the data, rewrites `src/core/continent-shapes.js` and prints the size of each outline.
+The script downloads the data (pinned to a Natural Earth commit and checked against a SHA-256 hash), rewrites `src/core/continent-shapes.js` and prints the size of each outline.
+
+If a download script fails with `CERTIFICATE_VERIFY_FAILED` on macOS, prefix it with `SSL_CERT_FILE=/etc/ssl/cert.pem`.
 
 ## Conventions
 
-- **No build step, no runtime dependencies.** Plain HTML, CSS and JavaScript (ES2021 modules). Do not add a framework or bundler without a good reason.
+- **No build step, no runtime dependencies, no third-party requests.** Plain HTML, CSS and JavaScript (ES2021 modules), with every asset bundled. Do not add a framework, bundler or CDN without a good reason.
 - **Code and comments in English**; UI texts only in `i18n.js`.
 - **Comments say why, not what.** Every module starts with a short description; exported functions have JSDoc with types.
 - **No DOM in `core/`**, and the renderer gets everything through its arguments. That keeps the logic easy to test.
@@ -129,15 +148,17 @@ Current Chrome, Edge, Safari (macOS / iOS 15.4+) and Firefox. The app relies on 
 
 ## Privacy
 
-Trips and settings stay in the browser's `localStorage`. The page loads fonts from Google Fonts and, where needed, flag images from the jsDelivr CDN; nothing else leaves the device.
+Trips and settings stay in the browser's `localStorage`. The page makes no requests to other services: fonts and flag images are served from the site itself, and there are no analytics. As with any website, the hosting provider sees visitors' IP addresses in its logs. The same explanation is shown to users in the footer — update it (`privacyText` in `i18n.js`) if this ever changes.
 
 ## Credits
 
-- Flag images on systems without emoji flags: [Twemoji](https://github.com/jdecked/twemoji), © Twitter and contributors, licensed [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Flag images on systems without emoji flags: [Twemoji](https://github.com/jdecked/twemoji) v15.1.0, © Twitter and contributors, licensed [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (see `src/assets/flags/LICENSE.md`).
 - Continent outlines: derived from [Natural Earth](https://www.naturalearthdata.com/) (public domain).
 - Plane icon in the empty trip list: [Lucide](https://lucide.dev/) (ISC licence).
-- Fonts: [DM Sans](https://fonts.google.com/specimen/DM+Sans) and [Inter](https://fonts.google.com/specimen/Inter) (SIL Open Font License), via Google Fonts.
+- Fonts: [DM Sans](https://github.com/googlefonts/dm-fonts) and [Inter](https://github.com/rsms/inter), SIL Open Font License 1.1 (see `src/assets/fonts/OFL-*.txt`).
 
 ## License
 
-No license has been chosen yet, so all rights are reserved by the author. Add a `LICENSE` file before accepting outside contributions.
+The code is open source under the [MIT License](LICENSE).
+
+Bundled third-party assets keep their own licences (see [Credits](#credits)): Twemoji flag images are CC-BY 4.0, the fonts are SIL OFL 1.1, and the continent outlines are derived from public-domain Natural Earth data.

@@ -15,6 +15,7 @@ Which countries belong to which continent is *not* generated; that list is
 maintained by hand in ``src/core/continents.js``.
 """
 
+import hashlib
 import json
 import math
 import sys
@@ -26,10 +27,14 @@ import shapely
 from shapely.geometry import MultiPolygon, Polygon, box, shape
 from shapely.ops import unary_union
 
+# Pinned to a commit so the output is reproducible and cannot change under us.
+NATURAL_EARTH_COMMIT = "ca96624a56bd078437bca8184e78163e5039ad19"
 DATA_URL = (
-    "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/"
+    f"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/{NATURAL_EARTH_COMMIT}/"
     "geojson/ne_110m_admin_0_countries.geojson"
 )
+# SHA-256 of that file; the download is rejected if it differs.
+DATA_SHA256 = "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f"
 OUTPUT = Path(__file__).resolve().parent.parent / "src" / "core" / "continent-shapes.js"
 
 VIEWBOX = 32       # output viewBox is 0 0 VIEWBOX VIEWBOX
@@ -41,7 +46,10 @@ def load_features(path=None):
     if path:
         return json.loads(Path(path).read_text())["features"]
     with urllib.request.urlopen(DATA_URL) as response:  # noqa: S310 (fixed https URL)
-        return json.loads(response.read())["features"]
+        data = response.read()
+    if hashlib.sha256(data).hexdigest() != DATA_SHA256:
+        sys.exit("Downloaded Natural Earth data does not match the expected checksum")
+    return json.loads(data)["features"]
 
 
 def parts(geom):

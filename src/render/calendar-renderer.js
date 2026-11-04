@@ -1,5 +1,5 @@
 /**
- * Draws the "travel year" image: a year view in the style of the iOS Calendar,
+ * Draws the "travel year" image: a minimalist year view, like a phone calendar app,
  * with flags in place of the day numbers of travel days.
  *
  * Everything is laid out on a fixed IMAGE_WIDTH × IMAGE_HEIGHT grid and scaled with

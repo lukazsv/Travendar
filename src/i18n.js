@@ -38,6 +38,15 @@ const TRANSLATIONS = {
     alignYear: 'Wyrównanie roku', alignMonths: 'Wyrównanie miesięcy',
     alignLeft: 'Do lewej', alignCenter: 'Do środka', alignRight: 'Do prawej',
     flags: 'Flagi', flagsNative: 'Systemowe',
+    backup: 'JSON', exportData: 'Eksportuj', importData: 'Importuj',
+    exported: 'Zapisano plik z kopią', importDone: 'Wczytano dane z pliku',
+    importFailed: 'To nie jest poprawny plik kopii Travel Year',
+    importConfirm: 'Zastąpić obecne podróże i ustawienia danymi z pliku?',
+
+    // Footer
+    privacySummary: 'Prywatność: Twoje podróże zostają tylko w tej przeglądarce',
+    privacyText: 'Podróże i ustawienia są zapisywane wyłącznie w pamięci tej przeglądarki. Strona nie ma kont ani statystyk odwiedzin i nie łączy się z żadnymi zewnętrznymi usługami – czcionki i flagi są jej częścią – więc niczego nie zbiera ani nigdzie nie wysyła. Jak przy każdej stronie, firma hostingowa może widzieć Twój adres IP w swoich logach. Pamiętaj: publikując obrazek, pokazujesz innym, kiedy nie było Cię w domu.',
+    creditFlags: 'Flagi:', creditContributors: 'i współtwórcy', licenseNote: 'kod na licencji MIT',
 
     // Country picker
     pickContinent: 'Wybierz kontynent', back: 'Wstecz', done: 'Zamknij',
@@ -80,6 +89,14 @@ const TRANSLATIONS = {
     alignYear: 'Year alignment', alignMonths: 'Month alignment',
     alignLeft: 'Left', alignCenter: 'Center', alignRight: 'Right',
     flags: 'Flags', flagsNative: 'System',
+    backup: 'JSON', exportData: 'Export', importData: 'Import',
+    exported: 'Backup file saved', importDone: 'Data loaded from the file',
+    importFailed: 'This is not a valid Travel Year backup file',
+    importConfirm: 'Replace your current trips and settings with the data from the file?',
+
+    privacySummary: 'Privacy: your trips stay in this browser only',
+    privacyText: 'Trips and settings are stored only in this browser. The site has no accounts and no visitor statistics and connects to no outside services — fonts and flags are part of it — so it collects nothing and sends nothing anywhere. As with any website, the hosting company may see your IP address in its logs. Keep in mind: posting the image shows others when you were away from home.',
+    creditFlags: 'Flags:', creditContributors: 'and contributors', licenseNote: 'code under the MIT License',
 
     pickContinent: 'Choose continent', back: 'Back', done: 'Close',
     search: 'Search countries', used: 'Used', noResults: 'No country found',

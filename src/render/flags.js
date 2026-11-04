@@ -1,11 +1,11 @@
 /**
  * Flag rendering. Uses the system's emoji flags when it can draw them (Apple, Android,
- * Firefox), otherwise Twemoji images (Windows has no emoji flags).
+ * Firefox), otherwise the bundled Twemoji images (Windows has no emoji flags).
  */
 
-import { EMOJI_FONT, TWEMOJI_BASE_URL } from '../config.js';
+import { EMOJI_FONT, FLAG_IMAGES_DIR } from '../config.js';
 import { state } from '../state.js';
-import { flagEmoji, flagCodePoints } from '../core/countries.js';
+import { flagEmoji } from '../core/countries.js';
 
 /**
  * Whether this system draws emoji flags in colour: render 🇵🇱 and look for its red pixels.
@@ -33,9 +33,13 @@ export function usesEmojiFlags() {
   return SUPPORTS_EMOJI_FLAGS && state.flagStyle !== 'twemoji';
 }
 
-/** @param {string} code  @returns {string} Twemoji PNG URL for the country's flag */
-export function twemojiUrl(code) {
-  return TWEMOJI_BASE_URL + flagCodePoints(code).map(cp => cp.toString(16)).join('-') + '.png';
+/**
+ * URL of the bundled flag image. `code` is always a known ISO code here (validated in
+ * state.js or taken from our own lists), so it is safe to put into a URL and HTML.
+ * @param {string} code
+ */
+export function flagImageUrl(code) {
+  return `${FLAG_IMAGES_DIR}${code}.png`;
 }
 
 // ---- Twemoji images for the canvas ----
@@ -57,10 +61,9 @@ export function getFlagImage(code) {
   let img = imageCache.get(code);
   if (!img) {
     img = new Image();
-    img.crossOrigin = 'anonymous';   // keeps the canvas exportable (not "tainted")
     img.onload = () => loadListeners.forEach(fn => fn());
     img.onerror = () => { img.failed = true; loadListeners.forEach(fn => fn()); };
-    img.src = twemojiUrl(code);
+    img.src = flagImageUrl(code);   // same origin, so the canvas stays exportable
     imageCache.set(code, img);
   }
   return img;
@@ -86,5 +89,5 @@ export function preloadFlagImages(codes) {
 /** HTML for a flag in lists and buttons, in the current flag style. */
 export function flagHTML(code) {
   if (usesEmojiFlags()) return `<span class="flag" aria-hidden="true">${flagEmoji(code)}</span>`;
-  return `<img class="flag" src="${twemojiUrl(code)}" alt="" crossorigin="anonymous" loading="lazy">`;
+  return `<img class="flag" src="${flagImageUrl(code)}" alt="" loading="lazy">`;
 }

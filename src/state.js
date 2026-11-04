@@ -7,8 +7,10 @@
  */
 
 import {
-  STORAGE_KEY, LANGUAGES, IMAGE_THEMES, ALIGNMENTS, FLAG_STYLES, THEME_NAMES,
+  STORAGE_KEY, LANGUAGES, IMAGE_THEMES, ALIGNMENTS, FLAG_STYLES, THEME_NAMES, YEAR_MIN, YEAR_MAX, MAX_TRIPS,
 } from './config.js';
+import { COUNTRY_CODES } from './core/countries.js';
+import { isISODate } from './core/dates.js';
 
 /**
  * @typedef {object} Trip
@@ -64,39 +66,84 @@ function defaults() {
   };
 }
 
+const VALID_ID = /^[a-z0-9]{1,24}$/i;
+const KNOWN_CODES = new Set(COUNTRY_CODES);
+
 /**
- * Reads the saved state and repairs anything missing or invalid, so older or hand-edited
- * data never breaks the app.
- * @returns {AppState}
+ * Builds a valid state from untrusted data (localStorage or an imported file).
+ *
+ * Only known fields with valid values are copied; everything else falls back to the
+ * defaults. This matters for security, not just robustness: trips end up in HTML, so a
+ * crafted file or tampered storage must not be able to smuggle markup in.
+ *
+ * @param {any} raw  Parsed JSON.
+ * @returns {AppState | null}  null when `raw` does not look like Travel Year data at all.
  */
-function load() {
+export function sanitizeState(raw) {
+  if (!raw || typeof raw !== 'object' || !Array.isArray(raw.trips)) return null;
   const base = defaults();
+  const pick = (value, allowed, fallback) => (allowed.includes(value) ? value : fallback);
+  const c = raw.custom && typeof raw.custom === 'object' ? raw.custom : {};
+
+  return {
+    year: Number.isInteger(raw.year) && raw.year >= YEAR_MIN && raw.year <= YEAR_MAX ? raw.year : base.year,
+    lang: pick(raw.lang, LANGUAGES.map(l => l.code), base.lang),
+    theme: pick(raw.theme, THEME_NAMES, base.theme),
+    custom: {
+      bg: isHexColor(c.bg) ? c.bg : base.custom.bg,
+      text: isHexColor(c.text) ? c.text : base.custom.text,
+      accent: isHexColor(c.accent) ? c.accent : base.custom.accent,
+    },
+    flagStyle: pick(raw.flagStyle, FLAG_STYLES, base.flagStyle),
+    yearAlign: pick(raw.yearAlign, ALIGNMENTS, base.yearAlign),
+    monthAlign: pick(raw.monthAlign, ALIGNMENTS, base.monthAlign),
+    weekSunday: raw.weekSunday === true,
+    trips: sanitizeTrips(raw.trips),
+  };
+}
+
+/**
+ * Keeps well-formed trips only (at most MAX_TRIPS). Unknown country codes and malformed
+ * dates are cleared rather than dropping the trip; missing or duplicate ids are replaced.
+ * @returns {Trip[]}
+ */
+function sanitizeTrips(list) {
+  const seen = new Set();
+  const trips = [];
+  for (const item of list) {
+    if (trips.length >= MAX_TRIPS) break;
+    if (!item || typeof item !== 'object') continue;
+    let id = typeof item.id === 'string' && VALID_ID.test(item.id) ? item.id : newId();
+    while (seen.has(id)) id = newId();
+    seen.add(id);
+    trips.push({
+      id,
+      code: KNOWN_CODES.has(item.code) ? item.code : '',
+      start: isISODate(item.start) ? item.start : '',
+      end: isISODate(item.end) ? item.end : '',
+    });
+  }
+  return trips;
+}
+
+/** Reads the saved state; anything missing or invalid falls back to the defaults. */
+function load() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { /* private mode, bad JSON… */ }
-  if (!saved || !Array.isArray(saved.trips)) return base;
-
-  const s = { ...base, ...saved };
-  delete s.markToday;   // removed option, may still be in old saves
-
-  if (!LANGUAGES.some(l => l.code === s.lang)) s.lang = base.lang;
-  if (!THEME_NAMES.includes(s.theme)) s.theme = base.theme;
-  if (!FLAG_STYLES.includes(s.flagStyle)) s.flagStyle = base.flagStyle;
-  if (!ALIGNMENTS.includes(s.yearAlign)) s.yearAlign = base.yearAlign;
-  if (!ALIGNMENTS.includes(s.monthAlign)) s.monthAlign = base.monthAlign;
-  if (!Number.isInteger(s.year)) s.year = base.year;
-  s.weekSunday = s.weekSunday === true;
-
-  const c = saved.custom || {};
-  s.custom = {
-    bg: isHexColor(c.bg) ? c.bg : base.custom.bg,
-    text: isHexColor(c.text) ? c.text : base.custom.text,
-    accent: isHexColor(c.accent) ? c.accent : base.custom.accent,
-  };
-  return s;
+  return sanitizeState(saved) || defaults();
 }
 
 /** The single source of truth. Mutate it, then call `commit()`. */
 export const state = load();
+
+/**
+ * Replaces the whole state (e.g. from an imported file), keeping the same object so
+ * modules holding a reference to `state` see the new values.
+ * @param {AppState} next  Already sanitised.
+ */
+export function replaceState(next) {
+  Object.assign(state, next);
+}
 
 /** Writes the state to localStorage; failures (quota, private mode) are ignored. */
 export function save() {
@@ -129,5 +176,7 @@ export function themeColors(name) {
   return name === 'custom' ? state.custom : IMAGE_THEMES[name] || IMAGE_THEMES.dark;
 }
 
-/** Short random id for new trips. */
-export const newId = () => Math.random().toString(36).slice(2, 10);
+/** Short random id for new trips (letters and digits only, see VALID_ID). */
+export function newId() {
+  return Math.random().toString(36).slice(2, 10);
+}

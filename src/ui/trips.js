@@ -65,7 +65,7 @@ function tripCard(trip) {
   const label = country
     ? `${flagHTML(country.code)}<span class="cname">${esc(name)}</span>`
     : `${ICON_GLOBE}<span class="cname muted">${esc(t('chooseCountry'))}</span>`;
-  return `<li class="card trip" data-id="${trip.id}">
+  return `<li class="card trip" data-id="${esc(trip.id)}">
     <div class="trip-top">
       <button class="country-btn" type="button" data-act="pick" aria-label="${esc(t('countryLabel')(name || t('notChosen')))}">${label}${ICON_CHEVRON}</button>
       <button class="icon-btn" type="button" data-act="delete" aria-label="${esc(t('deleteTrip'))}">${ICON_TRASH}</button>

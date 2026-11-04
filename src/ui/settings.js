@@ -1,6 +1,9 @@
 /**
  * Settings column: year, image theme (with custom colours), Advanced options,
  * and the phone-only Customize button that folds the settings away.
+ *
+ * Controls are wired once in initSettings(); syncSettings() copies the current state
+ * into them again (used after importing a backup).
  */
 
 import { YEAR_MIN, YEAR_MAX } from '../config.js';
@@ -8,38 +11,33 @@ import { state, commit, themeColors } from '../state.js';
 import { SUPPORTS_EMOJI_FLAGS } from '../render/flags.js';
 import { byId } from '../utils/html.js';
 
+/** Radio groups bound to a state key of the same name, with the change hint passed to commit(). */
+const RADIO_GROUPS = {
+  yearAlign: {},
+  monthAlign: {},
+  flagStyle: { flagStyle: true },
+};
+
+let yearOutput, customPanel, weekSunday;
+let colorInputs = [];
+
 export function initSettings() {
-  initYear();
-  initTheme();
-  initAdvanced();
-  initCustomizeToggle();
-}
+  yearOutput = byId('yearOut');
+  customPanel = byId('customColors');
+  weekSunday = byId('weekSunday');
+  colorInputs = [...document.querySelectorAll('input[data-color]')];
 
-// ---- Year ----
-
-function initYear() {
-  const output = byId('yearOut');
-  output.textContent = state.year;
+  // Year
   const setYear = year => {
     state.year = Math.max(YEAR_MIN, Math.min(YEAR_MAX, year));
-    output.textContent = state.year;
+    yearOutput.textContent = state.year;
     commit({ year: true });
   };
   byId('yearPrev').addEventListener('click', () => setYear(state.year - 1));
   byId('yearNext').addEventListener('click', () => setYear(state.year + 1));
-}
 
-// ---- Theme ----
-
-let customPanel;
-let colorInputs = [];
-
-function initTheme() {
-  customPanel = byId('customColors');
-  colorInputs = [...document.querySelectorAll('input[data-color]')];
-
+  // Theme
   document.querySelectorAll('input[name="theme"]').forEach(radio => {
-    radio.checked = radio.value === state.theme;
     radio.addEventListener('change', () => {
       if (!radio.checked) return;
       // Custom starts from the colours of the theme in use, so the user only changes what they want.
@@ -52,7 +50,6 @@ function initTheme() {
       commit();
     });
   });
-
   colorInputs.forEach(input => {
     input.addEventListener('input', () => {
       state.custom[input.dataset.color] = input.value;
@@ -61,6 +58,34 @@ function initTheme() {
     });
   });
 
+  // Advanced
+  weekSunday.addEventListener('change', () => {
+    state.weekSunday = weekSunday.checked;
+    commit();
+  });
+  for (const [key, change] of Object.entries(RADIO_GROUPS)) {
+    document.querySelectorAll(`input[name="${key}"]`).forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        state[key] = radio.value;
+        commit(change);
+      });
+    });
+  }
+  // Choosing a flag style only makes sense where emoji flags exist.
+  byId('flagsRow').hidden = !SUPPORTS_EMOJI_FLAGS;
+
+  initCustomizeToggle();
+  syncSettings();
+}
+
+/** Sets every settings control from the current state. */
+export function syncSettings() {
+  yearOutput.textContent = state.year;
+  for (const key of ['theme', ...Object.keys(RADIO_GROUPS)]) {
+    document.querySelectorAll(`input[name="${key}"]`).forEach(radio => { radio.checked = radio.value === state[key]; });
+  }
+  weekSunday.checked = state.weekSunday;
   syncColorInputs();
   syncCustomPanel();
 }
@@ -82,42 +107,7 @@ function syncCustomPanel() {
   colorInputs.forEach(input => { input.tabIndex = open ? 0 : -1; });
 }
 
-// ---- Advanced ----
-
-function initAdvanced() {
-  const weekSunday = byId('weekSunday');
-  weekSunday.checked = state.weekSunday;
-  weekSunday.addEventListener('change', () => {
-    state.weekSunday = weekSunday.checked;
-    commit();
-  });
-
-  bindRadioGroup('yearAlign');
-  bindRadioGroup('monthAlign');
-  bindRadioGroup('flagStyle', { flagStyle: true });
-
-  // Choosing a flag style only makes sense where emoji flags exist.
-  byId('flagsRow').hidden = !SUPPORTS_EMOJI_FLAGS;
-}
-
-/**
- * Two-way binds radios named `key` to `state[key]`.
- * @param {string} key
- * @param {import('../state.js').Change} [change]  passed to commit()
- */
-function bindRadioGroup(key, change = {}) {
-  document.querySelectorAll(`input[name="${key}"]`).forEach(radio => {
-    radio.checked = radio.value === state[key];
-    radio.addEventListener('change', () => {
-      if (!radio.checked) return;
-      state[key] = radio.value;
-      commit(change);
-    });
-  });
-}
-
-// ---- Customize button (phones) ----
-
+/** Phones: the Customize button folds / unfolds the settings. */
 function initCustomizeToggle() {
   const button = byId('customizeBtn');
   const app = document.querySelector('.app');
