@@ -52,6 +52,42 @@ header {
 .trips-col > .group-title:first-child {
   margin-top: 6px;
 }
+/* The pinned .trips-actions provides the bottom spacing, so cards cannot show below it. */
+.trips-col {
+  padding-bottom: 0;
+}
+
+/*
+ * Add trip / Clear trips stay visible at the bottom of the trips column however long the
+ * list gets (wide and medium layouts; on phones they simply follow the list).
+ * A short fade above them hints that cards scroll underneath.
+ */
+@media (min-width: 861px) {
+  .trips-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding-bottom: 20px;
+    background: var(--bg);
+  }
+  .trips-actions::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 16px;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .trips-actions .footer-links {
+    margin-top: 10px;
+  }
+  /* Scrolling a new or focused card into view keeps it clear of the pinned buttons. */
+  .trip {
+    scroll-margin-bottom: 120px;
+  }
+}
 
 /* ---- Medium ---- */
 
