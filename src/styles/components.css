@@ -1,0 +1,121 @@
+/*
+ * Shared building blocks used across the app:
+ * buttons, cards, section titles, setting rows, segmented controls, switch, stepper, toast.
+ */
+
+/* ---- Buttons ---- */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border: 1px solid var(--line); border-radius: 10px;
+  font-size: 15px; font-weight: 600; white-space: nowrap;
+  background: var(--surface); color: var(--text);
+  transition: transform .1s ease, opacity .15s ease, border-color .15s ease;
+}
+.btn:hover { border-color: var(--line-strong); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.btn.primary:hover { opacity: .88; }
+.btn svg { width: 18px; height: 18px; }
+.btn[disabled] { opacity: .5; pointer-events: none; }
+
+/* Square bordered icon button (delete trip, …). */
+.icon-btn {
+  width: 44px; height: 44px; flex: none; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  display: grid; place-items: center; color: var(--muted); transition: color .15s, border-color .15s;
+}
+.icon-btn:hover { color: var(--accent); border-color: var(--line-strong); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* Small square icon button used in dialog headers (close, back). */
+.close-btn {
+  width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px; background: none;
+  display: grid; place-items: center; color: var(--muted);
+}
+.close-btn:hover { color: var(--text); border-color: var(--line-strong); }
+.close-btn svg { width: 16px; height: 16px; }
+
+.link { background: none; border: 0; color: var(--accent); padding: 0; font-weight: 600; text-underline-offset: 3px; }
+.link:hover { text-decoration: underline; }
+
+/* Down-pointing chevron; rotate it where another direction is needed. */
+.chev { width: 14px; height: 14px; color: var(--muted); flex: none; }
+
+/* ---- Sections and cards ---- */
+
+.group-title {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  margin: 28px 2px 10px; font-size: 14px; font-weight: 600; letter-spacing: -.005em;
+}
+.group-title .stats { font-size: 13px; font-weight: 500; color: var(--muted); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+
+/* A label on the left, a control on the right; stacked rows get a divider. */
+.row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 52px; padding: 8px 14px;
+}
+.row + .row { border-top: 1px solid var(--line); }
+.row > span:first-child { font-size: 15px; }
+
+/* ---- Segmented control: <div class="seg"><label><input type="radio"><span>…</span></label>…</div> ---- */
+
+.seg { display: inline-flex; gap: 2px; border: 1px solid var(--line); border-radius: 9px; padding: 2px; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span {
+  display: block; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 500;
+  color: var(--muted); cursor: pointer; user-select: none; transition: background .15s, color .15s;
+}
+.seg span:hover { color: var(--text); }
+.seg input:checked + span { background: var(--ink); color: var(--on-ink); }
+.seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Variant with an icon instead of text in each segment. */
+.seg-icons span { display: grid; place-items: center; padding: 5px 10px; }
+.seg-icons svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
+/* ---- Toggle switch: <input type="checkbox" class="switch"> ---- */
+
+.switch {
+  appearance: none; -webkit-appearance: none; margin: 0; flex: none;
+  width: 40px; height: 22px; border-radius: 11px; background: var(--line-strong);
+  position: relative; cursor: pointer; transition: background .2s;
+}
+.switch::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface); transition: transform .2s;
+}
+.switch:checked { background: var(--ink); }
+.switch:checked::before { transform: translateX(18px); }
+
+/* ---- Number stepper: ‹ value › ---- */
+
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 9px; padding: 2px; }
+.stepper button { width: 32px; height: 28px; border: 0; background: none; border-radius: 6px; font-size: 17px; color: var(--muted); }
+.stepper button:hover { background: var(--soft); color: var(--text); }
+.stepper output { min-width: 50px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---- Flags (emoji or Twemoji <img>) ---- */
+
+.flag {
+  flex: none; font-size: 24px; line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif;
+}
+img.flag { width: 26px; height: 26px; display: block; }
+.flag.globe { width: 22px; height: 22px; color: var(--muted); }
+
+/* ---- Toast ---- */
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translate(-50%, 12px);
+  background: var(--ink); color: var(--on-ink); padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 10;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 380px) {
+  .row > span:first-child { font-size: 14px; }
+  .seg span { padding: 5px 9px; }
+}

@@ -1,2 +1,7 @@
 .DS_Store
 .claude/
+
+# Python tooling for scripts/
+.venv/
+__pycache__/
+*.geojson

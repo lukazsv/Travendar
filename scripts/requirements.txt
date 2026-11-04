@@ -1,0 +1,3 @@
+# Only needed for scripts/generate_continent_shapes.py — the app itself has no dependencies.
+shapely>=2.0
+numpy
