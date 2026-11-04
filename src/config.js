@@ -45,11 +45,8 @@ export function intlLocale(code) {
  */
 export const SITE_URL = 'https://travendar.pages.dev/';
 
-/**
- * Donation page (buycoffee.to), offered after saving the image and in the footer.
- * TODO before release: replace with your own profile, e.g. 'https://buycoffee.to/<name>'.
- */
-export const DONATE_URL = 'https://buycoffee.to/';
+/** Donation page (buycoffee.to), offered after saving the image and in the footer. */
+export const DONATE_URL = 'https://buycoffee.to/lukazsvv';
 
 /** Used when none of the browser's preferred languages is supported. */
 export const DEFAULT_LANGUAGE = 'en';

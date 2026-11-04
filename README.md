@@ -66,8 +66,6 @@ The site is hosted on **Cloudflare Pages** (free plan: unlimited bandwidth, cust
 
 Any other static host works too, as long as it publishes `dist/` and applies `_headers` (Netlify uses the same format). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. The service worker (offline mode) only runs over HTTPS or on `localhost`.
 
-**Before the first public release**, replace the `DONATE_URL` placeholder (your buycoffee.to profile) in `src/config.js`.
-
 ## Project structure
 
 ```
@@ -170,7 +168,7 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 | Change UI colours or fonts | `src/styles/tokens.css` |
 | Change the image colours of Dark / Light | `IMAGE_THEMES` in `src/config.js` |
 | Change the image layout (sizes, spacing, fonts) | constants at the top of `src/render/calendar-renderer.js` |
-| Change the site address on the image or the donation page | `SITE_URL` and `DONATE_URL` in `src/config.js` (both are placeholders until release) |
+| Change the site address on the image or the donation page | `SITE_URL` and `DONATE_URL` in `src/config.js` (for `SITE_URL` see [Deploying](#deploying)) |
 | Add a setting | default + validation in `state.js`, markup in `index.html`, binding in `ui/settings.js`, use it in `ui/preview.js` → renderer |
 | Move a country to another continent | `src/core/continents.js` |
 | Add a country | `COUNTRY_CODES` in `src/core/countries.js`, a continent in `continents.js`, then `python3 scripts/download_flags.py` |
