@@ -40,9 +40,10 @@ export function intlLocale(code) {
 
 /**
  * Public address of the site, printed small at the bottom of the image (Advanced → switch).
- * TODO before release: replace the placeholder with the real domain (also og:url in index.html).
+ * When the domain changes, also update index.html (og:url, og:image, canonical), robots.txt
+ * and sitemap.xml — tests/site.test.js checks that they all match.
  */
-export const SITE_URL = 'https://travendar.example/';
+export const SITE_URL = 'https://travendar.pages.dev/';
 
 /**
  * Donation page (buycoffee.to), offered after saving the image and in the footer.

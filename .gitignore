@@ -8,3 +8,6 @@ __pycache__/
 
 # Node tooling (dev only)
 node_modules/
+
+# Built site (npm run build)
+dist/

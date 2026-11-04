@@ -1,5 +1,5 @@
 # Runs on every pull request and on pushes to main: lint, formatting, unit tests,
-# and the check that sw.js lists every file needed offline.
+# the check that sw.js lists every file needed offline, and a test build of the site.
 name: CI
 
 on:
@@ -34,3 +34,4 @@ jobs:
       - run: npm run format:check
       - run: npm test
       - run: python3 scripts/check_precache.py
+      - run: npm run build
