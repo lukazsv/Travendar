@@ -1,0 +1,103 @@
+/** Spanish UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'Tu año de viajes',
+  preview: 'Vista previa',
+  previewAlt: 'Vista previa de la imagen generada',
+  zoomPreview: 'Ampliar la imagen',
+  save: 'Guardar JPG',
+  share: 'Compartir',
+  saved: 'Imagen JPG guardada',
+  saveFailed: 'No se pudo guardar la imagen',
+  shareFailed: 'No se pudo compartir',
+  customize: 'Personalizar',
+  language: 'Idioma',
+
+  // Trips
+  trips: 'Viajes',
+  addTrip: 'Añadir viaje',
+  clearTrips: 'Borrar viajes',
+  tripDeleted: 'Viaje eliminado',
+  tripsCleared: 'Se han borrado todos los viajes',
+  undo: 'Deshacer',
+  emptyText: 'Todavía no tienes viajes.',
+  emptyAdd: 'Añade el primero o',
+  loadDemo: 'carga un ejemplo',
+  from: 'Desde',
+  to: 'Hasta',
+  pickStartDate: 'Elige la fecha de inicio',
+  pickEndDate: 'Elige la fecha de fin',
+  noDate: 'Elegir',
+  prevMonth: 'Mes anterior',
+  nextMonth: 'Mes siguiente',
+  deleteTrip: 'Eliminar viaje',
+  chooseCountry: 'Elige un país',
+  countryLabel: name => `País: ${name}`,
+  notChosen: 'sin elegir',
+  fillDates: 'Indica las fechas del viaje',
+  endBeforeStart: 'La fecha de fin es anterior a la de inicio',
+  outsideYear: year => `fuera de ${year}`,
+  pickCountryHint: 'elige un país',
+
+  // Settings
+  general: 'General',
+  year: 'Año',
+  prevYear: 'Año anterior',
+  nextYear: 'Año siguiente',
+  theme: 'Tema',
+  themeDark: 'Oscuro',
+  themeLight: 'Claro',
+  themeCustom: 'Propio',
+  colorBg: 'Fondo',
+  colorText: 'Texto',
+  colorAccent: 'Acento',
+  advanced: 'Avanzado',
+  weekSunday: 'La semana empieza el domingo',
+  alignYear: 'Alineación del año',
+  alignMonths: 'Alineación de los meses',
+  alignLeft: 'Izquierda',
+  alignCenter: 'Centro',
+  alignRight: 'Derecha',
+  flags: 'Banderas',
+  flagsNative: 'Del sistema',
+  backup: 'JSON',
+  exportData: 'Exportar',
+  importData: 'Importar',
+  exported: 'Copia de seguridad guardada',
+  importDone: 'Datos cargados desde el archivo',
+  importFailed: 'Este no es un archivo de copia válido de Travel Year',
+  importConfirm: '¿Sustituir tus viajes y ajustes actuales por los datos del archivo?',
+
+  // Footer
+  privacySummary: 'Privacidad: tus viajes solo se quedan en este navegador',
+  privacyText:
+    'Los viajes y los ajustes se guardan solo en este navegador. El sitio no tiene cuentas ni estadísticas de visitas y no se conecta a ningún servicio externo —las fuentes y las banderas forman parte de él—, así que no recopila ni envía nada. Como en cualquier web, la empresa de alojamiento puede ver tu dirección IP en sus registros. Ten en cuenta que, al publicar la imagen, muestras cuándo no estabas en casa.',
+  creditFlags: 'Banderas:',
+  creditContributors: 'y colaboradores',
+  licenseNote: 'código con licencia MIT',
+
+  // Country picker
+  pickContinent: 'Elige un continente',
+  back: 'Atrás',
+  done: 'Cerrar',
+  search: 'Buscar país',
+  used: 'Usados',
+  noResults: 'No se ha encontrado ningún país',
+  continents: {
+    europe: 'Europa',
+    asia: 'Asia',
+    africa: 'África',
+    namerica: 'América del Norte',
+    samerica: 'América del Sur',
+    oceania: 'Australia y Oceanía',
+    antarctica: 'Antártida',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('es', { one: '{n} día', other: '{n} días' }),
+  countries: plural('es', { one: '{n} país', other: '{n} países' }),
+  months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+  weekdays: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'], // Monday first
+};

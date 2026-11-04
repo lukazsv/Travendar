@@ -9,7 +9,14 @@
 
 import { state } from '../state.js';
 import { t } from '../i18n.js';
-import { COUNTRIES, COUNTRY_BY_CODE, sortByName, normalizeForSearch } from '../core/countries.js';
+import {
+  COUNTRIES,
+  COUNTRY_BY_CODE,
+  countryName,
+  searchText,
+  sortByName,
+  normalizeForSearch,
+} from '../core/countries.js';
 import { CONTINENTS } from '../core/continents.js';
 import { flagHTML } from '../render/flags.js';
 import { ICON_CHEVRON } from './icons.js';
@@ -103,8 +110,10 @@ function render() {
 
   if (query) {
     // Names starting with the query first, then other matches; both groups stay A–Z.
-    const startsWith = c => (normalizeForSearch(c[state.lang]).startsWith(query) ? 0 : 1);
-    const results = pool.filter(c => c.search.includes(query)).sort((a, b) => startsWith(a) - startsWith(b));
+    const startsWith = c => (normalizeForSearch(countryName(c, state.lang)).startsWith(query) ? 0 : 1);
+    const results = pool
+      .filter(c => searchText(c, state.lang).includes(query))
+      .sort((a, b) => startsWith(a) - startsWith(b));
     list.innerHTML = results.length
       ? results.map(countryItem).join('')
       : `<div class="no-results">${esc(t('noResults'))}</div>`;
@@ -124,7 +133,7 @@ function render() {
 
 /** @param {import('../core/countries.js').Country} country */
 function countryItem(country) {
-  return `<button class="c-item" type="button" data-code="${country.code}">${flagHTML(country.code)}<span>${esc(country[state.lang])}</span></button>`;
+  return `<button class="c-item" type="button" data-code="${country.code}">${flagHTML(country.code)}<span>${esc(countryName(country, state.lang))}</span></button>`;
 }
 
 /** @param {import('../core/continents.js').Continent} continent */

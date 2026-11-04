@@ -1,0 +1,103 @@
+/** Japanese UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'あなたの旅の一年',
+  preview: 'プレビュー',
+  previewAlt: '作成した画像のプレビュー',
+  zoomPreview: '画像を拡大',
+  save: 'JPG を保存',
+  share: '共有',
+  saved: 'JPG 画像を保存しました',
+  saveFailed: '画像を保存できませんでした',
+  shareFailed: '共有できませんでした',
+  customize: 'カスタマイズ',
+  language: '言語',
+
+  // Trips
+  trips: '旅行',
+  addTrip: '旅行を追加',
+  clearTrips: '旅行をすべて削除',
+  tripDeleted: '旅行を削除しました',
+  tripsCleared: 'すべての旅行を削除しました',
+  undo: '元に戻す',
+  emptyText: 'まだ旅行がありません。',
+  emptyAdd: '最初の旅行を追加するか、',
+  loadDemo: 'サンプルを読み込む',
+  from: '開始',
+  to: '終了',
+  pickStartDate: '開始日を選択',
+  pickEndDate: '終了日を選択',
+  noDate: '選択',
+  prevMonth: '前の月',
+  nextMonth: '次の月',
+  deleteTrip: '旅行を削除',
+  chooseCountry: '国・地域を選択',
+  countryLabel: name => `国・地域：${name}`,
+  notChosen: '未選択',
+  fillDates: '旅行の日付を入力してください',
+  endBeforeStart: '終了日が開始日より前です',
+  outsideYear: year => `${year}年の範囲外`,
+  pickCountryHint: '国・地域を選択してください',
+
+  // Settings
+  general: '一般',
+  year: '年',
+  prevYear: '前の年',
+  nextYear: '次の年',
+  theme: 'テーマ',
+  themeDark: 'ダーク',
+  themeLight: 'ライト',
+  themeCustom: 'カスタム',
+  colorBg: '背景',
+  colorText: '文字',
+  colorAccent: 'アクセント',
+  advanced: '詳細設定',
+  weekSunday: '週の始まりを日曜日にする',
+  alignYear: '年の配置',
+  alignMonths: '月の配置',
+  alignLeft: '左揃え',
+  alignCenter: '中央揃え',
+  alignRight: '右揃え',
+  flags: '国旗',
+  flagsNative: 'システム',
+  backup: 'JSON',
+  exportData: '書き出し',
+  importData: '読み込み',
+  exported: 'バックアップファイルを保存しました',
+  importDone: 'ファイルからデータを読み込みました',
+  importFailed: '有効な Travel Year のバックアップファイルではありません',
+  importConfirm: '現在の旅行と設定をファイルのデータで置き換えますか？',
+
+  // Footer
+  privacySummary: 'プライバシー：旅行データはこのブラウザ内にのみ保存されます',
+  privacyText:
+    '旅行と設定はこのブラウザ内にのみ保存されます。このサイトにはアカウントもアクセス解析もなく、外部サービスにも接続しません（フォントと国旗はサイトに含まれています）。そのため、データを収集したり送信したりすることはありません。他のサイトと同様、ホスティング事業者のログには IP アドレスが記録される場合があります。画像を公開すると、留守にしていた時期が他人に分かることに注意してください。',
+  creditFlags: '国旗：',
+  creditContributors: 'および貢献者',
+  licenseNote: 'コードは MIT ライセンス',
+
+  // Country picker
+  pickContinent: '大陸を選択',
+  back: '戻る',
+  done: '閉じる',
+  search: '国・地域を検索',
+  used: '使用済み',
+  noResults: '国・地域が見つかりません',
+  continents: {
+    europe: 'ヨーロッパ',
+    asia: 'アジア',
+    africa: 'アフリカ',
+    namerica: '北アメリカ',
+    samerica: '南アメリカ',
+    oceania: 'オーストラリア・オセアニア',
+    antarctica: '南極',
+  },
+
+  // Plurals, the image and the date picker (Japanese has no plural forms)
+  days: plural('ja', { other: '{n}日' }),
+  countries: plural('ja', { other: '{n}か国・地域' }),
+  months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+  weekdays: ['月', '火', '水', '木', '金', '土', '日'], // Monday first
+};

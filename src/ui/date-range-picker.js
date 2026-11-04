@@ -12,6 +12,7 @@
  */
 
 import { state } from '../state.js';
+import { intlLocale } from '../config.js';
 import { t } from '../i18n.js';
 import { isISODate, parseISODate, toISODate, addDays } from '../core/dates.js';
 import { firstColumnOfMonth, daysInMonth } from '../core/calendar.js';
@@ -127,7 +128,7 @@ const addMonths = (date, n) => new Date(date.getFullYear(), date.getMonth() + n,
 const visibleMonths = () => (matchMedia(WIDE_LAYOUT).matches ? 2 : 1);
 
 function formatter(options) {
-  return new Intl.DateTimeFormat(state.lang, options);
+  return new Intl.DateTimeFormat(intlLocale(state.lang), options);
 }
 
 /** '2 lut 2026' / '2 Feb 2026' */
@@ -216,8 +217,11 @@ function onKeyDown(e) {
   const current = e.target.closest('.day')?.dataset.date;
   if (!current) return;
   let next;
-  if (e.key in KEY_STEPS) next = addDays(current, KEY_STEPS[e.key]);
-  else if (e.key === 'PageUp' || e.key === 'PageDown') {
+  if (e.key in KEY_STEPS) {
+    // In right-to-left languages the grid is mirrored, so ← moves to the next day.
+    const mirrored = document.documentElement.dir === 'rtl' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight');
+    next = addDays(current, mirrored ? -KEY_STEPS[e.key] : KEY_STEPS[e.key]);
+  } else if (e.key === 'PageUp' || e.key === 'PageDown') {
     const d = parseISODate(current);
     const target = new Date(d.getFullYear(), d.getMonth() + (e.key === 'PageUp' ? -1 : 1), 1);
     next = toISODate(

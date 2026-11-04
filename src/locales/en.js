@@ -1,0 +1,103 @@
+/** English UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'Your year of travel',
+  preview: 'Preview',
+  previewAlt: 'Preview of the generated image',
+  zoomPreview: 'Enlarge the image',
+  save: 'Save JPG',
+  share: 'Share',
+  saved: 'JPG image saved',
+  saveFailed: 'Could not save the image',
+  shareFailed: 'Could not share',
+  customize: 'Customize',
+  language: 'Language',
+
+  // Trips
+  trips: 'Trips',
+  addTrip: 'Add trip',
+  clearTrips: 'Clear trips',
+  tripDeleted: 'Trip deleted',
+  tripsCleared: 'All trips cleared',
+  undo: 'Undo',
+  emptyText: "You don't have any trips yet.",
+  emptyAdd: 'Add your first one or',
+  loadDemo: 'load an example',
+  from: 'From',
+  to: 'To',
+  pickStartDate: 'Choose the start date',
+  pickEndDate: 'Choose the end date',
+  noDate: 'Select',
+  prevMonth: 'Previous month',
+  nextMonth: 'Next month',
+  deleteTrip: 'Delete trip',
+  chooseCountry: 'Choose country',
+  countryLabel: name => `Country: ${name}`,
+  notChosen: 'not chosen',
+  fillDates: 'Fill in the trip dates',
+  endBeforeStart: 'End date is before the start date',
+  outsideYear: year => `outside ${year}`,
+  pickCountryHint: 'choose a country',
+
+  // Settings
+  general: 'General',
+  year: 'Year',
+  prevYear: 'Previous year',
+  nextYear: 'Next year',
+  theme: 'Theme',
+  themeDark: 'Dark',
+  themeLight: 'Light',
+  themeCustom: 'Custom',
+  colorBg: 'Background',
+  colorText: 'Text',
+  colorAccent: 'Accent',
+  advanced: 'Advanced',
+  weekSunday: 'Week starts on Sunday',
+  alignYear: 'Year alignment',
+  alignMonths: 'Month alignment',
+  alignLeft: 'Left',
+  alignCenter: 'Center',
+  alignRight: 'Right',
+  flags: 'Flags',
+  flagsNative: 'System',
+  backup: 'JSON',
+  exportData: 'Export',
+  importData: 'Import',
+  exported: 'Backup file saved',
+  importDone: 'Data loaded from the file',
+  importFailed: 'This is not a valid Travel Year backup file',
+  importConfirm: 'Replace your current trips and settings with the data from the file?',
+
+  // Footer
+  privacySummary: 'Privacy: your trips stay in this browser only',
+  privacyText:
+    'Trips and settings are stored only in this browser. The site has no accounts and no visitor statistics and connects to no outside services — fonts and flags are part of it — so it collects nothing and sends nothing anywhere. As with any website, the hosting company may see your IP address in its logs. Keep in mind: posting the image shows others when you were away from home.',
+  creditFlags: 'Flags:',
+  creditContributors: 'and contributors',
+  licenseNote: 'code under the MIT License',
+
+  // Country picker
+  pickContinent: 'Choose continent',
+  back: 'Back',
+  done: 'Close',
+  search: 'Search countries',
+  used: 'Used',
+  noResults: 'No country found',
+  continents: {
+    europe: 'Europe',
+    asia: 'Asia',
+    africa: 'Africa',
+    namerica: 'North America',
+    samerica: 'South America',
+    oceania: 'Australia & Oceania',
+    antarctica: 'Antarctica',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('en', { one: '{n} day', other: '{n} days' }),
+  countries: plural('en', { one: '{n} country', other: '{n} countries' }),
+  months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], // Monday first
+};

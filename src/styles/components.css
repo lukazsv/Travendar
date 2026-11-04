@@ -241,7 +241,7 @@
   content: '';
   position: absolute;
   top: 3px;
-  left: 3px;
+  inset-inline-start: 3px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -354,4 +354,20 @@ img.flag {
   .seg span {
     padding: 5px 9px;
   }
+}
+
+/* ---- Right-to-left languages (Arabic) ----
+   Layout, grids and flex rows mirror by themselves with <html dir="rtl"> and the logical
+   properties used above; only arrow-like icons and the switch knob need flipping. */
+[dir='rtl'] .switch:checked::before {
+  transform: translateX(-18px);
+}
+[dir='rtl'] .stepper button,
+[dir='rtl'] .back-btn svg,
+[dir='rtl'] .dp-nav svg {
+  transform: scaleX(-1);
+}
+[dir='rtl'] .cont-item .chev,
+[dir='rtl'] details.adv:not([open]) > summary .chev {
+  transform: rotate(90deg);
 }

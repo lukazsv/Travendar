@@ -55,7 +55,7 @@ header p {
 .lang-menu {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  inset-inline-end: 0;
   z-index: 20;
   min-width: 180px;
   padding: 4px;
@@ -65,6 +65,9 @@ header p {
   box-shadow: var(--pop-shadow);
   transform-origin: top right;
   animation: menu-in 0.14s ease-out;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 @keyframes menu-in {
   from {
@@ -82,8 +85,13 @@ header p {
   border: 0;
   border-radius: 8px;
   background: none;
-  text-align: left;
+  text-align: start;
   font-size: 15px;
+}
+.lang-divider {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--line);
 }
 .lang-item:hover,
 .lang-item:focus-visible {
@@ -98,7 +106,7 @@ header p {
   height: 22px;
 }
 .lang-item .check {
-  margin-left: auto;
+  margin-inline-start: auto;
   width: 16px;
   height: 16px;
   color: var(--accent);

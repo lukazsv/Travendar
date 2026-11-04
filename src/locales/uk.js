@@ -1,0 +1,103 @@
+/** Ukrainian UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'Твій рік у подорожах',
+  preview: 'Попередній перегляд',
+  previewAlt: 'Попередній перегляд створеного зображення',
+  zoomPreview: 'Збільшити зображення',
+  save: 'Зберегти JPG',
+  share: 'Поділитися',
+  saved: 'Зображення JPG збережено',
+  saveFailed: 'Не вдалося зберегти зображення',
+  shareFailed: 'Не вдалося поділитися',
+  customize: 'Налаштувати',
+  language: 'Мова',
+
+  // Trips
+  trips: 'Подорожі',
+  addTrip: 'Додати подорож',
+  clearTrips: 'Видалити всі подорожі',
+  tripDeleted: 'Подорож видалено',
+  tripsCleared: 'Усі подорожі видалено',
+  undo: 'Скасувати',
+  emptyText: 'У тебе ще немає подорожей.',
+  emptyAdd: 'Додай першу або',
+  loadDemo: 'завантаж приклад',
+  from: 'З',
+  to: 'По',
+  pickStartDate: 'Обери дату початку',
+  pickEndDate: 'Обери дату завершення',
+  noDate: 'Обрати',
+  prevMonth: 'Попередній місяць',
+  nextMonth: 'Наступний місяць',
+  deleteTrip: 'Видалити подорож',
+  chooseCountry: 'Обрати країну',
+  countryLabel: name => `Країна: ${name}`,
+  notChosen: 'не обрано',
+  fillDates: 'Вкажи дати подорожі',
+  endBeforeStart: 'Дата завершення раніше за дату початку',
+  outsideYear: year => `поза ${year} роком`,
+  pickCountryHint: 'обери країну',
+
+  // Settings
+  general: 'Загальні',
+  year: 'Рік',
+  prevYear: 'Попередній рік',
+  nextYear: 'Наступний рік',
+  theme: 'Тема',
+  themeDark: 'Темна',
+  themeLight: 'Світла',
+  themeCustom: 'Власна',
+  colorBg: 'Тло',
+  colorText: 'Текст',
+  colorAccent: 'Акцент',
+  advanced: 'Додатково',
+  weekSunday: 'Тиждень починається з неділі',
+  alignYear: 'Вирівнювання року',
+  alignMonths: 'Вирівнювання місяців',
+  alignLeft: 'Ліворуч',
+  alignCenter: 'По центру',
+  alignRight: 'Праворуч',
+  flags: 'Прапори',
+  flagsNative: 'Системні',
+  backup: 'JSON',
+  exportData: 'Експорт',
+  importData: 'Імпорт',
+  exported: 'Файл резервної копії збережено',
+  importDone: 'Дані завантажено з файлу',
+  importFailed: 'Це не файл резервної копії Travel Year',
+  importConfirm: 'Замінити поточні подорожі й налаштування даними з файлу?',
+
+  // Footer
+  privacySummary: 'Приватність: твої подорожі залишаються лише в цьому браузері',
+  privacyText:
+    'Подорожі й налаштування зберігаються лише в цьому браузері. Сайт не має облікових записів і статистики відвідувань та не підключається до жодних зовнішніх сервісів — шрифти й прапори є його частиною, — тож нічого не збирає й нікуди не надсилає. Як і будь-який сайт, хостинг-провайдер може бачити твою IP-адресу у своїх журналах. Пам’ятай: публікуючи зображення, ти показуєш іншим, коли тебе не було вдома.',
+  creditFlags: 'Прапори:',
+  creditContributors: 'та учасники',
+  licenseNote: 'код за ліцензією MIT',
+
+  // Country picker
+  pickContinent: 'Обери континент',
+  back: 'Назад',
+  done: 'Закрити',
+  search: 'Шукати країну',
+  used: 'Використані',
+  noResults: 'Країну не знайдено',
+  continents: {
+    europe: 'Європа',
+    asia: 'Азія',
+    africa: 'Африка',
+    namerica: 'Північна Америка',
+    samerica: 'Південна Америка',
+    oceania: 'Австралія та Океанія',
+    antarctica: 'Антарктида',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('uk', { one: '{n} день', few: '{n} дні', many: '{n} днів', other: '{n} дня' }),
+  countries: plural('uk', { one: '{n} країна', few: '{n} країни', many: '{n} країн', other: '{n} країни' }),
+  months: ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'],
+  weekdays: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'], // Monday first
+};

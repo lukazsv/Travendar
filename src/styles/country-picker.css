@@ -41,7 +41,7 @@ dialog::backdrop {
   white-space: nowrap;
 }
 .picker-head:has(.back-btn:not([hidden])) {
-  padding-left: 14px;
+  padding-inline-start: 14px;
 }
 
 .picker-search {
@@ -96,7 +96,7 @@ dialog::backdrop {
   border: 0;
   border-radius: 8px;
   background: none;
-  text-align: left;
+  text-align: start;
   font-size: 15px;
   font-weight: 500;
 }
@@ -116,7 +116,7 @@ dialog::backdrop {
   stroke-linecap: round;
 }
 .cont-item .count {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 13px;
   font-weight: 400;
   color: var(--muted);
@@ -136,7 +136,7 @@ dialog::backdrop {
   border: 0;
   border-radius: 8px;
   background: none;
-  text-align: left;
+  text-align: start;
   font-size: 15px;
 }
 .c-item:hover,

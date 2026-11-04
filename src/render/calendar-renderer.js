@@ -79,6 +79,8 @@ export function paintCalendar(ctx, o) {
   const emoji = o.emojiFlags ? getEmojiMetrics(ctx) : null;
 
   ctx.setTransform(o.scale, 0, 0, o.scale, 0, 0);
+  // The image is always laid out left to right, also when the page is in a right-to-left language.
+  ctx.direction = 'ltr';
   ctx.fillStyle = o.colors.bg;
   ctx.fillRect(0, 0, W, H);
 

@@ -1,0 +1,103 @@
+/** Russian UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'Твой год в путешествиях',
+  preview: 'Предпросмотр',
+  previewAlt: 'Предпросмотр созданного изображения',
+  zoomPreview: 'Увеличить изображение',
+  save: 'Сохранить JPG',
+  share: 'Поделиться',
+  saved: 'Изображение JPG сохранено',
+  saveFailed: 'Не удалось сохранить изображение',
+  shareFailed: 'Не удалось поделиться',
+  customize: 'Настроить',
+  language: 'Язык',
+
+  // Trips
+  trips: 'Поездки',
+  addTrip: 'Добавить поездку',
+  clearTrips: 'Удалить все поездки',
+  tripDeleted: 'Поездка удалена',
+  tripsCleared: 'Все поездки удалены',
+  undo: 'Отменить',
+  emptyText: 'У тебя пока нет поездок.',
+  emptyAdd: 'Добавь первую или',
+  loadDemo: 'загрузи пример',
+  from: 'С',
+  to: 'По',
+  pickStartDate: 'Выбери дату начала',
+  pickEndDate: 'Выбери дату окончания',
+  noDate: 'Выбрать',
+  prevMonth: 'Предыдущий месяц',
+  nextMonth: 'Следующий месяц',
+  deleteTrip: 'Удалить поездку',
+  chooseCountry: 'Выбрать страну',
+  countryLabel: name => `Страна: ${name}`,
+  notChosen: 'не выбрана',
+  fillDates: 'Укажи даты поездки',
+  endBeforeStart: 'Дата окончания раньше даты начала',
+  outsideYear: year => `вне ${year} года`,
+  pickCountryHint: 'выбери страну',
+
+  // Settings
+  general: 'Общие',
+  year: 'Год',
+  prevYear: 'Предыдущий год',
+  nextYear: 'Следующий год',
+  theme: 'Тема',
+  themeDark: 'Тёмная',
+  themeLight: 'Светлая',
+  themeCustom: 'Своя',
+  colorBg: 'Фон',
+  colorText: 'Текст',
+  colorAccent: 'Акцент',
+  advanced: 'Дополнительно',
+  weekSunday: 'Неделя начинается с воскресенья',
+  alignYear: 'Выравнивание года',
+  alignMonths: 'Выравнивание месяцев',
+  alignLeft: 'Влево',
+  alignCenter: 'По центру',
+  alignRight: 'Вправо',
+  flags: 'Флаги',
+  flagsNative: 'Системные',
+  backup: 'JSON',
+  exportData: 'Экспорт',
+  importData: 'Импорт',
+  exported: 'Файл резервной копии сохранён',
+  importDone: 'Данные загружены из файла',
+  importFailed: 'Это не файл резервной копии Travel Year',
+  importConfirm: 'Заменить текущие поездки и настройки данными из файла?',
+
+  // Footer
+  privacySummary: 'Конфиденциальность: твои поездки остаются только в этом браузере',
+  privacyText:
+    'Поездки и настройки хранятся только в этом браузере. У сайта нет аккаунтов и статистики посещений, и он не подключается ни к каким внешним сервисам — шрифты и флаги входят в его состав, — поэтому он ничего не собирает и никуда не отправляет. Как и у любого сайта, хостинг-провайдер может видеть твой IP-адрес в своих журналах. Помни: публикуя изображение, ты показываешь другим, когда тебя не было дома.',
+  creditFlags: 'Флаги:',
+  creditContributors: 'и участники',
+  licenseNote: 'код под лицензией MIT',
+
+  // Country picker
+  pickContinent: 'Выбери континент',
+  back: 'Назад',
+  done: 'Закрыть',
+  search: 'Найти страну',
+  used: 'Использованные',
+  noResults: 'Страна не найдена',
+  continents: {
+    europe: 'Европа',
+    asia: 'Азия',
+    africa: 'Африка',
+    namerica: 'Северная Америка',
+    samerica: 'Южная Америка',
+    oceania: 'Австралия и Океания',
+    antarctica: 'Антарктида',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('ru', { one: '{n} день', few: '{n} дня', many: '{n} дней', other: '{n} дня' }),
+  countries: plural('ru', { one: '{n} страна', few: '{n} страны', many: '{n} стран', other: '{n} страны' }),
+  months: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+  weekdays: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], // Monday first
+};

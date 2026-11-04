@@ -12,7 +12,7 @@
  * Bump CACHE_VERSION when files are removed or renamed, so old copies are deleted.
  */
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = `travel-year-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -36,7 +36,22 @@ const PRECACHE = [
   'src/core/countries.js',
   'src/core/date-range.js',
   'src/core/dates.js',
+  'src/core/language.js',
   'src/i18n.js',
+  'src/locales/ar.js',
+  'src/locales/de.js',
+  'src/locales/en.js',
+  'src/locales/es.js',
+  'src/locales/fr.js',
+  'src/locales/hi.js',
+  'src/locales/it.js',
+  'src/locales/ja.js',
+  'src/locales/pl.js',
+  'src/locales/plural.js',
+  'src/locales/pt.js',
+  'src/locales/ru.js',
+  'src/locales/uk.js',
+  'src/locales/zh.js',
   'src/main.js',
   'src/pwa.js',
   'src/render/calendar-renderer.js',

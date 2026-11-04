@@ -3,6 +3,8 @@
  * up to date and need no translation files.
  */
 
+import { intlLocale } from '../config.js';
+
 /** ISO 3166-1 alpha-2 codes that have an emoji flag (plus XK, Kosovo). */
 export const COUNTRY_CODES = (
   'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ ' +
@@ -16,47 +18,86 @@ export const COUNTRY_CODES = (
 
 /**
  * Lower-cases and strips diacritics so 'Łódź', 'lodz' and 'LODZ' match.
+ * Non-Latin scripts (Cyrillic, Arabic, CJK, Devanagari…) are only lower-cased.
  * @param {string} text
  */
 export function normalizeForSearch(text) {
-  return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l');
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ł/g, 'l')
+    .normalize('NFC');
 }
 
+/** @type {Map<string, Intl.DisplayNames | null>} */
+const displayNamesByLang = new Map();
 function displayNames(lang) {
-  try {
-    return new Intl.DisplayNames([lang], { type: 'region' });
-  } catch {
-    return null;
+  if (!displayNamesByLang.has(lang)) {
+    let names = null;
+    try {
+      names = new Intl.DisplayNames([intlLocale(lang)], { type: 'region' });
+    } catch {
+      /* unsupported in this browser: fall back to codes */
+    }
+    displayNamesByLang.set(lang, names);
   }
+  return displayNamesByLang.get(lang);
 }
-const namesPl = displayNames('pl');
-const namesEn = displayNames('en');
 
 /**
  * @typedef {object} Country
- * @property {string} code
- * @property {string} pl      Polish name.
- * @property {string} en      English name.
- * @property {string} search  Normalised "pl en code" string for searching in either language.
+ * @property {string} code  ISO 3166-1 alpha-2 code. Names come from countryName().
  */
 
 /** @type {Country[]} */
-export const COUNTRIES = COUNTRY_CODES.map(code => {
-  const pl = namesPl?.of(code) || code;
-  const en = namesEn?.of(code) || code;
-  return { code, pl, en, search: normalizeForSearch(`${pl} ${en} ${code}`) };
-});
+export const COUNTRIES = COUNTRY_CODES.map(code => ({ code }));
 
 /** @type {Record<string, Country>} */
 export const COUNTRY_BY_CODE = Object.fromEntries(COUNTRIES.map(c => [c.code, c]));
 
+/** @type {Map<string, string>} cache of `${lang}:${code}` → name */
+const nameCache = new Map();
+
+/**
+ * The country's name in a language, from the browser (Intl.DisplayNames).
+ * @param {Country} country
+ * @param {string} lang
+ */
+export function countryName(country, lang) {
+  const key = `${lang}:${country.code}`;
+  if (!nameCache.has(key)) nameCache.set(key, displayNames(lang)?.of(country.code) || country.code);
+  return nameCache.get(key);
+}
+
+/** @type {Map<string, string>} */
+const searchCache = new Map();
+
+/**
+ * Normalised text to search in: the name in `lang`, the English name and the code, so
+ * people can type either their own language, English or e.g. "PT".
+ * @param {Country} country
+ * @param {string} lang
+ */
+export function searchText(country, lang) {
+  const key = `${lang}:${country.code}`;
+  if (!searchCache.has(key)) {
+    searchCache.set(
+      key,
+      normalizeForSearch(`${countryName(country, lang)} ${countryName(country, 'en')} ${country.code}`),
+    );
+  }
+  return searchCache.get(key);
+}
+
 /**
  * @param {Country[]} countries
- * @param {'pl'|'en'} lang
+ * @param {string} lang
  * @returns {Country[]} a new array sorted by name in `lang`
  */
 export function sortByName(countries, lang) {
-  return countries.slice().sort((a, b) => a[lang].localeCompare(b[lang], lang));
+  const collator = new Intl.Collator(intlLocale(lang));
+  return countries.slice().sort((a, b) => collator.compare(countryName(a, lang), countryName(b, lang)));
 }
 
 /**

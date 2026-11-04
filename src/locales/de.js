@@ -1,0 +1,103 @@
+/** German UI texts. Keys and kinds of values must match the other languages (tests/i18n.test.js). */
+
+import { plural } from './plural.js';
+
+export default {
+  tagline: 'Dein Jahr auf Reisen',
+  preview: 'Vorschau',
+  previewAlt: 'Vorschau des erstellten Bildes',
+  zoomPreview: 'Bild vergrößern',
+  save: 'JPG speichern',
+  share: 'Teilen',
+  saved: 'JPG-Bild gespeichert',
+  saveFailed: 'Das Bild konnte nicht gespeichert werden',
+  shareFailed: 'Teilen fehlgeschlagen',
+  customize: 'Anpassen',
+  language: 'Sprache',
+
+  // Trips
+  trips: 'Reisen',
+  addTrip: 'Reise hinzufügen',
+  clearTrips: 'Alle Reisen löschen',
+  tripDeleted: 'Reise gelöscht',
+  tripsCleared: 'Alle Reisen gelöscht',
+  undo: 'Rückgängig',
+  emptyText: 'Du hast noch keine Reisen.',
+  emptyAdd: 'Füge deine erste hinzu oder',
+  loadDemo: 'lade ein Beispiel',
+  from: 'Von',
+  to: 'Bis',
+  pickStartDate: 'Startdatum wählen',
+  pickEndDate: 'Enddatum wählen',
+  noDate: 'Wählen',
+  prevMonth: 'Vorheriger Monat',
+  nextMonth: 'Nächster Monat',
+  deleteTrip: 'Reise löschen',
+  chooseCountry: 'Land wählen',
+  countryLabel: name => `Land: ${name}`,
+  notChosen: 'nicht gewählt',
+  fillDates: 'Reisedaten eintragen',
+  endBeforeStart: 'Das Enddatum liegt vor dem Startdatum',
+  outsideYear: year => `außerhalb von ${year}`,
+  pickCountryHint: 'Land wählen',
+
+  // Settings
+  general: 'Allgemein',
+  year: 'Jahr',
+  prevYear: 'Vorheriges Jahr',
+  nextYear: 'Nächstes Jahr',
+  theme: 'Design',
+  themeDark: 'Dunkel',
+  themeLight: 'Hell',
+  themeCustom: 'Eigenes',
+  colorBg: 'Hintergrund',
+  colorText: 'Text',
+  colorAccent: 'Akzent',
+  advanced: 'Erweitert',
+  weekSunday: 'Woche beginnt am Sonntag',
+  alignYear: 'Ausrichtung des Jahres',
+  alignMonths: 'Ausrichtung der Monate',
+  alignLeft: 'Links',
+  alignCenter: 'Mitte',
+  alignRight: 'Rechts',
+  flags: 'Flaggen',
+  flagsNative: 'System',
+  backup: 'JSON',
+  exportData: 'Exportieren',
+  importData: 'Importieren',
+  exported: 'Sicherungsdatei gespeichert',
+  importDone: 'Daten aus der Datei geladen',
+  importFailed: 'Das ist keine gültige Travel-Year-Sicherungsdatei',
+  importConfirm: 'Aktuelle Reisen und Einstellungen durch die Daten aus der Datei ersetzen?',
+
+  // Footer
+  privacySummary: 'Datenschutz: Deine Reisen bleiben nur in diesem Browser',
+  privacyText:
+    'Reisen und Einstellungen werden nur in diesem Browser gespeichert. Die Seite hat keine Konten und keine Besucherstatistiken und verbindet sich mit keinen externen Diensten – Schriften und Flaggen sind Teil der Seite –, sie sammelt also nichts und sendet nichts. Wie bei jeder Website kann der Hosting-Anbieter deine IP-Adresse in seinen Logs sehen. Denk daran: Wer das Bild veröffentlicht, zeigt anderen, wann er nicht zu Hause war.',
+  creditFlags: 'Flaggen:',
+  creditContributors: 'und Mitwirkende',
+  licenseNote: 'Code unter MIT-Lizenz',
+
+  // Country picker
+  pickContinent: 'Kontinent wählen',
+  back: 'Zurück',
+  done: 'Schließen',
+  search: 'Land suchen',
+  used: 'Verwendet',
+  noResults: 'Kein Land gefunden',
+  continents: {
+    europe: 'Europa',
+    asia: 'Asien',
+    africa: 'Afrika',
+    namerica: 'Nordamerika',
+    samerica: 'Südamerika',
+    oceania: 'Australien und Ozeanien',
+    antarctica: 'Antarktis',
+  },
+
+  // Plurals, the image and the date picker
+  days: plural('de', { one: '{n} Tag', other: '{n} Tage' }),
+  countries: plural('de', { one: '{n} Land', other: '{n} Länder' }),
+  months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+  weekdays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'], // Monday first
+};
