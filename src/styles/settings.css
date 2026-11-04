@@ -198,3 +198,28 @@ details.adv[open] > summary .chev {
 .customize-btn[aria-expanded='true'] .chev {
   transform: rotate(180deg);
 }
+
+/* Note under a switch that slides open (e.g. under "Website address on the image" when it is off). */
+.switch-hint {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.switch-hint.open {
+  grid-template-rows: 1fr;
+}
+.switch-hint-inner {
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.switch-hint.open .switch-hint-inner {
+  padding-bottom: 12px;
+}
+.switch-hint + .row {
+  border-top: 1px solid var(--line);
+}

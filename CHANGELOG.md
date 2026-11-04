@@ -10,7 +10,8 @@ Everything below will ship as **1.0.0** once the site is hosted and tested on re
 ### Added
 
 - **Trips**: country (picked by continent, then A–Z, or by search) and dates in a range calendar — first click sets the start, second the end, months change instantly, keyboard support; add, delete, load an example, clear all — with **Undo** for delete and clear.
-- **Image**: a 1080 × 1920 year calendar where travel days show the country's flag; live preview that opens enlarged on tap (swipe any way to close); **Save JPG** and **Share** (phones).
+- **Image**: a 1080 × 1920 year calendar where travel days show the country's flag, with the site address small at the bottom (can be switched off in Advanced); live preview that opens enlarged on tap (swipe any way to close); **Save JPG** and **Share** (phones).
+- **Donations**: after saving or sharing, a centred dialog confirms it and asks for a tip on buycoffee.to (stays open until closed); the same link is in the footer. It is a plain link — no third-party script.
 - **Themes**: Dark, Light and Custom (own background, text and accent colours) with live thumbnails.
 - **Advanced**: week starting on Sunday, year and month-name alignment, system or Twemoji flags, **JSON backup** export and import.
 - **13 interface languages** — Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish, Ukrainian — chosen automatically from the browser (English otherwise) and listed alphabetically in the language menu; country names, month names and plurals in each language.

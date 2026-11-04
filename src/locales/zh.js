@@ -12,6 +12,9 @@ export default {
   saved: 'JPG 图片已保存',
   saveFailed: '无法保存图片',
   shareFailed: '无法分享',
+  thanks: '感谢使用 Travel Year！',
+  donate: '请我喝杯咖啡',
+  donatePitch: '我是来自波兰 {flag} 的学生，正在攒钱去旅行。每一笔打赏都在帮助我实现梦想！', // {flag} = the Polish flag
   customize: '自定义',
   language: '语言',
 
@@ -55,6 +58,8 @@ export default {
   colorAccent: '强调色',
   advanced: '高级',
   weekSunday: '每周从星期日开始',
+  siteUrlOnImage: '在图片上显示网址',
+  siteUrlHint: '在图片上保留网址能帮助我继续发展这个完全免费的项目',
   alignYear: '年份对齐',
   alignMonths: '月份对齐',
   alignLeft: '左对齐',
@@ -77,6 +82,7 @@ export default {
   creditFlags: '旗帜：',
   creditContributors: '及贡献者',
   licenseNote: '代码采用 MIT 许可证',
+  donateFooter: '喜欢 Travel Year？请我喝杯咖啡',
 
   // Country picker
   pickContinent: '选择大洲',

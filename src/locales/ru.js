@@ -12,6 +12,10 @@ export default {
   saved: 'Изображение JPG сохранено',
   saveFailed: 'Не удалось сохранить изображение',
   shareFailed: 'Не удалось поделиться',
+  thanks: 'Спасибо, что пользуешься Travel Year!',
+  donate: 'Угости меня кофе',
+  donatePitch:
+    'Я студент из Польши {flag} и коплю деньги на путешествия. Любые чаевые помогают мне осуществлять мечты!', // {flag} = the Polish flag
   customize: 'Настроить',
   language: 'Язык',
 
@@ -55,6 +59,8 @@ export default {
   colorAccent: 'Акцент',
   advanced: 'Дополнительно',
   weekSunday: 'Неделя начинается с воскресенья',
+  siteUrlOnImage: 'Адрес сайта на изображении',
+  siteUrlHint: 'Адрес сайта на изображении помогает мне развивать мой полностью бесплатный проект',
   alignYear: 'Выравнивание года',
   alignMonths: 'Выравнивание месяцев',
   alignLeft: 'Влево',
@@ -77,6 +83,7 @@ export default {
   creditFlags: 'Флаги:',
   creditContributors: 'и участники',
   licenseNote: 'код под лицензией MIT',
+  donateFooter: 'Нравится Travel Year? Угости меня кофе',
 
   // Country picker
   pickContinent: 'Выбери континент',

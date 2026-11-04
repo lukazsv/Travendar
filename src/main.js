@@ -15,6 +15,7 @@ import { initDateRangePicker, refreshDateRangePicker } from './ui/date-range-pic
 import { initSettings, syncSettings } from './ui/settings.js';
 import { initLanguageMenu } from './ui/language-menu.js';
 import { initExport } from './ui/export.js';
+import { initDonate } from './ui/donate.js';
 import { initLightbox } from './ui/lightbox.js';
 import { initBackup } from './ui/backup.js';
 import { registerServiceWorker } from './pwa.js';
@@ -27,6 +28,7 @@ initDateRangePicker();
 initSettings();
 initLanguageMenu();
 initExport();
+initDonate();
 initLightbox();
 initBackup(syncSettings);
 

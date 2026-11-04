@@ -18,13 +18,14 @@ const RADIO_GROUPS = {
   flagStyle: { flagStyle: true },
 };
 
-let yearOutput, customPanel, weekSunday;
+let yearOutput, customPanel, weekSunday, showSiteUrl;
 let colorInputs = [];
 
 export function initSettings() {
   yearOutput = byId('yearOut');
   customPanel = byId('customColors');
   weekSunday = byId('weekSunday');
+  showSiteUrl = byId('showSiteUrl');
   colorInputs = [...document.querySelectorAll('input[data-color]')];
 
   // Year
@@ -63,6 +64,11 @@ export function initSettings() {
     state.weekSunday = weekSunday.checked;
     commit();
   });
+  showSiteUrl.addEventListener('change', () => {
+    state.showSiteUrl = showSiteUrl.checked;
+    syncSiteUrlHint();
+    commit();
+  });
   for (const [key, change] of Object.entries(RADIO_GROUPS)) {
     document.querySelectorAll(`input[name="${key}"]`).forEach(radio => {
       radio.addEventListener('change', () => {
@@ -88,6 +94,8 @@ export function syncSettings() {
     });
   }
   weekSunday.checked = state.weekSunday;
+  showSiteUrl.checked = state.showSiteUrl;
+  syncSiteUrlHint();
   syncColorInputs();
   syncCustomPanel();
 }
@@ -109,6 +117,14 @@ function syncCustomPanel() {
   colorInputs.forEach(input => {
     input.tabIndex = open ? 0 : -1;
   });
+}
+
+/** The note asking to keep the site address slides open while the switch is off. */
+function syncSiteUrlHint() {
+  const open = !state.showSiteUrl;
+  const box = byId('siteUrlHintBox');
+  box.classList.toggle('open', open);
+  box.setAttribute('aria-hidden', String(!open));
 }
 
 /** Phones: the Customize button folds / unfolds the settings. */

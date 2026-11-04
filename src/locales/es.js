@@ -12,6 +12,10 @@ export default {
   saved: 'Imagen JPG guardada',
   saveFailed: 'No se pudo guardar la imagen',
   shareFailed: 'No se pudo compartir',
+  thanks: '¡Gracias por usar Travel Year!',
+  donate: 'Invítame a un café',
+  donatePitch:
+    'Soy un estudiante de Polonia {flag} y estoy ahorrando para viajar. ¡Cada propina me ayuda a cumplir mis sueños!', // {flag} = the Polish flag
   customize: 'Personalizar',
   language: 'Idioma',
 
@@ -55,6 +59,8 @@ export default {
   colorAccent: 'Acento',
   advanced: 'Avanzado',
   weekSunday: 'La semana empieza el domingo',
+  siteUrlOnImage: 'Dirección web en la imagen',
+  siteUrlHint: 'Dejar la dirección web en la imagen me ayuda a desarrollar mi proyecto totalmente gratuito',
   alignYear: 'Alineación del año',
   alignMonths: 'Alineación de los meses',
   alignLeft: 'Izquierda',
@@ -77,6 +83,7 @@ export default {
   creditFlags: 'Banderas:',
   creditContributors: 'y colaboradores',
   licenseNote: 'código con licencia MIT',
+  donateFooter: '¿Te gusta Travel Year? Invítame a un café',
 
   // Country picker
   pickContinent: 'Elige un continente',

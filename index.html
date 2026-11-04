@@ -177,6 +177,14 @@
         <span data-i18n="weekSunday"></span>
         <input type="checkbox" class="switch" id="weekSunday">
       </label>
+      <label class="row">
+        <span data-i18n="siteUrlOnImage"></span>
+        <input type="checkbox" class="switch" id="showSiteUrl" aria-describedby="siteUrlHint">
+      </label>
+      <!-- Slides open under the switch while it is off (ui/settings.js). -->
+      <div class="switch-hint" id="siteUrlHintBox">
+        <p class="switch-hint-inner" id="siteUrlHint" data-i18n="siteUrlHint"></p>
+      </div>
       <div class="row">
         <span data-i18n="alignYear"></span>
         <div class="seg seg-icons" role="radiogroup" data-i18n-aria="alignYear">
@@ -223,6 +231,8 @@
       <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC-BY 4.0</a>
     </p>
     <p>© 2026 Łukasz Święcicki · <span data-i18n="licenseNote"></span></p>
+    <!-- href is set from DONATE_URL in src/config.js (ui/donate.js). -->
+    <p><a class="donate-link" id="donateLink" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☕</span> <span data-i18n="donateFooter"></span></a></p>
   </footer>
 </div>
 
@@ -269,6 +279,20 @@
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
     </button>
     <canvas id="lightboxCanvas" width="1080" height="1920" role="img"></canvas>
+  </div>
+</dialog>
+
+<!-- Shown after the image was saved or shared; closes only with the ✕ or Esc (ui/donate.js). -->
+<dialog id="donateDialog" class="donate-dialog" aria-labelledby="donateTitle" aria-describedby="donateText">
+  <div class="donate">
+    <button class="close-btn donate-close" type="button" id="donateClose" data-i18n-aria="done">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+    </button>
+    <div class="donate-icon" aria-hidden="true">☕</div>
+    <h2 id="donateTitle" tabindex="-1"></h2>
+    <p id="donateText"></p>
+    <!-- href is set from DONATE_URL in src/config.js (ui/donate.js). -->
+    <a class="btn primary donate-btn" id="donateBtn" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☕</span> <span data-i18n="donate"></span></a>
   </div>
 </dialog>
 

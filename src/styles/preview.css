@@ -147,3 +147,59 @@ dialog.lightbox::backdrop {
 .lightbox-frame:focus {
   outline: none; /* focused on open only so the ✕ does not get focus (and a highlight) on touch */
 }
+
+/* ---- Donation dialog (shown after saving or sharing, see ui/donate.js) ---- */
+
+/* Centred on every screen size, also on phones where other dialogs are bottom sheets. */
+dialog.donate-dialog {
+  width: min(380px, calc(100vw - 32px));
+  height: fit-content;
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.donate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 24px 24px;
+  text-align: center;
+}
+.donate-close {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 12px;
+}
+.donate-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+.donate h2 {
+  margin: 4px 0 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+.donate h2:focus {
+  outline: none; /* focused on open only to keep the focus ring off the ✕ */
+}
+.donate p {
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.donate-flag .flag {
+  display: inline-block;
+  width: 1.2em;
+  height: auto;
+  vertical-align: -0.15em;
+  font-size: 1.05em;
+  line-height: 1;
+}
+.donate-btn {
+  width: 100%;
+  text-decoration: none;
+}

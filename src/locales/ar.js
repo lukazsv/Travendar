@@ -16,6 +16,9 @@ export default {
   saved: 'تم حفظ صورة JPG',
   saveFailed: 'تعذّر حفظ الصورة',
   shareFailed: 'تعذّرت المشاركة',
+  thanks: 'شكرًا لاستخدامك Travel Year!',
+  donate: 'اشترِ لي قهوة',
+  donatePitch: 'أنا طالب من بولندا {flag} وأجمع المال للسفر. كل إكرامية تساعدني على تحقيق أحلامي!', // {flag} = the Polish flag
   customize: 'تخصيص',
   language: 'اللغة',
 
@@ -59,6 +62,8 @@ export default {
   colorAccent: 'اللون المميز',
   advanced: 'خيارات متقدمة',
   weekSunday: 'يبدأ الأسبوع يوم الأحد',
+  siteUrlOnImage: 'عنوان الموقع على الصورة',
+  siteUrlHint: 'إبقاء عنوان الموقع على الصورة يساعدني على تطوير مشروعي المجاني بالكامل',
   alignYear: 'محاذاة السنة',
   alignMonths: 'محاذاة الأشهر',
   alignLeft: 'يسار',
@@ -81,6 +86,7 @@ export default {
   creditFlags: 'الأعلام:',
   creditContributors: 'والمساهمون',
   licenseNote: 'الشيفرة بترخيص MIT',
+  donateFooter: 'هل أعجبك Travel Year؟ اشترِ لي قهوة',
 
   // Country picker
   pickContinent: 'اختر قارة',

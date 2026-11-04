@@ -12,6 +12,10 @@ export default {
   saved: 'JPG तस्वीर सहेजी गई',
   saveFailed: 'तस्वीर सहेजी नहीं जा सकी',
   shareFailed: 'शेयर नहीं किया जा सका',
+  thanks: 'Travel Year इस्तेमाल करने के लिए धन्यवाद!',
+  donate: 'मुझे एक कॉफ़ी पिलाइए',
+  donatePitch:
+    'मैं पोलैंड {flag} का एक छात्र हूँ और घूमने के लिए पैसे जमा कर रहा हूँ। हर टिप मुझे अपने सपने पूरे करने में मदद करती है!', // {flag} = the Polish flag
   customize: 'अनुकूलित करें',
   language: 'भाषा',
 
@@ -55,6 +59,8 @@ export default {
   colorAccent: 'मुख्य रंग',
   advanced: 'उन्नत',
   weekSunday: 'हफ़्ता रविवार से शुरू करें',
+  siteUrlOnImage: 'तस्वीर पर वेबसाइट का पता',
+  siteUrlHint: 'तस्वीर पर वेबसाइट का पता रहने देने से मुझे अपना पूरी तरह मुफ़्त प्रोजेक्ट आगे बढ़ाने में मदद मिलती है',
   alignYear: 'साल का संरेखण',
   alignMonths: 'महीनों का संरेखण',
   alignLeft: 'बाएँ',
@@ -77,6 +83,7 @@ export default {
   creditFlags: 'झंडे:',
   creditContributors: 'और योगदानकर्ता',
   licenseNote: 'कोड MIT लाइसेंस के तहत',
+  donateFooter: 'Travel Year पसंद आया? मुझे एक कॉफ़ी पिलाइए',
 
   // Country picker
   pickContinent: 'महाद्वीप चुनें',
