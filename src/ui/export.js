@@ -9,6 +9,7 @@ import { t } from '../i18n.js';
 import { renderJpeg, exportFileName } from './preview.js';
 import { showToast } from './toast.js';
 import { byId } from '../utils/html.js';
+import { downloadBlob } from '../utils/download.js';
 
 export function initExport() {
   const saveBtn = byId('downloadBtn');
@@ -45,15 +46,4 @@ function canShareImages() {
   } catch {
     return false;
   }
-}
-
-function downloadBlob(blob, fileName) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 5000);
 }

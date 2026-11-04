@@ -63,7 +63,7 @@ export function flagEmoji(code) {
   return String.fromCodePoint(...flagCodePoints(code));
 }
 
-/** Unicode code points of the flag emoji (also used to build Twemoji file names). */
+/** Unicode code points of the flag emoji. */
 export function flagCodePoints(code) {
   return [...code].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65);
 }

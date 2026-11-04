@@ -11,9 +11,10 @@ import { onFlagImageLoad } from './render/flags.js';
 import { initPreview, drawNow, scheduleDraw } from './ui/preview.js';
 import { initTrips, renderTrips, updateStats } from './ui/trips.js';
 import { initCountryPicker, refreshCountryPicker } from './ui/country-picker.js';
-import { initSettings } from './ui/settings.js';
+import { initSettings, syncSettings } from './ui/settings.js';
 import { initLanguageMenu } from './ui/language-menu.js';
 import { initExport } from './ui/export.js';
+import { initBackup } from './ui/backup.js';
 
 applyI18n();
 initPreview();
@@ -22,6 +23,7 @@ initCountryPicker();
 initSettings();
 initLanguageMenu();
 initExport();
+initBackup(syncSettings);
 
 onChange(change => {
   if (change.lang) applyI18n();

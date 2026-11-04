@@ -8,14 +8,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Travel Year</title>
-<meta name="description" content="Wygeneruj swój travel year – rok podróży z flagami w stylu kalendarza iOS.">
+<meta name="description" content="Wygeneruj swój travel year – kalendarz całego roku, w którym dni podróży zastępują flagi odwiedzonych krajów.">
+<!--
+  Content Security Policy: the page may load scripts, styles, fonts and images from its own
+  origin only (data: is allowed for the small inline SVG icon in the search box).
+  Everything is self-hosted, so any new external service must be added here on purpose.
+  Hosting-level headers (frame-ancestors, HSTS…) are set by the host, not here.
+-->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- DM Sans: UI font. Inter: canvas fallback where SF Pro is not available. -->
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- Order matters: tokens → base → components → sections → layout (responsive overrides last). -->
+<!-- Order matters: fonts/tokens → base → components → sections → layout (responsive overrides last). -->
+<link rel="stylesheet" href="src/styles/fonts.css">
 <link rel="stylesheet" href="src/styles/tokens.css">
 <link rel="stylesheet" href="src/styles/base.css">
 <link rel="stylesheet" href="src/styles/components.css">
@@ -24,6 +28,7 @@
 <link rel="stylesheet" href="src/styles/trips.css">
 <link rel="stylesheet" href="src/styles/settings.css">
 <link rel="stylesheet" href="src/styles/country-picker.css">
+<link rel="stylesheet" href="src/styles/footer.css">
 <link rel="stylesheet" href="src/styles/layout.css">
 
 <script type="module" src="src/main.js"></script>
@@ -164,8 +169,30 @@
           <label><input type="radio" name="flagStyle" value="twemoji"><span>Twemoji</span></label>
         </div>
       </div>
+      <div class="row">
+        <span data-i18n="backup"></span>
+        <div class="row-actions">
+          <button class="btn small" type="button" id="exportBtn" data-i18n="exportData"></button>
+          <button class="btn small" type="button" id="importBtn" data-i18n="importData"></button>
+          <input type="file" id="importFile" accept="application/json,.json" hidden>
+        </div>
+      </div>
     </details>
   </aside>
+
+  <footer class="app-footer">
+    <details class="privacy">
+      <summary data-i18n="privacySummary"></summary>
+      <p data-i18n="privacyText"></p>
+    </details>
+    <p>
+      <span data-i18n="creditFlags"></span>
+      <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener noreferrer">Twemoji</a>
+      © Twitter <span data-i18n="creditContributors"></span>,
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC-BY 4.0</a>
+    </p>
+    <p>© 2026 Łukasz Święcicki · <span data-i18n="licenseNote"></span></p>
+  </footer>
 </div>
 
 <dialog id="picker" aria-labelledby="pickerTitle">
