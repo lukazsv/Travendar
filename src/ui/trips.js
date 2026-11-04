@@ -14,6 +14,7 @@ import { COUNTRY_BY_CODE } from '../core/countries.js';
 import { flagHTML } from '../render/flags.js';
 import { openCountryPicker } from './country-picker.js';
 import { ICON_CHEVRON, ICON_GLOBE, ICON_TRASH } from './icons.js';
+import { showToast } from './toast.js';
 import { byId, escapeHtml as esc } from '../utils/html.js';
 
 /** Length of a new trip, in days including the first one. */
@@ -111,10 +112,22 @@ function onListClick(e) {
   if (!button) return;
   const id = button.closest('.trip').dataset.id;
   if (button.dataset.act === 'pick') pickCountryFor(id);
-  if (button.dataset.act === 'delete') {
-    state.trips = state.trips.filter(trip => trip.id !== id);
-    commit({ trips: true });
-  }
+  if (button.dataset.act === 'delete') deleteTrip(id);
+}
+
+/** Deletes one trip, with Undo putting it back in the same place. */
+function deleteTrip(id) {
+  const index = state.trips.findIndex(trip => trip.id === id);
+  if (index < 0) return;
+  const [removed] = state.trips.splice(index, 1);
+  commit({ trips: true });
+  showToast(t('tripDeleted'), {
+    actionLabel: t('undo'),
+    onAction: () => {
+      state.trips.splice(Math.min(index, state.trips.length), 0, removed);
+      commit({ trips: true });
+    },
+  });
 }
 
 function onDateInput(e) {
@@ -194,8 +207,17 @@ function loadDemoTrips() {
   commit({ trips: true });
 }
 
+/** Removes all trips; Undo restores them (instead of an "are you sure?" dialog). */
 function clearTrips() {
-  if (!state.trips.length || !confirm(t('confirmClear'))) return;
+  if (!state.trips.length) return;
+  const previous = state.trips;
   state.trips = [];
   commit({ trips: true });
+  showToast(t('tripsCleared'), {
+    actionLabel: t('undo'),
+    onAction: () => {
+      state.trips = previous;
+      commit({ trips: true });
+    },
+  });
 }
