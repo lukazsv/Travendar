@@ -13,7 +13,7 @@
 
 import { state } from './state.js';
 
-const TRANSLATIONS = {
+export const TRANSLATIONS = {
   pl: {
     tagline: 'Twój rok w podróżach',
     preview: 'Podgląd',
