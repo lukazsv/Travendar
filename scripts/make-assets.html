@@ -1,0 +1,151 @@
+<!doctype html>
+<!--
+  Generates the PNG icons and the social share image from the sources in the repo.
+  Development tool only — not part of the site.
+
+  1. Serve the repository root:   python3 -m http.server 8000 --bind 127.0.0.1
+  2. Open:                         http://localhost:8000/scripts/make-assets.html
+  3. Click each "Download" link and save the file under the path shown next to it.
+
+  Sources: src/assets/icons/icon.svg (icons) and the app's own calendar renderer (share image).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Travel Year — asset generator</title>
+<link rel="stylesheet" href="../src/styles/fonts.css">
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; background: #eee; color: #222; }
+  figure { display: inline-block; margin: 0 24px 24px 0; vertical-align: top; }
+  canvas { display: block; max-width: 600px; height: auto; background: repeating-conic-gradient(#ccc 0 25%, #fff 0 50%) 0 0 / 16px 16px; }
+  figcaption { margin-top: 6px; }
+  code { background: #fff; padding: 1px 4px; }
+</style>
+</head>
+<body>
+<h1>Travel Year assets</h1>
+<div id="out"></div>
+
+<script type="module">
+  import { paintCalendar } from '../src/render/calendar-renderer.js';
+  import { buildDayMap } from '../src/core/calendar.js';
+  import { usesEmojiFlags, getFlagImage, preloadFlagImages } from '../src/render/flags.js';
+  import { IMAGE_THEMES, IMAGE_WIDTH, IMAGE_HEIGHT } from '../src/config.js';
+
+  const ICON_BG = '#1a1917';                  // same as the tile in icon.svg
+  const out = document.getElementById('out');
+
+  /** Adds a canvas with a download link; `file` is where to save it in the repo. */
+  function show(canvas, file) {
+    const fig = document.createElement('figure');
+    const name = file.split('/').pop();
+    const link = document.createElement('a');
+    link.textContent = `Download ${name}`;
+    link.download = name;
+    link.href = canvas.toDataURL('image/png');
+    fig.append(canvas);
+    const cap = document.createElement('figcaption');
+    cap.append(link, ' → save as ', Object.assign(document.createElement('code'), { textContent: file }));
+    fig.append(cap);
+    out.append(fig);
+    canvas.dataset.file = file;
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  /**
+   * @param {number} size     output size in px
+   * @param {number} inset    share of the size left empty on each side (maskable icons need ~10%)
+   * @param {boolean} bleed   fill the whole square (platforms that round the corners themselves)
+   */
+  function icon(svg, size, { inset = 0, bleed = false } = {}) {
+    const c = Object.assign(document.createElement('canvas'), { width: size, height: size });
+    const ctx = c.getContext('2d');
+    if (bleed) { ctx.fillStyle = ICON_BG; ctx.fillRect(0, 0, size, size); }
+    const pad = size * inset;
+    ctx.drawImage(svg, pad, pad, size - 2 * pad, size - 2 * pad);
+    return c;
+  }
+
+  // ---- Share image (Open Graph), 1200 × 630 ----
+  const DEMO_TRIPS = [
+    ['ES', '02-02', '02-05'], ['IT', '03-11', '03-14'], ['IT', '04-01', '04-08'],
+    ['NL', '05-05', '05-09'], ['ES', '05-20', '05-27'], ['AR', '06-29', '07-07'],
+    ['JP', '08-08', '08-16'], ['KR', '09-01', '09-15'], ['EG', '10-22', '10-28'],
+    ['SG', '11-27', '12-09'], ['TH', '12-15', '12-22'],
+  ];
+
+  async function shareImage() {
+    const year = 2026;
+    const trips = DEMO_TRIPS.map(([code, s, e], i) => ({ id: `d${i}`, code, start: `${year}-${s}`, end: `${year}-${e}` }));
+    const days = buildDayMap(trips, year);
+    await preloadFlagImages(days.values());
+
+    // The calendar itself, at full size, then scaled into the card.
+    const cal = Object.assign(document.createElement('canvas'), { width: IMAGE_WIDTH, height: IMAGE_HEIGHT });
+    paintCalendar(cal.getContext('2d'), {
+      colors: IMAGE_THEMES.dark, scale: 1, year,
+      monthNames: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+      weekStartsSunday: false, yearAlign: 'center', monthAlign: 'left',
+      days, emojiFlags: usesEmojiFlags(), getFlagImage,
+    });
+
+    const W = 1200, H = 630;
+    const c = Object.assign(document.createElement('canvas'), { width: W, height: H });
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#f6f5f2';                  // --bg of the UI
+    ctx.fillRect(0, 0, W, H);
+
+    // Calendar card on the right, slightly tilted.
+    const ch = 560, cw = ch * IMAGE_WIDTH / IMAGE_HEIGHT;
+    ctx.save();
+    ctx.translate(900, H / 2);
+    ctx.rotate(-0.04);
+    ctx.shadowColor = 'rgba(26,25,23,.25)';
+    ctx.shadowBlur = 40;
+    ctx.shadowOffsetY = 14;
+    ctx.beginPath();
+    ctx.roundRect(-cw / 2, -ch / 2, cw, ch, 22);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.shadowColor = 'transparent';
+    ctx.clip();
+    ctx.drawImage(cal, -cw / 2, -ch / 2, cw, ch);
+    ctx.restore();
+
+    // Title and tagline on the left.
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#1a1917';
+    ctx.font = '700 96px "DM Sans"';
+    ctx.fillText('Travel', 80, 270);
+    const travelW = ctx.measureText('Travel ').width;
+    ctx.fillStyle = '#e8553a';
+    ctx.fillText('Year', 80 + travelW, 270);
+    ctx.fillStyle = '#78746b';
+    ctx.font = '500 34px "DM Sans"';
+    ctx.fillText('Twój rok w podróżach', 84, 330);
+    ctx.font = '500 26px "DM Sans"';
+    ctx.fillText('Flagi zamiast dat · zapisz jako JPG', 84, 380);
+    return c;
+  }
+
+  await Promise.all([document.fonts.load('700 96px "DM Sans"'), document.fonts.load('500 34px "DM Sans"')]);
+  const svg = await loadImage('../src/assets/icons/icon.svg');
+
+  show(icon(svg, 32), 'src/assets/icons/favicon-32.png');
+  show(icon(svg, 180, { bleed: true }), 'src/assets/icons/apple-touch-icon.png');
+  show(icon(svg, 192), 'src/assets/icons/icon-192.png');
+  show(icon(svg, 512), 'src/assets/icons/icon-512.png');
+  show(icon(svg, 512, { bleed: true, inset: 0.1 }), 'src/assets/icons/icon-maskable-512.png');
+  show(await shareImage(), 'src/assets/og-image.png');
+  document.body.dataset.ready = 'true';
+</script>
+</body>
+</html>

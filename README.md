@@ -13,6 +13,7 @@ The app runs entirely in the browser: no backend, no account, no build step.
 - **Export**: *Save JPG*, plus *Share* on phones (saves straight to Photos through the share sheet).
 - **Polish and English** UI. Country names come from the browser, so they are always translated.
 - **Responsive**: three columns on wide screens, two on laptops and tablets, one on phones (settings folded behind *Customize*).
+- **Installable and offline**: add it to the home screen / install it as an app; after the first visit it also works without internet.
 - **Saved automatically** in the browser (`localStorage`). Nothing is sent anywhere and the page makes no requests to outside services (fonts and flags are bundled); the footer explains this to users and credits the flag images.
 
 ## Running locally
@@ -29,19 +30,26 @@ Then open <http://localhost:8000>. There is nothing to install and nothing to bu
 
 ## Deploying
 
-Publish **only `index.html` and the `src/` folder** (it includes the fonts and flag images) to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel…). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. Git-based hosts such as Netlify, Cloudflare Pages and GitHub Pages skip `.git` automatically. `scripts/` is for development only.
+Publish **only `index.html`, `manifest.webmanifest`, `sw.js` and the `src/` folder** (it includes the fonts, icons and flag images) to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel…). Do not upload the whole repository folder by hand (e.g. over FTP): that would also publish the `.git` history. Git-based hosts such as Netlify, Cloudflare Pages and GitHub Pages skip `.git` automatically. `scripts/` is for development only.
 
 > GitHub Pages on a free plan works only for public repositories.
+
+The service worker (offline mode) only runs over HTTPS or on `localhost`, which every host above provides.
+
+**Before the first public release**, set the absolute address of the share image in `index.html` (`og:image`, plus `og:url`), e.g. `https://example.com/src/assets/og-image.png`. Link previews in most messengers ignore relative URLs.
 
 ## Project structure
 
 ```
-index.html                    Markup only: links the styles and loads src/main.js
+index.html                    Markup only: links the styles and loads src/main.js; icons, sharing tags, CSP
+manifest.webmanifest          Web app manifest (name, icons, colours) for installing the app
+sw.js                         Service worker: offline support (must stay in the site root)
 src/
   main.js                     Entry point: initialises the UI and reacts to state changes
   config.js                   Constants: image size, fonts, built-in themes, languages, limits
   state.js                    App state, validation of stored/imported data, persistence, change notifications
   i18n.js                     Polish and English UI texts, t() and applyI18n()
+  pwa.js                      Registers the service worker
   core/                       Logic with no DOM access (pure functions)
     dates.js                  'YYYY-MM-DD' helpers
     calendar.js               Trips → which flag goes on which day; travel stats
@@ -67,6 +75,8 @@ src/
   assets/
     fonts/                    DM Sans and Inter (woff2) with their OFL licences
     flags/                    Twemoji flag PNGs named <ISO code>.png, with LICENSE.md
+    icons/                    App icon: icon.svg (source) and the PNG sizes generated from it
+    og-image.png              Link preview image (1200 × 630)
   styles/                     CSS, loaded in this order by index.html:
     fonts.css                 @font-face rules for the bundled fonts
     tokens.css                Colours and fonts of the UI (light and dark)
@@ -78,6 +88,8 @@ scripts/
   generate_continent_shapes.py   Rebuilds src/core/continent-shapes.js from map data
   requirements.txt               Python dependencies of that script (pinned)
   download_flags.py              Downloads the Twemoji flag PNGs into src/assets/flags/
+  make-assets.html               Generates the PNG icons and og-image.png in the browser
+  check_precache.py              Checks that sw.js lists every file needed offline
 ```
 
 ## How it works
@@ -101,6 +113,8 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 
 **Security.** `index.html` sets a strict Content Security Policy: scripts, styles, fonts and images may come from the site itself only, so injected or third-party code cannot run. Together with `sanitizeState()` and `escapeHtml()` this covers the app's only inputs (stored data and backup files). Headers that only the server can send (HSTS, `frame-ancestors`, …) must be configured on the hosting.
 
+**Offline and install.** `src/pwa.js` registers `sw.js`, which caches the app on the first visit. It is *network first*: online, files always come fresh from the server (a deployment is picked up at once, old and new files never mix); offline, the cached copies are used. `sw.js` has a `PRECACHE` list of every file the app needs to start offline — when you add, rename or remove a file in `src/`, update it and run `python3 scripts/check_precache.py`.
+
 **Translations.** Static text in `index.html` uses `data-i18n="key"` (text), `data-i18n-aria` (aria-label) and `data-i18n-ph` (placeholder). Text built in JS uses `t('key')`.
 
 ## Common changes
@@ -116,6 +130,8 @@ The `change` flags (`trips`, `lang`, `year`, `flagStyle`) decide whether the pag
 | Move a country to another continent | `src/core/continents.js` |
 | Add a country | `COUNTRY_CODES` in `src/core/countries.js`, a continent in `continents.js`, then `python3 scripts/download_flags.py` |
 | Use a new external resource (font, CDN, API) | avoid it if you can; otherwise allow it in the CSP in `index.html` and mention it in `privacyText` (`i18n.js`) |
+| Add, rename or remove a file in `src/` | update `PRECACHE` in `sw.js`, then `python3 scripts/check_precache.py` |
+| Change the app icon or the link preview image | edit `src/assets/icons/icon.svg` (or the drawing code in `scripts/make-assets.html`), then open `http://localhost:8000/scripts/make-assets.html` and save the generated files |
 | Regenerate continent outlines | see below |
 
 ### Regenerating the continent outlines
