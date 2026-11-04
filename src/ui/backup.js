@@ -21,7 +21,12 @@ export function initBackup(onImported) {
   const fileInput = byId('importFile');
 
   byId('exportBtn').addEventListener('click', () => {
-    const backup = { format: BACKUP_FORMAT, version: BACKUP_VERSION, exportedAt: new Date().toISOString(), data: state };
+    const backup = {
+      format: BACKUP_FORMAT,
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      data: state,
+    };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
     downloadBlob(blob, `travel-year-backup-${toISODate(new Date())}.json`);
     showToast(t('exported'));
@@ -31,7 +36,7 @@ export function initBackup(onImported) {
 
   fileInput.addEventListener('change', async () => {
     const file = fileInput.files?.[0];
-    fileInput.value = '';   // allow choosing the same file again
+    fileInput.value = ''; // allow choosing the same file again
     if (!file) return;
     try {
       const next = await readBackup(file);

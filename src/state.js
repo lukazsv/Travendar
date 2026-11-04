@@ -7,7 +7,15 @@
  */
 
 import {
-  STORAGE_KEY, LANGUAGES, IMAGE_THEMES, ALIGNMENTS, FLAG_STYLES, THEME_NAMES, YEAR_MIN, YEAR_MAX, MAX_TRIPS,
+  STORAGE_KEY,
+  LANGUAGES,
+  IMAGE_THEMES,
+  ALIGNMENTS,
+  FLAG_STYLES,
+  THEME_NAMES,
+  YEAR_MIN,
+  YEAR_MAX,
+  MAX_TRIPS,
 } from './config.js';
 import { COUNTRY_CODES } from './core/countries.js';
 import { isISODate } from './core/dates.js';
@@ -87,7 +95,11 @@ export function sanitizeState(raw) {
 
   return {
     year: Number.isInteger(raw.year) && raw.year >= YEAR_MIN && raw.year <= YEAR_MAX ? raw.year : base.year,
-    lang: pick(raw.lang, LANGUAGES.map(l => l.code), base.lang),
+    lang: pick(
+      raw.lang,
+      LANGUAGES.map(l => l.code),
+      base.lang,
+    ),
     theme: pick(raw.theme, THEME_NAMES, base.theme),
     custom: {
       bg: isHexColor(c.bg) ? c.bg : base.custom.bg,
@@ -129,7 +141,11 @@ function sanitizeTrips(list) {
 /** Reads the saved state; anything missing or invalid falls back to the defaults. */
 function load() {
   let saved = null;
-  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { /* private mode, bad JSON… */ }
+  try {
+    saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  } catch {
+    /* private mode, bad JSON… */
+  }
   return sanitizeState(saved) || defaults();
 }
 
@@ -147,7 +163,11 @@ export function replaceState(next) {
 
 /** Writes the state to localStorage; failures (quota, private mode) are ignored. */
 export function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* ignore */ }
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
 }
 
 /** @type {Set<(change: Change) => void>} */

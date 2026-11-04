@@ -23,7 +23,11 @@ export function normalizeForSearch(text) {
 }
 
 function displayNames(lang) {
-  try { return new Intl.DisplayNames([lang], { type: 'region' }); } catch { return null; }
+  try {
+    return new Intl.DisplayNames([lang], { type: 'region' });
+  } catch {
+    return null;
+  }
 }
 const namesPl = displayNames('pl');
 const namesEn = displayNames('en');
@@ -65,5 +69,5 @@ export function flagEmoji(code) {
 
 /** Unicode code points of the flag emoji. */
 export function flagCodePoints(code) {
-  return [...code].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65);
+  return [...code].map(ch => 0x1f1e6 + ch.charCodeAt(0) - 65);
 }

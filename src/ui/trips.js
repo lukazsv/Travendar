@@ -14,6 +14,7 @@ import { COUNTRY_BY_CODE } from '../core/countries.js';
 import { flagHTML } from '../render/flags.js';
 import { openCountryPicker } from './country-picker.js';
 import { ICON_CHEVRON, ICON_GLOBE, ICON_TRASH } from './icons.js';
+import { showToast } from './toast.js';
 import { byId, escapeHtml as esc } from '../utils/html.js';
 
 /** Length of a new trip, in days including the first one. */
@@ -21,14 +22,22 @@ const NEW_TRIP_DAYS = 7;
 
 /** Example trips loaded from the empty state: [country, 'MM-DD' start, 'MM-DD' end] in the selected year. */
 const DEMO_TRIPS = [
-  ['ES', '02-02', '02-05'], ['IT', '03-11', '03-14'], ['IT', '04-01', '04-08'],
-  ['NL', '05-05', '05-09'], ['ES', '05-20', '05-27'], ['AR', '06-29', '07-07'],
-  ['JP', '08-08', '08-16'], ['KR', '09-01', '09-15'], ['EG', '10-22', '10-28'],
-  ['SG', '11-27', '12-09'], ['TH', '12-15', '12-22'],
+  ['ES', '02-02', '02-05'],
+  ['IT', '03-11', '03-14'],
+  ['IT', '04-01', '04-08'],
+  ['NL', '05-05', '05-09'],
+  ['ES', '05-20', '05-27'],
+  ['AR', '06-29', '07-07'],
+  ['JP', '08-08', '08-16'],
+  ['KR', '09-01', '09-15'],
+  ['EG', '10-22', '10-28'],
+  ['SG', '11-27', '12-09'],
+  ['TH', '12-15', '12-22'],
 ];
 
 let listEl, emptyEl, statsEl;
 
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const findTrip = id => state.trips.find(trip => trip.id === id);
 
 export function initTrips() {
@@ -103,10 +112,22 @@ function onListClick(e) {
   if (!button) return;
   const id = button.closest('.trip').dataset.id;
   if (button.dataset.act === 'pick') pickCountryFor(id);
-  if (button.dataset.act === 'delete') {
-    state.trips = state.trips.filter(trip => trip.id !== id);
-    commit({ trips: true });
-  }
+  if (button.dataset.act === 'delete') deleteTrip(id);
+}
+
+/** Deletes one trip, with Undo putting it back in the same place. */
+function deleteTrip(id) {
+  const index = state.trips.findIndex(trip => trip.id === id);
+  if (index < 0) return;
+  const [removed] = state.trips.splice(index, 1);
+  commit({ trips: true });
+  showToast(t('tripDeleted'), {
+    actionLabel: t('undo'),
+    onAction: () => {
+      state.trips.splice(Math.min(index, state.trips.length), 0, removed);
+      commit({ trips: true });
+    },
+  });
 }
 
 function onDateInput(e) {
@@ -150,7 +171,11 @@ function pickCountryFor(tripId) {
 function addTrip() {
   const year = state.year;
   const lastDay = `${year}-12-31`;
-  const latestEnd = state.trips.map(trip => trip.end).filter(isISODate).sort().pop();
+  const latestEnd = state.trips
+    .map(trip => trip.end)
+    .filter(isISODate)
+    .sort()
+    .pop();
   const today = new Date();
 
   let start;
@@ -159,24 +184,40 @@ function addTrip() {
   else start = `${year}-01-01`;
 
   let end = addDays(start, NEW_TRIP_DAYS - 1);
-  if (end > lastDay && start <= lastDay) end = lastDay;   // don't spill into next year
+  if (end > lastDay && start <= lastDay) end = lastDay; // don't spill into next year
 
   const trip = { id: newId(), code: '', start, end };
   state.trips.push(trip);
   commit({ trips: true });
 
-  listEl.querySelector(`[data-id="${trip.id}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  listEl
+    .querySelector(`[data-id="${trip.id}"]`)
+    ?.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
   pickCountryFor(trip.id);
 }
 
 function loadDemoTrips() {
   const year = state.year;
-  state.trips = DEMO_TRIPS.map(([code, start, end]) => ({ id: newId(), code, start: `${year}-${start}`, end: `${year}-${end}` }));
+  state.trips = DEMO_TRIPS.map(([code, start, end]) => ({
+    id: newId(),
+    code,
+    start: `${year}-${start}`,
+    end: `${year}-${end}`,
+  }));
   commit({ trips: true });
 }
 
+/** Removes all trips; Undo restores them (instead of an "are you sure?" dialog). */
 function clearTrips() {
-  if (!state.trips.length || !confirm(t('confirmClear'))) return;
+  if (!state.trips.length) return;
+  const previous = state.trips;
   state.trips = [];
   commit({ trips: true });
+  showToast(t('tripsCleared'), {
+    actionLabel: t('undo'),
+    onAction: () => {
+      state.trips = previous;
+      commit({ trips: true });
+    },
+  });
 }

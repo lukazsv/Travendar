@@ -1,62 +1,162 @@
 /* Country picker dialog: continent list → countries of that continent, with search. */
 
 dialog {
-  border: 1px solid var(--line); padding: 0; border-radius: 14px; background: var(--surface); color: var(--text);
+  border: 1px solid var(--line);
+  padding: 0;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
   width: min(420px, calc(100vw - 32px));
   height: min(620px, 80vh);
   box-shadow: var(--pop-shadow);
 }
-dialog::backdrop { background: rgba(17, 17, 16, .4); }
+dialog::backdrop {
+  background: rgba(17, 17, 16, 0.4);
+}
 
-.picker { display: flex; flex-direction: column; height: 100%; }
+.picker {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-.picker-head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 10px 18px; }
+.picker-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 10px 18px;
+}
+.picker-head h2:focus {
+  outline: none; /* focused only to announce the step, see country-picker.js */
+}
 .picker-head h2 {
-  flex: 1; min-width: 0; margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.picker-head:has(.back-btn:not([hidden])) { padding-left: 14px; }
+.picker-head:has(.back-btn:not([hidden])) {
+  padding-left: 14px;
+}
 
-.picker-search { padding: 0 14px 10px; border-bottom: 1px solid var(--line); }
+.picker-search {
+  padding: 0 14px 10px;
+  border-bottom: 1px solid var(--line);
+}
 .picker-search input {
-  width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
-  padding: 0 12px 0 36px; font-size: 15px;
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 0 12px 0 36px;
+  font-size: 15px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a867c' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='5.5'/%3E%3Cpath d='M11 11l3.5 3.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: 12px center;
+  background-repeat: no-repeat;
+  background-position: 12px center;
 }
-.picker-search input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.picker-search input:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
 
-.picker-list { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 6px 12px; overscroll-behavior: contain; }
-.picker-list h3 { margin: 12px 10px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
-.no-results { padding: 30px 10px; text-align: center; color: var(--muted); }
+.picker-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 6px 12px;
+  overscroll-behavior: contain;
+}
+.picker-list h3 {
+  margin: 12px 10px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.no-results {
+  padding: 30px 10px;
+  text-align: center;
+  color: var(--muted);
+}
 
 /* ---- Continent row: outline icon, name, country count, chevron ---- */
 
 .cont-item {
-  width: 100%; display: flex; align-items: center; gap: 14px; padding: 8px 10px;
-  border: 0; border-radius: 8px; background: none; text-align: left; font-size: 15px; font-weight: 500;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
 }
-.cont-item:hover, .cont-item:focus-visible { background: var(--soft); outline: none; }
+.cont-item:hover,
+.cont-item:focus-visible {
+  background: var(--soft);
+  outline: none;
+}
 .cont-item svg.outline {
-  width: 40px; height: 40px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.15;
-  stroke-linejoin: round; stroke-linecap: round;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
-.cont-item .count { margin-left: auto; font-size: 13px; font-weight: 400; color: var(--muted); }
-.cont-item .chev { transform: rotate(-90deg); }
+.cont-item .count {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.cont-item .chev {
+  transform: rotate(-90deg);
+}
 
 /* ---- Country row: flag + name ---- */
 
 .c-item {
-  width: 100%; display: flex; align-items: center; gap: 12px; padding: 8px 10px;
-  border: 0; border-radius: 8px; background: none; text-align: left; font-size: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+  font-size: 15px;
 }
-.c-item:hover, .c-item:focus-visible { background: var(--soft); outline: none; }
+.c-item:hover,
+.c-item:focus-visible {
+  background: var(--soft);
+  outline: none;
+}
 
 /* Phones: show the dialog as a bottom sheet. */
 @media (max-width: 600px) {
   dialog {
-    width: 100%; max-width: 100%; height: 86vh; height: 86svh;
-    margin: auto 0 0; border-radius: 14px 14px 0 0; border-bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 86vh;
+    height: 86svh;
+    margin: auto 0 0;
+    border-radius: 14px 14px 0 0;
+    border-bottom: 0;
   }
-  .picker-list { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .picker-list {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
 }

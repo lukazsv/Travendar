@@ -6,7 +6,7 @@ The app runs entirely in the browser: no backend, no account, no build step.
 
 ## Features
 
-- **Trips**: pick a country (first a continent, then its countries A–Z, or search), a start and an end date. Days of trips that overlap go to the trip that starts later.
+- **Trips**: pick a country (first a continent, then its countries A–Z, or search), a start and an end date. Days of trips that overlap go to the trip that starts later. Deleting a trip or clearing the list can be undone.
 - **Live preview** of the image while you edit.
 - **Themes**: Dark, Light (classic calendar look) and Custom, with your own background, text and accent colours.
 - **Advanced**: week starts on Sunday, year and month-name alignment, system emoji or Twemoji flags, and **backup** — export all trips and settings to a JSON file and import them back (e.g. on another device).
@@ -24,9 +24,27 @@ The app uses native ES modules, which browsers do not load from `file://`. Serve
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then open <http://localhost:8000>. There is nothing to install and nothing to build: edit a file and reload the page.
+Then open <http://localhost:8000> (`npm start` does the same). There is nothing to install and nothing to build: edit a file and reload the page.
 
 `--bind 127.0.0.1` keeps the server private to your computer. Without it, anyone on the same network can browse the whole folder (including `.git`). Drop it only while testing on a phone, on a network you trust, and open `http://<your computer's IP>:8000` there — type the `http://` part, or the phone will try HTTPS and fail.
+
+## Development
+
+The site has no dependencies, but the development tools run on **Node.js 22+**:
+
+```bash
+npm install          # ESLint and Prettier (dev only)
+npm run check        # lint + format check + unit tests + offline file list — the same as CI
+```
+
+| Script | Purpose |
+| --- | --- |
+| `npm start` | Local server on <http://localhost:8000> |
+| `npm test` | Unit tests in `tests/` (Node's built-in test runner) |
+| `npm run lint` | ESLint |
+| `npm run format` / `format:check` | Prettier (HTML and Markdown are formatted by hand) |
+
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm run check` on every pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [SECURITY.md](SECURITY.md) for reporting vulnerabilities. Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
 ## Deploying
 
@@ -84,12 +102,17 @@ src/
     components.css            Buttons, cards, rows, segmented control, switch, stepper, toast
     header.css, preview.css, trips.css, settings.css, country-picker.css, footer.css
     layout.css                Page grid and responsive breakpoints (loaded last)
+tests/                        Unit tests for src/core, state validation and translations
 scripts/
   generate_continent_shapes.py   Rebuilds src/core/continent-shapes.js from map data
   requirements.txt               Python dependencies of that script (pinned)
   download_flags.py              Downloads the Twemoji flag PNGs into src/assets/flags/
   make-assets.html               Generates the PNG icons and og-image.png in the browser
   check_precache.py              Checks that sw.js lists every file needed offline
+.github/workflows/ci.yml      CI: lint, format check, tests, precache check
+package.json                  Dev tooling and npm scripts (no runtime dependencies)
+eslint.config.js, .prettierrc.json, .editorconfig   Code style
+CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, LICENSE
 ```
 
 ## How it works
@@ -155,8 +178,10 @@ If a download script fails with `CERTIFICATE_VERIFY_FAILED` on macOS, prefix it 
 - **Comments say why, not what.** Every module starts with a short description; exported functions have JSDoc with types.
 - **No DOM in `core/`**, and the renderer gets everything through its arguments. That keeps the logic easy to test.
 - **CSS**: colours come from the variables in `tokens.css`, never hard-coded in components. Responsive layout rules go in `layout.css`; component-specific breakpoints stay in the component's file.
-- **Formatting**: 2 spaces (4 in Python), UTF-8, LF; see `.editorconfig`.
-- **Git**: branch from `main` (`feature/…`, `fix/…`, `refactor/…`), open a pull request, merge when reviewed.
+- **Formatting**: Prettier for JS, CSS, JSON and YAML (`npm run format`); 4 spaces in Python; UTF-8, LF; see `.editorconfig`.
+- **Tests**: new logic in `src/core/` comes with a test in `tests/`.
+- **Accessibility**: text contrast at least 4.5:1 (use `--muted` / `--accent-text` for small text), every control labelled, everything usable with the keyboard; no motion when the system asks for reduced motion.
+- **Git**: branch from `main` (`feature/…`, `fix/…`, `refactor/…`, `chore/…`), open a pull request, merge when CI is green and it is reviewed. Details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Browser support
 

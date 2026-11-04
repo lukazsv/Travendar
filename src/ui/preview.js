@@ -6,7 +6,7 @@
 import { IMAGE_WIDTH, JPEG_QUALITY } from '../config.js';
 import { state, themeColors } from '../state.js';
 import { t } from '../i18n.js';
-import { buildDayMap } from '../core/calendar.js';
+import { buildDayMap, travelStats } from '../core/calendar.js';
 import { paintCalendar } from '../render/calendar-renderer.js';
 import { usesEmojiFlags, getFlagImage, preloadFlagImages } from '../render/flags.js';
 import { byId } from '../utils/html.js';
@@ -35,6 +35,7 @@ export function drawNow() {
   };
 
   paintCalendar(canvas.getContext('2d'), { ...common, colors: themeColors(state.theme), scale: 1 });
+  canvas.setAttribute('aria-label', describeImage(days));
 
   for (const thumb of thumbnails) {
     // While Dark or Light is active, the Custom tile shows those colours: that is where
@@ -42,6 +43,13 @@ export function drawNow() {
     const name = thumb.dataset.thumb === 'custom' && state.theme !== 'custom' ? state.theme : thumb.dataset.thumb;
     paintCalendar(thumb.getContext('2d'), { ...common, colors: themeColors(name), scale: thumb.width / IMAGE_WIDTH });
   }
+}
+
+/** Text alternative for the image: screen readers cannot see the canvas. */
+function describeImage(days) {
+  const { days: count, countries } = travelStats(days);
+  const summary = count ? `: ${t('days')(count)} · ${t('countries')(countries)}` : '';
+  return `${t('previewAlt')}, ${state.year}${summary}`;
 }
 
 let drawQueued = false;
@@ -64,7 +72,11 @@ export async function renderJpeg() {
   await preloadFlagImages(buildDayMap(state.trips, state.year).values());
   drawNow();
   return new Promise((resolve, reject) => {
-    canvas.toBlob(blob => (blob ? resolve(blob) : reject(new Error('canvas.toBlob failed'))), 'image/jpeg', JPEG_QUALITY);
+    canvas.toBlob(
+      blob => (blob ? resolve(blob) : reject(new Error('canvas.toBlob failed'))),
+      'image/jpeg',
+      JPEG_QUALITY,
+    );
   });
 }
 

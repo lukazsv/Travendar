@@ -31,15 +31,21 @@ export function initCountryPicker() {
 
   backBtn.addEventListener('click', () => showStep(null));
   byId('pickerClose').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });   // click on backdrop
+  dialog.addEventListener('click', e => {
+    if (e.target === dialog) dialog.close();
+  }); // click on backdrop
 
-  search.addEventListener('input', () => { render(); list.scrollTop = 0; });
+  search.addEventListener('input', () => {
+    render();
+    list.scrollTop = 0;
+  });
   search.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
     // Enter picks the first result; with an empty query it just closes the keyboard.
     const first = list.querySelector('.c-item');
-    if (first && search.value.trim()) pick(first.dataset.code); else search.blur();
+    if (first && search.value.trim()) pick(first.dataset.code);
+    else search.blur();
   });
 
   list.addEventListener('click', e => {
@@ -78,7 +84,13 @@ function showStep(key) {
   render();
   list.scrollTop = 0;
   // Focus the search box only with a mouse/trackpad; on touch it would pop up the keyboard.
-  if (matchMedia('(pointer: fine)').matches) search.focus();
+  if (matchMedia('(pointer: fine)').matches) {
+    search.focus();
+  } else {
+    // Touch / screen readers: the tapped button was just replaced, so move focus to the
+    // title instead of losing it; it also announces the new step ("Europa").
+    title.focus();
+  }
 }
 
 function render() {
@@ -105,7 +117,8 @@ function render() {
   }
 
   const used = (session?.usedCodes || []).map(code => COUNTRY_BY_CODE[code]).filter(Boolean);
-  list.innerHTML = CONTINENTS.map(continentItem).join('') +
+  list.innerHTML =
+    CONTINENTS.map(continentItem).join('') +
     (used.length ? `<h3>${esc(t('used'))}</h3>${used.map(countryItem).join('')}` : '');
 }
 
