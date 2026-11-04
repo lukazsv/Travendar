@@ -1,0 +1,26 @@
+{
+  "name": "travel-year",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Make a year calendar image where travel days show the flags of the countries you visited.",
+  "license": "MIT",
+  "author": "Łukasz Święcicki",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 127.0.0.1",
+    "test": "node --test tests/",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm test && python3 scripts/check_precache.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "globals": "17.14.0",
+    "prettier": "3.9.10"
+  }
+}

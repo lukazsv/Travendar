@@ -6,28 +6,28 @@
  */
 
 :root {
-  --font: "DM Sans", Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font: 'DM Sans', Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  --bg: #f6f5f2;            /* page background */
-  --surface: #ffffff;       /* cards, inputs, panels */
-  --soft: #f1efea;          /* hover background inside lists */
-  --line: #e4e1da;          /* borders and dividers */
-  --line-strong: #cfcbc2;   /* hovered borders, dashed outlines */
+  --bg: #f6f5f2; /* page background */
+  --surface: #ffffff; /* cards, inputs, panels */
+  --soft: #f1efea; /* hover background inside lists */
+  --line: #e4e1da; /* borders and dividers */
+  --line-strong: #cfcbc2; /* hovered borders, dashed outlines */
   --text: #1a1917;
-  --muted: #78746b;         /* secondary text, icons */
-  --ink: #1a1917;           /* filled controls (primary button, selected segment) */
-  --on-ink: #ffffff;        /* text on --ink */
-  --accent: #e8553a;        /* links, focus rings, highlights */
-  --dot: rgba(26, 25, 23, .09);
+  --muted: #78746b; /* secondary text, icons */
+  --ink: #1a1917; /* filled controls (primary button, selected segment) */
+  --on-ink: #ffffff; /* text on --ink */
+  --accent: #e8553a; /* links, focus rings, highlights */
+  --dot: rgba(26, 25, 23, 0.09);
 
-  --canvas-shadow: 0 1px 2px rgba(26, 25, 23, .06), 0 12px 32px rgba(26, 25, 23, .12);
-  --pop-shadow: 0 10px 30px rgba(26, 25, 23, .12);
+  --canvas-shadow: 0 1px 2px rgba(26, 25, 23, 0.06), 0 12px 32px rgba(26, 25, 23, 0.12);
+  --pop-shadow: 0 10px 30px rgba(26, 25, 23, 0.12);
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     --bg: #111110;
     --surface: #191918;
     --soft: #222220;
@@ -38,15 +38,15 @@
     --ink: #ecebe7;
     --on-ink: #111110;
     --accent: #ff7052;
-    --dot: rgba(236, 235, 231, .08);
-    --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 12px 32px rgba(0, 0, 0, .5);
-    --pop-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+    --dot: rgba(236, 235, 231, 0.08);
+    --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 32px rgba(0, 0, 0, 0.5);
+    --pop-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     color-scheme: dark;
   }
 }
 
 /* Keep in sync with the dark block above. */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --bg: #111110;
   --surface: #191918;
   --soft: #222220;
@@ -57,8 +57,8 @@
   --ink: #ecebe7;
   --on-ink: #111110;
   --accent: #ff7052;
-  --dot: rgba(236, 235, 231, .08);
-  --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 12px 32px rgba(0, 0, 0, .5);
-  --pop-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  --dot: rgba(236, 235, 231, 0.08);
+  --canvas-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 32px rgba(0, 0, 0, 0.5);
+  --pop-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   color-scheme: dark;
 }

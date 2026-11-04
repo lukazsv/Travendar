@@ -34,7 +34,7 @@ export function initExport() {
       const file = new File([await renderJpeg()], exportFileName(), { type: 'image/jpeg' });
       await navigator.share({ files: [file], title: `Travel Year ${state.year}` });
     } catch (err) {
-      if (err?.name !== 'AbortError') showToast(t('shareFailed'));   // AbortError = user closed the share sheet
+      if (err?.name !== 'AbortError') showToast(t('shareFailed')); // AbortError = user closed the share sheet
     }
   });
 }

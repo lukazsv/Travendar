@@ -83,7 +83,9 @@ export function initSettings() {
 export function syncSettings() {
   yearOutput.textContent = state.year;
   for (const key of ['theme', ...Object.keys(RADIO_GROUPS)]) {
-    document.querySelectorAll(`input[name="${key}"]`).forEach(radio => { radio.checked = radio.value === state[key]; });
+    document.querySelectorAll(`input[name="${key}"]`).forEach(radio => {
+      radio.checked = radio.value === state[key];
+    });
   }
   weekSunday.checked = state.weekSunday;
   syncColorInputs();
@@ -104,7 +106,9 @@ function syncCustomPanel() {
   const open = state.theme === 'custom';
   customPanel.classList.toggle('open', open);
   customPanel.setAttribute('aria-hidden', String(!open));
-  colorInputs.forEach(input => { input.tabIndex = open ? 0 : -1; });
+  colorInputs.forEach(input => {
+    input.tabIndex = open ? 0 : -1;
+  });
 }
 
 /** Phones: the Customize button folds / unfolds the settings. */

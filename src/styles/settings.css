@@ -2,71 +2,199 @@
 
 /* ---- Theme tiles (live thumbnails of the image) ---- */
 
-.themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px 14px 14px; }
-.theme-tile { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
-.theme-tile input { position: absolute; opacity: 0; pointer-events: none; }
+.themes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px 14px 14px;
+}
+.theme-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.theme-tile input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
 
 .thumb {
-  display: block; width: 100%; max-width: 84px; height: auto; aspect-ratio: 9 / 16;
-  border-radius: 8px; box-shadow: 0 0 0 1px var(--line);
-  transition: box-shadow .15s ease, transform .15s ease;
+  display: block;
+  width: 100%;
+  max-width: 84px;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--line);
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
-.theme-tile:hover .thumb { transform: translateY(-2px); }
+.theme-tile:hover .thumb {
+  transform: translateY(-2px);
+}
 .theme-tile input:checked ~ .thumb,
-.theme-tile input:checked ~ .thumb-box .thumb { box-shadow: 0 0 0 3px var(--surface), 0 0 0 4.5px var(--ink); }
+.theme-tile input:checked ~ .thumb-box .thumb {
+  box-shadow:
+    0 0 0 3px var(--surface),
+    0 0 0 4.5px var(--ink);
+}
 .theme-tile input:focus-visible ~ .thumb,
-.theme-tile input:focus-visible ~ .thumb-box .thumb { outline: 2px solid var(--accent); outline-offset: 7px; }
+.theme-tile input:focus-visible ~ .thumb-box .thumb {
+  outline: 2px solid var(--accent);
+  outline-offset: 7px;
+}
 
 /* The Custom tile wraps its thumbnail to place the pencil badge. */
-.thumb-box { position: relative; display: block; width: 100%; max-width: 84px; }
-.thumb-badge {
-  position: absolute; right: -7px; bottom: -7px; width: 24px; height: 24px; border-radius: 50%;
-  display: grid; place-items: center; background: var(--ink); color: var(--on-ink);
-  box-shadow: 0 0 0 3px var(--surface); pointer-events: none;
+.thumb-box {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 84px;
 }
-.thumb-badge svg { width: 12px; height: 12px; }
+.thumb-badge {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: 0 0 0 3px var(--surface);
+  pointer-events: none;
+}
+.thumb-badge svg {
+  width: 12px;
+  height: 12px;
+}
 
-.theme-tile .tname { font-size: 13px; font-weight: 500; color: var(--muted); }
-.theme-tile input:checked ~ .tname { color: var(--text); font-weight: 600; }
+.theme-tile .tname {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.theme-tile input:checked ~ .tname {
+  color: var(--text);
+  font-weight: 600;
+}
 
 /* ---- Custom colours (slides open when the Custom theme is selected) ---- */
 
-.custom-colors { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
-.custom-colors.open { grid-template-rows: 1fr; }
-.custom-inner { overflow: hidden; min-height: 0; }
-.custom-inner .row:first-child { border-top: 1px solid var(--line); }
+.custom-colors {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.custom-colors.open {
+  grid-template-rows: 1fr;
+}
+.custom-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.custom-inner .row:first-child {
+  border-top: 1px solid var(--line);
+}
 
-.color-pick { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.color-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
 .color-pick .hex {
-  font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; text-transform: uppercase;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
-input[type="color"] {
-  -webkit-appearance: none; appearance: none; width: 30px; height: 30px; padding: 0; border: 0;
-  background: none; border-radius: 50%; cursor: pointer;
+input[type='color'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
 }
-input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-input[type="color"]::-webkit-color-swatch { border: 1px solid var(--line-strong); border-radius: 50%; }
-input[type="color"]::-moz-color-swatch { border: 1px solid var(--line-strong); border-radius: 50%; }
+input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type='color']::-webkit-color-swatch {
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+input[type='color']::-moz-color-swatch {
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
 
 /* ---- Advanced (collapsible <details>) ---- */
 
-details.adv { margin-top: 28px; }
-details.adv > summary { list-style: none; cursor: pointer; user-select: none; font-weight: 600; }
-details.adv > summary::-webkit-details-marker { display: none; }
-details.adv > summary .chev { transition: transform .2s; transform: rotate(-90deg); }
-details.adv[open] > summary .chev { transform: rotate(0deg); }
+details.adv {
+  margin-top: 28px;
+}
+details.adv > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+}
+details.adv > summary::-webkit-details-marker {
+  display: none;
+}
+details.adv > summary .chev {
+  transition: transform 0.2s;
+  transform: rotate(-90deg);
+}
+details.adv[open] > summary .chev {
+  transform: rotate(0deg);
+}
 
 /* ---- Customize button (shown on phones only, see layout.css) ---- */
 
 .customize-btn {
-  display: none; align-items: center; gap: 12px; width: 100%; height: 50px; padding: 0 14px;
-  border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
-  font-size: 15px; font-weight: 600; text-align: left; transition: border-color .15s;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 50px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  transition: border-color 0.15s;
 }
-.customize-btn:hover { border-color: var(--line-strong); }
-.customize-btn span { flex: 1; }
-.customize-btn .tune { width: 20px; height: 20px; flex: none; }
-.customize-btn .chev { transition: transform .2s; }
-.customize-btn[aria-expanded="true"] { border-color: var(--ink); }
-.customize-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.customize-btn:hover {
+  border-color: var(--line-strong);
+}
+.customize-btn span {
+  flex: 1;
+}
+.customize-btn .tune {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.customize-btn .chev {
+  transition: transform 0.2s;
+}
+.customize-btn[aria-expanded='true'] {
+  border-color: var(--ink);
+}
+.customize-btn[aria-expanded='true'] .chev {
+  transform: rotate(180deg);
+}

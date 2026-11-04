@@ -24,7 +24,9 @@ export const SUPPORTS_EMOJI_FLAGS = (() => {
     for (let i = 0; i < px.length; i += 4) {
       if (px[i] > 150 && px[i + 1] < 90 && px[i + 2] < 90 && px[i + 3] > 200) return true;
     }
-  } catch { /* canvas unavailable */ }
+  } catch {
+    /* canvas unavailable */
+  }
   return false;
 })();
 
@@ -62,8 +64,11 @@ export function getFlagImage(code) {
   if (!img) {
     img = new Image();
     img.onload = () => loadListeners.forEach(fn => fn());
-    img.onerror = () => { img.failed = true; loadListeners.forEach(fn => fn()); };
-    img.src = flagImageUrl(code);   // same origin, so the canvas stays exportable
+    img.onerror = () => {
+      img.failed = true;
+      loadListeners.forEach(fn => fn());
+    };
+    img.src = flagImageUrl(code); // same origin, so the canvas stays exportable
     imageCache.set(code, img);
   }
   return img;
@@ -76,12 +81,17 @@ export function getFlagImage(code) {
  */
 export function preloadFlagImages(codes) {
   if (usesEmojiFlags()) return Promise.resolve();
-  return Promise.all([...new Set(codes)].map(code => new Promise(resolve => {
-    const img = getFlagImage(code);
-    if (img.complete) return resolve();
-    img.addEventListener('load', resolve, { once: true });
-    img.addEventListener('error', resolve, { once: true });
-  })));
+  return Promise.all(
+    [...new Set(codes)].map(
+      code =>
+        new Promise(resolve => {
+          const img = getFlagImage(code);
+          if (img.complete) return resolve();
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        }),
+    ),
+  );
 }
 
 // ---- Flags in the HTML UI ----

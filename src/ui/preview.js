@@ -64,7 +64,11 @@ export async function renderJpeg() {
   await preloadFlagImages(buildDayMap(state.trips, state.year).values());
   drawNow();
   return new Promise((resolve, reject) => {
-    canvas.toBlob(blob => (blob ? resolve(blob) : reject(new Error('canvas.toBlob failed'))), 'image/jpeg', JPEG_QUALITY);
+    canvas.toBlob(
+      blob => (blob ? resolve(blob) : reject(new Error('canvas.toBlob failed'))),
+      'image/jpeg',
+      JPEG_QUALITY,
+    );
   });
 }
 

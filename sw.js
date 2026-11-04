@@ -68,7 +68,8 @@ const PRECACHE = [
 self.addEventListener('install', event => {
   // `cache: 'reload'` bypasses the HTTP cache so the precache gets current files.
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then(cache => cache.addAll(PRECACHE.map(url => new Request(url, { cache: 'reload' }))))
       .then(() => self.skipWaiting()),
   );
@@ -76,8 +77,13 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key.startsWith('travel-year-') && key !== CACHE_NAME).map(key => caches.delete(key))))
+    caches
+      .keys()
+      .then(keys =>
+        Promise.all(
+          keys.filter(key => key.startsWith('travel-year-') && key !== CACHE_NAME).map(key => caches.delete(key)),
+        ),
+      )
       .then(() => self.clients.claim()),
   );
 });
@@ -97,8 +103,9 @@ async function networkFirst(request) {
     return response;
   } catch (err) {
     // Offline: the cached copy, ignoring ?query strings; for page loads fall back to the app shell.
-    const cached = await cache.match(request, { ignoreSearch: true })
-      || (request.mode === 'navigate' ? await cache.match('index.html') : undefined);
+    const cached =
+      (await cache.match(request, { ignoreSearch: true })) ||
+      (request.mode === 'navigate' ? await cache.match('index.html') : undefined);
     if (cached) return cached;
     throw err;
   }

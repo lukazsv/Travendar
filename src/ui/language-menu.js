@@ -32,14 +32,19 @@ export function initLanguageMenu() {
     const step = e.key === 'ArrowDown' ? 1 : -1;
     items[(items.indexOf(document.activeElement) + step + items.length) % items.length].focus();
   });
-  document.addEventListener('click', e => { if (!e.target.closest('.lang')) close(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(true); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.lang')) close();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') close(true);
+  });
 }
 
 function open() {
-  menu.innerHTML = LANGUAGES.map(lang => `
+  menu.innerHTML = LANGUAGES.map(
+    lang => `
     <button class="lang-item" type="button" role="menuitemradio" lang="${lang.code}" data-lang="${lang.code}"
-            aria-checked="${lang.code === state.lang}">${flagHTML(lang.flag)}<span>${esc(lang.name)}</span>${ICON_CHECK}</button>`
+            aria-checked="${lang.code === state.lang}">${flagHTML(lang.flag)}<span>${esc(lang.name)}</span>${ICON_CHECK}</button>`,
   ).join('');
   menu.hidden = false;
   button.setAttribute('aria-expanded', 'true');

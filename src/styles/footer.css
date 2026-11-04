@@ -7,10 +7,25 @@
   line-height: 1.5;
   color: var(--muted);
 }
-.app-footer p { margin: 6px 0 0; }
-.app-footer a { color: inherit; text-underline-offset: 2px; }
-.app-footer a:hover { color: var(--text); }
+.app-footer p {
+  margin: 6px 0 0;
+}
+.app-footer a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
+.app-footer a:hover {
+  color: var(--text);
+}
 
-.privacy > summary { cursor: pointer; color: var(--muted); font-weight: 500; }
-.privacy > summary::marker { color: var(--muted); }
-.privacy > p { margin: 6px 0 8px; }
+.privacy > summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+}
+.privacy > summary::marker {
+  color: var(--muted);
+}
+.privacy > p {
+  margin: 6px 0 8px;
+}

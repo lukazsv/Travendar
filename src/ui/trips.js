@@ -21,10 +21,17 @@ const NEW_TRIP_DAYS = 7;
 
 /** Example trips loaded from the empty state: [country, 'MM-DD' start, 'MM-DD' end] in the selected year. */
 const DEMO_TRIPS = [
-  ['ES', '02-02', '02-05'], ['IT', '03-11', '03-14'], ['IT', '04-01', '04-08'],
-  ['NL', '05-05', '05-09'], ['ES', '05-20', '05-27'], ['AR', '06-29', '07-07'],
-  ['JP', '08-08', '08-16'], ['KR', '09-01', '09-15'], ['EG', '10-22', '10-28'],
-  ['SG', '11-27', '12-09'], ['TH', '12-15', '12-22'],
+  ['ES', '02-02', '02-05'],
+  ['IT', '03-11', '03-14'],
+  ['IT', '04-01', '04-08'],
+  ['NL', '05-05', '05-09'],
+  ['ES', '05-20', '05-27'],
+  ['AR', '06-29', '07-07'],
+  ['JP', '08-08', '08-16'],
+  ['KR', '09-01', '09-15'],
+  ['EG', '10-22', '10-28'],
+  ['SG', '11-27', '12-09'],
+  ['TH', '12-15', '12-22'],
 ];
 
 let listEl, emptyEl, statsEl;
@@ -150,7 +157,11 @@ function pickCountryFor(tripId) {
 function addTrip() {
   const year = state.year;
   const lastDay = `${year}-12-31`;
-  const latestEnd = state.trips.map(trip => trip.end).filter(isISODate).sort().pop();
+  const latestEnd = state.trips
+    .map(trip => trip.end)
+    .filter(isISODate)
+    .sort()
+    .pop();
   const today = new Date();
 
   let start;
@@ -159,7 +170,7 @@ function addTrip() {
   else start = `${year}-01-01`;
 
   let end = addDays(start, NEW_TRIP_DAYS - 1);
-  if (end > lastDay && start <= lastDay) end = lastDay;   // don't spill into next year
+  if (end > lastDay && start <= lastDay) end = lastDay; // don't spill into next year
 
   const trip = { id: newId(), code: '', start, end };
   state.trips.push(trip);
@@ -171,7 +182,12 @@ function addTrip() {
 
 function loadDemoTrips() {
   const year = state.year;
-  state.trips = DEMO_TRIPS.map(([code, start, end]) => ({ id: newId(), code, start: `${year}-${start}`, end: `${year}-${end}` }));
+  state.trips = DEMO_TRIPS.map(([code, start, end]) => ({
+    id: newId(),
+    code,
+    start: `${year}-${start}`,
+    end: `${year}-${end}`,
+  }));
   commit({ trips: true });
 }
 

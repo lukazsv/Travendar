@@ -1,0 +1,8 @@
+# Generated or third-party files
+src/core/continent-shapes.js
+src/assets/
+package-lock.json
+
+# Markup and docs are formatted by hand (Prettier would reflow the inline SVG icons and tables).
+*.html
+*.md
