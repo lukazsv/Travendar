@@ -20,7 +20,6 @@
     --accent: #ff3b30;
     --accent-press: #d70015;
     --seg-on: #ffffff;
-    --toggle-off: #e9e9eb;
     --green: #34c759;
     --shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 20px rgba(0,0,0,.05);
     --canvas-shadow: 0 10px 40px rgba(0,0,0,.18);
@@ -38,7 +37,6 @@
       --accent: #ff453a;
       --accent-press: #ff6961;
       --seg-on: #636366;
-      --toggle-off: #39393d;
       --green: #30d158;
       --shadow: none;
       --canvas-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
@@ -48,7 +46,7 @@
   :root[data-theme="dark"] {
     --bg: #000000; --card: #1c1c1e; --panel: #121214; --field: #2c2c2e; --text: #ffffff;
     --muted: #98989f; --sep: rgba(84, 84, 88, .55); --accent: #ff453a; --accent-press: #ff6961;
-    --seg-on: #636366; --toggle-off: #39393d; --green: #30d158; --shadow: none;
+    --seg-on: #636366; --green: #30d158; --shadow: none;
     --canvas-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
     color-scheme: dark;
   }
@@ -64,6 +62,7 @@
   }
   button, input { font: inherit; color: inherit; }
   button { cursor: pointer; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
 
   .app {
     display: grid;
@@ -79,6 +78,32 @@
   header h1 { margin: 0; font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -.02em; }
   header h1 span { color: var(--accent); }
   header p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .lang { position: relative; flex: none; }
+  .lang-btn {
+    width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--card);
+    display: grid; place-items: center; color: var(--text); box-shadow: var(--shadow);
+    transition: background .15s, color .15s;
+  }
+  .lang-btn:hover, .lang-btn[aria-expanded="true"] { color: var(--accent); }
+  .lang-btn svg { width: 22px; height: 22px; }
+  .lang-menu {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 20; min-width: 190px;
+    padding: 6px; border-radius: 14px; background: var(--card);
+    box-shadow: 0 12px 40px rgba(0,0,0,.25), 0 0 0 0.5px var(--sep);
+    transform-origin: top right; animation: menu-in .16s ease-out;
+  }
+  @keyframes menu-in { from { opacity: 0; transform: scale(.94) translateY(-4px); } }
+  .lang-item {
+    width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    border: 0; border-radius: 9px; background: none; text-align: left; font-size: 17px;
+  }
+  .lang-item:hover, .lang-item:focus-visible { background: var(--field); outline: none; }
+  .lang-item .flag { font-size: 22px; }
+  .lang-item img.flag { width: 26px; height: 26px; }
+  .lang-item .check { margin-left: auto; width: 18px; height: 18px; color: var(--accent); visibility: hidden; }
+  .lang-item[aria-checked="true"] { font-weight: 600; }
+  .lang-item[aria-checked="true"] .check { visibility: visible; }
   .side { grid-area: side; min-width: 0; }
 
   .preview {
@@ -127,13 +152,13 @@
   .group-title .stats { text-transform: none; letter-spacing: 0; font-size: 13px; }
   .card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); }
 
-  /* Settings */
+  /* Settings rows */
   .row {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     min-height: 52px; padding: 8px 16px;
   }
   .row + .row { border-top: 0.5px solid var(--sep); }
-  .row > span { font-size: 17px; }
+  .row > span:first-child { font-size: 17px; }
   .seg { display: inline-flex; background: var(--field); border-radius: 9px; padding: 2px; }
   .seg label { position: relative; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
@@ -144,17 +169,47 @@
   .stepper button { width: 34px; height: 30px; border: 0; background: none; border-radius: 7px; font-size: 18px; color: var(--accent); }
   .stepper button:hover { background: var(--seg-on); }
   .stepper output { min-width: 52px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .switch {
-    appearance: none; -webkit-appearance: none; margin: 0;
-    width: 51px; height: 31px; border-radius: 16px; background: var(--toggle-off);
-    position: relative; cursor: pointer; transition: background .2s; flex: none;
+
+  /* Theme picker */
+  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px 16px 14px; }
+  .theme-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .theme-tile input { position: absolute; opacity: 0; pointer-events: none; }
+  .thumb {
+    display: block; width: 100%; max-width: 86px; height: auto; aspect-ratio: 9 / 16;
+    border-radius: 11px; box-shadow: 0 0 0 1px var(--sep);
+    transition: box-shadow .15s ease, transform .15s ease;
   }
-  .switch::before {
-    content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%;
-    background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: transform .2s;
+  .theme-tile:hover .thumb { transform: translateY(-2px); }
+  .theme-tile input:checked ~ .thumb, .theme-tile input:checked ~ .thumb-box .thumb { box-shadow: 0 0 0 2.5px var(--card), 0 0 0 5px var(--accent); }
+  .theme-tile input:focus-visible ~ .thumb, .theme-tile input:focus-visible ~ .thumb-box .thumb { outline: 2px solid var(--accent); outline-offset: 6px; }
+  .thumb-box { position: relative; display: block; width: 100%; max-width: 86px; }
+  .thumb-badge {
+    position: absolute; right: -6px; bottom: -6px; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--accent); color: #fff;
+    box-shadow: 0 0 0 2.5px var(--card); pointer-events: none;
   }
-  .switch:checked { background: var(--green); }
-  .switch:checked::before { transform: translateX(20px); }
+  .thumb-badge svg { width: 14px; height: 14px; }
+  .theme-tile .tname { font-size: 14px; font-weight: 500; color: var(--muted); }
+  .theme-tile input:checked ~ .tname { color: var(--text); font-weight: 600; }
+  .custom-colors { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+  .custom-colors.open { grid-template-rows: 1fr; }
+  .custom-inner { overflow: hidden; min-height: 0; }
+  .custom-inner .row:first-child { border-top: 0.5px solid var(--sep); }
+  .color-pick { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+  .color-pick .hex { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  input[type="color"] {
+    -webkit-appearance: none; appearance: none; width: 44px; height: 30px; padding: 0; border: 0;
+    background: none; border-radius: 8px; cursor: pointer;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type="color"]::-webkit-color-swatch { border: 1px solid var(--sep); border-radius: 8px; }
+  input[type="color"]::-moz-color-swatch { border: 1px solid var(--sep); border-radius: 8px; }
+
+  /* Advanced */
+  details.adv > summary { list-style: none; cursor: pointer; user-select: none; }
+  details.adv > summary::-webkit-details-marker { display: none; }
+  details.adv > summary .chev { width: 14px; height: 14px; color: var(--muted); transition: transform .2s; transform: rotate(-90deg); }
+  details.adv[open] > summary .chev { transform: rotate(0deg); }
 
   /* Trips */
   .trips { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -167,7 +222,7 @@
   }
   .country-btn .cname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .country-btn .cname.muted { color: var(--muted); font-weight: 500; }
-  .country-btn .chev { width: 14px; height: 14px; color: var(--muted); flex: none; }
+  .chev { width: 14px; height: 14px; color: var(--muted); flex: none; }
   .icon-btn {
     width: 48px; height: 48px; flex: none; border: 0; border-radius: 12px; background: var(--field);
     display: grid; place-items: center; color: var(--muted);
@@ -194,6 +249,7 @@
     display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow);
   }
   .add-btn:active { transform: scale(.99); }
+  .add-btn:focus:not(:focus-visible) { outline: none; }
   .add-btn svg { width: 22px; height: 22px; }
   .empty { padding: 26px 20px; text-align: center; color: var(--muted); }
   .empty .big { font-size: 34px; margin-bottom: 6px; }
@@ -226,7 +282,7 @@
     border: 0; border-radius: 10px; background: none; text-align: left; font-size: 17px;
   }
   .c-item:hover, .c-item:focus-visible { background: var(--field); outline: none; }
-  .c-item .en { margin-left: auto; color: var(--muted); font-size: 13px; }
+  .c-item .alt { margin-left: auto; color: var(--muted); font-size: 13px; }
   .no-results { padding: 30px 10px; text-align: center; color: var(--muted); }
 
   .toast {
@@ -262,7 +318,7 @@
     .picker-list { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
   }
   @media (max-width: 380px) {
-    .row > span { font-size: 15px; }
+    .row > span:first-child { font-size: 15px; }
     .seg span { padding: 6px 10px; }
   }
 </style>
@@ -270,75 +326,110 @@
 <body>
 <div class="app">
   <header>
-    <h1>Travel <span>Year</span></h1>
-    <p>Twój rok w podróżach – flagi zamiast dat, w stylu kalendarza iOS.</p>
+    <div class="head-row">
+      <h1>Travel <span>Year</span></h1>
+      <div class="lang">
+        <button class="lang-btn" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu" data-i18n-aria="language">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu" data-i18n-aria="language" hidden></div>
+      </div>
+    </div>
+    <p data-i18n="tagline"></p>
   </header>
 
-  <section class="preview" aria-label="Podgląd">
-    <canvas id="cv" width="1080" height="1920" role="img" aria-label="Podgląd wygenerowanego obrazka"></canvas>
+  <section class="preview" data-i18n-aria="preview">
+    <canvas id="cv" width="1080" height="1920" role="img" data-i18n-aria="previewAlt"></canvas>
     <div class="actions">
       <button class="btn primary" id="downloadBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
-        Zapisz JPG
+        <span data-i18n="save"></span>
       </button>
       <button class="btn" id="shareBtn" type="button" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0L8 8m4-4l4 4M6 11H5v9h14v-9h-1"/></svg>
-        Udostępnij
+        <span data-i18n="share"></span>
       </button>
     </div>
   </section>
 
   <main class="side">
-    <div class="group-title" style="margin-top:0"><span>Podróże</span><span class="stats" id="stats"></span></div>
+    <div class="group-title" style="margin-top:0"><span data-i18n="trips"></span><span class="stats" id="stats"></span></div>
     <ul class="trips" id="trips"></ul>
     <div class="card empty" id="empty" hidden>
       <div class="big">✈️</div>
-      Nie masz jeszcze żadnych podróży.<br>
-      Dodaj pierwszą albo <button class="link" type="button" id="demoBtn">wczytaj przykład</button>.
+      <span data-i18n="emptyText"></span><br>
+      <span data-i18n="emptyAdd"></span> <button class="link" type="button" id="demoBtn" data-i18n="loadDemo"></button>.
     </div>
     <button class="add-btn" id="addBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-      Dodaj podróż
+      <span data-i18n="addTrip"></span>
     </button>
 
-    <div class="group-title"><span>Wygląd</span></div>
+    <div class="group-title"><span data-i18n="general"></span></div>
     <div class="card">
       <div class="row">
-        <span>Rok</span>
+        <span data-i18n="year"></span>
         <div class="stepper">
-          <button type="button" id="yearPrev" aria-label="Poprzedni rok">‹</button>
+          <button type="button" id="yearPrev" data-i18n-aria="prevYear">‹</button>
           <output id="yearOut"></output>
-          <button type="button" id="yearNext" aria-label="Następny rok">›</button>
+          <button type="button" id="yearNext" data-i18n-aria="nextYear">›</button>
         </div>
       </div>
+    </div>
+
+    <div class="group-title"><span data-i18n="theme"></span></div>
+    <div class="card">
+      <div class="themes" role="radiogroup" data-i18n-aria="theme">
+        <label class="theme-tile">
+          <input type="radio" name="theme" value="dark">
+          <canvas class="thumb" data-thumb="dark" width="180" height="320"></canvas>
+          <span class="tname" data-i18n="themeDark"></span>
+        </label>
+        <label class="theme-tile">
+          <input type="radio" name="theme" value="light">
+          <canvas class="thumb" data-thumb="light" width="180" height="320"></canvas>
+          <span class="tname" data-i18n="themeLight"></span>
+        </label>
+        <label class="theme-tile">
+          <input type="radio" name="theme" value="custom">
+          <span class="thumb-box">
+            <canvas class="thumb" data-thumb="custom" width="180" height="320"></canvas>
+            <span class="thumb-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></span>
+          </span>
+          <span class="tname" data-i18n="themeCustom"></span>
+        </label>
+      </div>
+      <div class="custom-colors" id="customColors">
+        <div class="custom-inner">
+          <label class="row">
+            <span data-i18n="colorBg"></span>
+            <span class="color-pick"><span class="hex" data-hex="bg"></span><input type="color" data-color="bg" tabindex="-1"></span>
+          </label>
+          <label class="row">
+            <span data-i18n="colorText"></span>
+            <span class="color-pick"><span class="hex" data-hex="text"></span><input type="color" data-color="text" tabindex="-1"></span>
+          </label>
+          <label class="row">
+            <span data-i18n="colorAccent"></span>
+            <span class="color-pick"><span class="hex" data-hex="accent"></span><input type="color" data-color="accent" tabindex="-1"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <details class="card adv" id="advanced" style="margin-top:22px">
+      <summary class="row"><span data-i18n="advanced"></span><svg class="chev" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5.5L7 9l3.5-3.5"/></svg></summary>
       <div class="row">
-        <span>Motyw</span>
-        <div class="seg" role="radiogroup" aria-label="Motyw obrazka">
-          <label><input type="radio" name="theme" value="dark"><span>Ciemny</span></label>
-          <label><input type="radio" name="theme" value="light"><span>Jasny</span></label>
-        </div>
-      </div>
-      <div class="row">
-        <span>Miesiące</span>
-        <div class="seg" role="radiogroup" aria-label="Język nazw miesięcy">
-          <label><input type="radio" name="lang" value="pl"><span>Polski</span></label>
-          <label><input type="radio" name="lang" value="en"><span>English</span></label>
-        </div>
-      </div>
-      <div class="row" id="flagStyleRow" hidden>
-        <span>Flagi</span>
-        <div class="seg" role="radiogroup" aria-label="Styl flag">
-          <label><input type="radio" name="flagStyle" value="native"><span>Systemowe</span></label>
+        <span data-i18n="flags"></span>
+        <div class="seg" role="radiogroup" data-i18n-aria="flags">
+          <label><input type="radio" name="flagStyle" value="native"><span data-i18n="flagsNative"></span></label>
           <label><input type="radio" name="flagStyle" value="twemoji"><span>Twemoji</span></label>
         </div>
       </div>
-      <div class="row">
-        <span>Zaznacz dzisiaj</span>
-        <input type="checkbox" class="switch" id="markToday" aria-label="Zaznacz dzisiejszy dzień">
-      </div>
-    </div>
+    </details>
+
     <div class="footer-links">
-      <button class="link" type="button" id="clearBtn">Wyczyść podróże</button>
+      <button class="link" type="button" id="clearBtn" data-i18n="clearTrips"></button>
     </div>
   </main>
 </div>
@@ -346,10 +437,10 @@
 <dialog id="picker" aria-labelledby="pickerTitle">
   <div class="picker">
     <div class="picker-head">
-      <h2 id="pickerTitle">Wybierz kraj</h2>
-      <button class="link" type="button" id="pickerClose">Gotowe</button>
+      <h2 id="pickerTitle" data-i18n="pickCountry"></h2>
+      <button class="link" type="button" id="pickerClose" data-i18n="done"></button>
     </div>
-    <div class="picker-search"><input type="search" id="pickerSearch" placeholder="Szukaj kraju" autocomplete="off" enterkeyhint="done"></div>
+    <div class="picker-search"><input type="search" id="pickerSearch" data-i18n-ph="search" autocomplete="off" enterkeyhint="done"></div>
     <div class="picker-list" id="pickerList"></div>
   </div>
 </dialog>
@@ -360,14 +451,66 @@
 (() => {
   'use strict';
 
+  // ---------- Translations ----------
+  const I18N = {
+    pl: {
+      tagline: 'Twój rok w podróżach – flagi zamiast dat, w stylu kalendarza iOS.',
+      preview: 'Podgląd', previewAlt: 'Podgląd wygenerowanego obrazka',
+      save: 'Zapisz JPG', share: 'Udostępnij',
+      trips: 'Podróże', emptyText: 'Nie masz jeszcze żadnych podróży.', emptyAdd: 'Dodaj pierwszą albo', loadDemo: 'wczytaj przykład',
+      addTrip: 'Dodaj podróż',
+      general: 'Ogólne', year: 'Rok', prevYear: 'Poprzedni rok', nextYear: 'Następny rok', language: 'Język',
+      theme: 'Motyw', themeDark: 'Ciemny', themeLight: 'Jasny', themeCustom: 'Własny',
+      colorBg: 'Tło', colorText: 'Tekst', colorAccent: 'Akcent',
+      advanced: 'Zaawansowane', flags: 'Flagi', flagsNative: 'Systemowe',
+      clearTrips: 'Wyczyść podróże', confirmClear: 'Usunąć wszystkie podróże?',
+      pickCountry: 'Wybierz kraj', done: 'Gotowe', search: 'Szukaj kraju', used: 'Użyte', allCountries: 'Wszystkie kraje',
+      noResults: 'Nie znaleziono kraju', chooseCountry: 'Wybierz kraj',
+      from: 'Od', to: 'Do', deleteTrip: 'Usuń podróż', countryLabel: n => `Kraj: ${n}`, notChosen: 'nie wybrano',
+      fillDates: 'Uzupełnij daty podróży', endBeforeStart: 'Data końca jest wcześniejsza niż data początku',
+      outsideYear: y => `poza rokiem ${y}`, pickCountryHint: 'wybierz kraj',
+      saved: 'Zapisano obraz JPG', saveFailed: 'Nie udało się zapisać obrazu', shareFailed: 'Nie udało się udostępnić',
+      days: n => (n === 1 ? '1 dzień' : `${n} dni`),
+      countries: n => {
+        if (n === 1) return '1 kraj';
+        const d = n % 10, h = n % 100;
+        return `${n} ${d >= 2 && d <= 4 && !(h >= 12 && h <= 14) ? 'kraje' : 'krajów'}`;
+      },
+      months: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+    },
+    en: {
+      tagline: 'Your year of travel – flags instead of dates, in the style of the iOS calendar.',
+      preview: 'Preview', previewAlt: 'Preview of the generated image',
+      save: 'Save JPG', share: 'Share',
+      trips: 'Trips', emptyText: "You don't have any trips yet.", emptyAdd: 'Add your first one or', loadDemo: 'load an example',
+      addTrip: 'Add trip',
+      general: 'General', year: 'Year', prevYear: 'Previous year', nextYear: 'Next year', language: 'Language',
+      theme: 'Theme', themeDark: 'Dark', themeLight: 'Light', themeCustom: 'Custom',
+      colorBg: 'Background', colorText: 'Text', colorAccent: 'Accent',
+      advanced: 'Advanced', flags: 'Flags', flagsNative: 'System',
+      clearTrips: 'Clear trips', confirmClear: 'Delete all trips?',
+      pickCountry: 'Choose country', done: 'Done', search: 'Search countries', used: 'Used', allCountries: 'All countries',
+      noResults: 'No country found', chooseCountry: 'Choose country',
+      from: 'From', to: 'To', deleteTrip: 'Delete trip', countryLabel: n => `Country: ${n}`, notChosen: 'not chosen',
+      fillDates: 'Fill in the trip dates', endBeforeStart: 'End date is before the start date',
+      outsideYear: y => `outside ${y}`, pickCountryHint: 'choose a country',
+      saved: 'JPG image saved', saveFailed: 'Could not save the image', shareFailed: 'Could not share',
+      days: n => (n === 1 ? '1 day' : `${n} days`),
+      countries: n => (n === 1 ? '1 country' : `${n} countries`),
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    },
+  };
+  const t = key => I18N[state.lang][key];
+
   // ---------- Constants ----------
   const W = 1080, H = 1920;
   const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
   const EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif';
-  const MONTHS = {
-    pl: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-    en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  const THEMES = {
+    dark: { bg: '#000000', text: '#ffffff', accent: '#ff453a' },
+    light: { bg: '#ffffff', text: '#000000', accent: '#ff3b30' },
   };
+  const DEFAULT_CUSTOM = { ...THEMES.dark };
   const CODES = ('AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ ' +
     'CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR ' +
     'GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP ' +
@@ -376,21 +519,22 @@
     'RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW ' +
     'TZ UA UG US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW').split(' ');
 
-  const dn = (lang) => { try { return new Intl.DisplayNames([lang], { type: 'region' }); } catch (e) { return null; } };
+  const dn = lang => { try { return new Intl.DisplayNames([lang], { type: 'region' }); } catch (e) { return null; } };
   const namesPL = dn('pl'), namesEN = dn('en');
-  const COUNTRIES = CODES.map(code => ({
-    code,
-    name: (namesPL && namesPL.of(code)) || code,
-    en: (namesEN && namesEN.of(code)) || code,
-  })).sort((a, b) => a.name.localeCompare(b.name, 'pl'));
+  const COUNTRIES = CODES.map(code => {
+    const pl = (namesPL && namesPL.of(code)) || code;
+    const en = (namesEN && namesEN.of(code)) || code;
+    return { code, pl, en, search: norm(`${pl} ${en} ${code}`) };
+  });
   const BY_CODE = Object.fromEntries(COUNTRIES.map(c => [c.code, c]));
-  COUNTRIES.forEach(c => { c.search = norm(`${c.name} ${c.en} ${c.code}`); });
+  const sortedCountries = () => COUNTRIES.slice().sort((a, b) => a[state.lang].localeCompare(b[state.lang], state.lang));
 
   function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l'); }
   const flagEmoji = code => String.fromCodePoint(...[...code].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
   const twemojiUrl = code => 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/' +
     [...code].map(ch => (0x1F1E6 + ch.charCodeAt(0) - 65).toString(16)).join('-') + '.png';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const isHex = s => typeof s === 'string' && /^#[0-9a-f]{6}$/i.test(s);
 
   // ---------- Dates ----------
   const pad = n => String(n).padStart(2, '0');
@@ -399,27 +543,38 @@
   const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
   const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate() + n); return fmt(d); };
   const span = (a, b) => Math.round((parse(b) - parse(a)) / 864e5) + 1;
-  const plDays = n => n === 1 ? '1 dzień' : `${n} dni`;
-  const plCountries = n => {
-    if (n === 1) return '1 kraj';
-    const d = n % 10, h = n % 100;
-    return `${n} ${d >= 2 && d <= 4 && !(h >= 12 && h <= 14) ? 'kraje' : 'krajów'}`;
-  };
 
   // ---------- State ----------
   const STORE = 'travel-year.v1';
   const TODAY = new Date();
-  const DEFAULT = { year: TODAY.getFullYear(), theme: 'dark', lang: 'pl', markToday: true, flagStyle: 'native', trips: [] };
+  const DEFAULT = {
+    year: TODAY.getFullYear(),
+    lang: (navigator.language || '').toLowerCase().startsWith('pl') ? 'pl' : 'en',
+    theme: 'dark',
+    custom: { ...DEFAULT_CUSTOM },
+    flagStyle: 'native',
+    trips: [],
+  };
   const state = load();
   function load() {
-    try {
-      const s = JSON.parse(localStorage.getItem(STORE));
-      if (s && Array.isArray(s.trips)) return { ...DEFAULT, ...s };
-    } catch (e) { /* ignore */ }
-    return { ...DEFAULT, trips: [] };
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(STORE)); } catch (e) { /* ignore */ }
+    if (!s || !Array.isArray(s.trips)) return { ...DEFAULT, custom: { ...DEFAULT_CUSTOM }, trips: [] };
+    const out = { ...DEFAULT, ...s };
+    delete out.markToday;
+    if (!I18N[out.lang]) out.lang = DEFAULT.lang;
+    if (!['dark', 'light', 'custom'].includes(out.theme)) out.theme = 'dark';
+    const c = s.custom || {};
+    out.custom = {
+      bg: isHex(c.bg) ? c.bg : DEFAULT_CUSTOM.bg,
+      text: isHex(c.text) ? c.text : DEFAULT_CUSTOM.text,
+      accent: isHex(c.accent) ? c.accent : DEFAULT_CUSTOM.accent,
+    };
+    return out;
   }
   function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ignore */ } }
   const uid = () => Math.random().toString(36).slice(2, 10);
+  const themeColors = name => (name === 'custom' ? state.custom : THEMES[name] || THEMES.dark);
 
   // ---------- Flag rendering support ----------
   const NATIVE_FLAGS = (() => {
@@ -465,14 +620,14 @@
   const GLOBE = '<svg class="flag globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>';
 
   // ---------- Day map ----------
-  function validTrip(t) { return t.code && isDate(t.start) && isDate(t.end) && t.end >= t.start; }
+  function validTrip(tr) { return tr.code && isDate(tr.start) && isDate(tr.end) && tr.end >= tr.start; }
   function dayMap() {
     const map = new Map();
     const trips = state.trips.filter(validTrip).sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
-    for (const t of trips) {
-      const d = parse(t.start), end = parse(t.end);
+    for (const tr of trips) {
+      const d = parse(tr.start), end = parse(tr.end);
       for (let guard = 0; d <= end && guard < 1500; guard++) {
-        if (d.getFullYear() === state.year) map.set(d.getMonth() * 100 + d.getDate(), t.code);
+        if (d.getFullYear() === state.year) map.set(d.getMonth() * 100 + d.getDate(), tr.code);
         d.setDate(d.getDate() + 1);
       }
     }
@@ -482,61 +637,60 @@
   // ---------- Canvas ----------
   const canvas = document.getElementById('cv');
   const ctx = canvas.getContext('2d');
-  let emojiMetrics = null;
-
-  function draw() {
-    const dark = state.theme === 'dark';
-    const C = dark
-      ? { bg: '#000000', text: '#ffffff', red: '#ff453a' }
-      : { bg: '#ffffff', text: '#000000', red: '#ff3b30' };
-    const days = dayMap();
-    const native = useNative();
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = C.bg;
-    ctx.fillRect(0, 0, W, H);
-
-    // Year
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = C.red;
-    ctx.font = `700 124px ${FONT}`;
-    ctx.fillText(String(state.year), W / 2, 200);
-
-    // Grid
+  const thumbs = [...document.querySelectorAll('canvas[data-thumb]')];
+  const GRID = (() => {
     const padX = 34, gapX = 34;
     const colW = (W - 2 * padX - 2 * gapX) / 3;
-    const cellW = colW / 7;
-    const top = 270, bottom = H - 40;
-    const blockH = (bottom - top) / 4;
-    const titleH = 90;
-    const rowH = (blockH - titleH - 14) / 6;
-    const showToday = state.markToday && TODAY.getFullYear() === state.year;
+    const top = 270, bottom = H - 40, blockH = (bottom - top) / 4, titleH = 90;
+    return { padX, gapX, colW, cellW: colW / 7, top, blockH, titleH, rowH: (blockH - titleH - 14) / 6 };
+  })();
+  let emojiMetrics = null;
+  function getEmojiMetrics(c) {
+    if (emojiMetrics) return emojiMetrics;
+    c.save();
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.font = `100px ${EMOJI_FONT}`;
+    const m = c.measureText(flagEmoji('PL'));
+    const size = Math.floor(100 * (GRID.cellW * 0.98) / (m.width || 120));
+    c.font = `${size}px ${EMOJI_FONT}`;
+    const m2 = c.measureText(flagEmoji('PL'));
+    const asc = m2.actualBoundingBoxAscent, desc = m2.actualBoundingBoxDescent;
+    const dy = (asc !== undefined && desc !== undefined && asc + desc > 0) ? (asc - desc) / 2 : size * 0.35;
+    c.restore();
+    emojiMetrics = { size, dy };
+    return emojiMetrics;
+  }
 
-    if (native && (!emojiMetrics || emojiMetrics.cellW !== cellW)) {
-      ctx.font = `100px ${EMOJI_FONT}`;
-      const m = ctx.measureText(flagEmoji('PL'));
-      const size = Math.floor(100 * (cellW * 0.98) / (m.width || 120));
-      ctx.font = `${size}px ${EMOJI_FONT}`;
-      const m2 = ctx.measureText(flagEmoji('PL'));
-      const asc = m2.actualBoundingBoxAscent, desc = m2.actualBoundingBoxDescent;
-      const dy = (asc !== undefined && desc !== undefined && asc + desc > 0) ? (asc - desc) / 2 : size * 0.35;
-      emojiMetrics = { cellW, size, dy };
-    }
+  // Paints the full 1080×1920 layout onto any context, scaled by `scale`.
+  function paint(c, C, scale, days) {
+    const native = useNative();
+    const { padX, gapX, colW, cellW, top, blockH, titleH, rowH } = GRID;
+    const em = native ? getEmojiMetrics(c) : null;
+    const months = t('months');
+
+    c.setTransform(scale, 0, 0, scale, 0, 0);
+    c.fillStyle = C.bg;
+    c.fillRect(0, 0, W, H);
+
+    c.textAlign = 'center';
+    c.textBaseline = 'alphabetic';
+    c.fillStyle = C.accent;
+    c.font = `700 124px ${FONT}`;
+    c.fillText(String(state.year), W / 2, 200);
 
     for (let m = 0; m < 12; m++) {
       const bx = padX + (m % 3) * (colW + gapX);
       const by = top + Math.floor(m / 3) * blockH;
-      const isCurrent = showToday && TODAY.getMonth() === m;
 
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'alphabetic';
-      ctx.fillStyle = isCurrent ? C.red : C.text;
-      ctx.font = `700 62px ${FONT}`;
-      ctx.fillText(MONTHS[state.lang][m], bx + cellW * 0.12, by + 62);
+      c.textAlign = 'left';
+      c.textBaseline = 'alphabetic';
+      c.fillStyle = C.text;
+      c.font = `700 62px ${FONT}`;
+      c.fillText(months[m], bx + cellW * 0.12, by + 62);
 
       const first = (new Date(state.year, m, 1).getDay() + 6) % 7; // Monday first
       const dim = new Date(state.year, m + 1, 0).getDate();
+      c.font = `600 27px ${FONT}`;
       for (let d = 1; d <= dim; d++) {
         const idx = first + d - 1;
         const cx = bx + cellW * (idx % 7 + 0.5);
@@ -545,46 +699,53 @@
 
         if (code) {
           if (native) {
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'alphabetic';
-            ctx.font = `${emojiMetrics.size}px ${EMOJI_FONT}`;
-            ctx.fillText(flagEmoji(code), cx, cy + emojiMetrics.dy);
+            c.textAlign = 'center';
+            c.textBaseline = 'alphabetic';
+            c.font = `${em.size}px ${EMOJI_FONT}`;
+            c.fillText(flagEmoji(code), cx, cy + em.dy);
+            c.font = `600 27px ${FONT}`;
           } else {
             const im = flagImg(code);
             if (im.complete && im.naturalWidth) {
               const s = cellW * 0.88;
-              ctx.drawImage(im, cx - s / 2, cy - s / 2, s, s);
+              c.drawImage(im, cx - s / 2, cy - s / 2, s, s);
             } else if (im.failed) {
-              drawCodeBadge(code, cx, cy, cellW, C);
+              drawCodeBadge(c, code, cx, cy, cellW, C);
             }
           }
           continue;
         }
-
-        const isToday = showToday && TODAY.getMonth() === m && TODAY.getDate() === d;
-        if (isToday) {
-          ctx.fillStyle = C.red;
-          ctx.beginPath();
-          ctx.arc(cx, cy, Math.min(cellW, rowH) * 0.47, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = isToday ? '#ffffff' : C.text;
-        ctx.font = `${isToday ? 700 : 600} 27px ${FONT}`;
-        ctx.fillText(String(d), cx, cy + 1);
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillStyle = C.text;
+        c.fillText(String(d), cx, cy + 1);
       }
     }
+    c.setTransform(1, 0, 0, 1, 0, 0);
   }
-  function drawCodeBadge(code, cx, cy, cellW, C) {
+  function drawCodeBadge(c, code, cx, cy, cellW, C) {
     const w = cellW * 0.9, h = w * 0.68;
-    ctx.fillStyle = C.text === '#ffffff' ? '#3a3a3c' : '#e5e5ea';
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(cx - w / 2, cy - h / 2, w, h, 5); else ctx.rect(cx - w / 2, cy - h / 2, w, h);
-    ctx.fill();
-    ctx.fillStyle = C.text; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = `700 15px ${FONT}`;
-    ctx.fillText(code, cx, cy + 1);
+    c.save();
+    c.globalAlpha = 0.18;
+    c.fillStyle = C.text;
+    c.beginPath();
+    if (c.roundRect) c.roundRect(cx - w / 2, cy - h / 2, w, h, 5); else c.rect(cx - w / 2, cy - h / 2, w, h);
+    c.fill();
+    c.restore();
+    c.fillStyle = C.text; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = `700 15px ${FONT}`;
+    c.fillText(code, cx, cy + 1);
+    c.font = `600 27px ${FONT}`;
+  }
+
+  function draw() {
+    const days = dayMap();
+    paint(ctx, themeColors(state.theme), 1, days);
+    for (const th of thumbs) {
+      // The "custom" tile previews what choosing it would give: the current colours, ready to edit.
+      const name = th.dataset.thumb === 'custom' && state.theme !== 'custom' ? state.theme : th.dataset.thumb;
+      paint(th.getContext('2d'), themeColors(name), th.width / W, days);
+    }
   }
 
   let drawQueued = false;
@@ -595,8 +756,15 @@
   }
   function updateStats() {
     const m = dayMap();
-    const el = document.getElementById('stats');
-    el.textContent = m.size ? `${plDays(m.size)} · ${plCountries(new Set(m.values()).size)}` : '';
+    document.getElementById('stats').textContent = m.size ? `${t('days')(m.size)} · ${t('countries')(new Set(m.values()).size)}` : '';
+  }
+
+  // ---------- Static texts ----------
+  function applyI18n() {
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
   }
 
   // ---------- Trips UI ----------
@@ -607,46 +775,46 @@
 
   function renderTrips() {
     emptyEl.hidden = state.trips.length > 0;
-    listEl.innerHTML = state.trips.map(t => {
-      const c = BY_CODE[t.code];
+    listEl.innerHTML = state.trips.map(tr => {
+      const c = BY_CODE[tr.code];
+      const name = c ? c[state.lang] : '';
       const country = c
-        ? `${flagHTML(c.code)}<span class="cname">${esc(c.name)}</span>`
-        : `${GLOBE}<span class="cname muted">Wybierz kraj</span>`;
-      return `<li class="card trip" data-id="${t.id}">
+        ? `${flagHTML(c.code)}<span class="cname">${esc(name)}</span>`
+        : `${GLOBE}<span class="cname muted">${esc(t('chooseCountry'))}</span>`;
+      return `<li class="card trip" data-id="${tr.id}">
         <div class="trip-top">
-          <button class="country-btn" type="button" data-act="pick" aria-label="Kraj: ${esc(c ? c.name : 'nie wybrano')}">${country}${CHEV}</button>
-          <button class="icon-btn" type="button" data-act="del" aria-label="Usuń podróż">${TRASH}</button>
+          <button class="country-btn" type="button" data-act="pick" aria-label="${esc(t('countryLabel')(c ? name : t('notChosen')))}">${country}${CHEV}</button>
+          <button class="icon-btn" type="button" data-act="del" aria-label="${esc(t('deleteTrip'))}">${TRASH}</button>
         </div>
         <div class="dates">
-          <label class="field"><span>Od</span><input type="date" data-f="start" value="${esc(t.start || '')}"></label>
-          <label class="field"><span>Do</span><input type="date" data-f="end" value="${esc(t.end || '')}" min="${esc(t.start || '')}"></label>
+          <label class="field"><span>${esc(t('from'))}</span><input type="date" data-f="start" value="${esc(tr.start || '')}"></label>
+          <label class="field"><span>${esc(t('to'))}</span><input type="date" data-f="end" value="${esc(tr.end || '')}" min="${esc(tr.start || '')}"></label>
         </div>
         <div class="trip-meta"></div>
       </li>`;
     }).join('');
     listEl.querySelectorAll('.trip').forEach(li => updateMeta(li, getTrip(li.dataset.id)));
   }
-  function updateMeta(li, t) {
+  function updateMeta(li, tr) {
     const el = li.querySelector('.trip-meta');
     el.classList.remove('err');
-    if (!isDate(t.start) || !isDate(t.end)) { el.textContent = 'Uzupełnij daty podróży'; return; }
-    if (t.end < t.start) { el.textContent = 'Data końca jest wcześniejsza niż data początku'; el.classList.add('err'); return; }
-    let txt = plDays(span(t.start, t.end));
+    if (!isDate(tr.start) || !isDate(tr.end)) { el.textContent = t('fillDates'); return; }
+    if (tr.end < tr.start) { el.textContent = t('endBeforeStart'); el.classList.add('err'); return; }
+    let txt = t('days')(span(tr.start, tr.end));
     const y = state.year;
-    if (t.end < `${y}-01-01` || t.start > `${y}-12-31`) txt += ` · poza rokiem ${y}`;
-    if (!t.code) txt += ' · wybierz kraj';
+    if (tr.end < `${y}-01-01` || tr.start > `${y}-12-31`) txt += ` · ${t('outsideYear')(y)}`;
+    if (!tr.code) txt += ` · ${t('pickCountryHint')}`;
     el.textContent = txt;
   }
-  const getTrip = id => state.trips.find(t => t.id === id);
+  const getTrip = id => state.trips.find(tr => tr.id === id);
 
   listEl.addEventListener('click', e => {
     const btn = e.target.closest('[data-act]');
     if (!btn) return;
-    const li = btn.closest('.trip');
-    const id = li.dataset.id;
+    const id = btn.closest('.trip').dataset.id;
     if (btn.dataset.act === 'pick') openPicker(id);
     if (btn.dataset.act === 'del') {
-      state.trips = state.trips.filter(t => t.id !== id);
+      state.trips = state.trips.filter(tr => tr.id !== id);
       save(); renderTrips(); scheduleDraw();
     }
   });
@@ -654,17 +822,17 @@
     const input = e.target.closest('input[data-f]');
     if (!input) return;
     const li = input.closest('.trip');
-    const t = getTrip(li.dataset.id);
-    t[input.dataset.f] = input.value;
+    const tr = getTrip(li.dataset.id);
+    tr[input.dataset.f] = input.value;
     if (input.dataset.f === 'start') {
       const endInput = li.querySelector('[data-f="end"]');
       endInput.min = input.value;
-      if (isDate(input.value) && (!isDate(t.end) || t.end < input.value)) {
-        t.end = input.value;
+      if (isDate(input.value) && (!isDate(tr.end) || tr.end < input.value)) {
+        tr.end = input.value;
         endInput.value = input.value;
       }
     }
-    updateMeta(li, t);
+    updateMeta(li, tr);
     save(); scheduleDraw();
   }
   listEl.addEventListener('input', onDateInput);
@@ -672,19 +840,19 @@
 
   function addTrip(code = '') {
     let start;
-    const ends = state.trips.map(t => t.end).filter(isDate).sort();
+    const ends = state.trips.map(tr => tr.end).filter(isDate).sort();
     const lastEnd = ends[ends.length - 1];
     if (lastEnd && parse(lastEnd).getFullYear() === state.year && lastEnd < `${state.year}-12-31`) start = addDays(lastEnd, 1);
     else if (TODAY.getFullYear() === state.year) start = fmt(TODAY);
     else start = `${state.year}-01-01`;
     let end = addDays(start, 6);
     if (end > `${state.year}-12-31` && start <= `${state.year}-12-31`) end = `${state.year}-12-31`;
-    const t = { id: uid(), code, start, end };
-    state.trips.push(t);
+    const tr = { id: uid(), code, start, end };
+    state.trips.push(tr);
     save(); renderTrips(); scheduleDraw();
-    const li = listEl.querySelector(`[data-id="${t.id}"]`);
+    const li = listEl.querySelector(`[data-id="${tr.id}"]`);
     if (li) li.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    if (!code) openPicker(t.id);
+    if (!code) openPicker(tr.id);
   }
   document.getElementById('addBtn').addEventListener('click', () => addTrip());
 
@@ -700,7 +868,7 @@
   });
   document.getElementById('clearBtn').addEventListener('click', () => {
     if (!state.trips.length) return;
-    if (!confirm('Usunąć wszystkie podróże?')) return;
+    if (!confirm(t('confirmClear'))) return;
     state.trips = [];
     save(); renderTrips(); scheduleDraw();
   });
@@ -712,21 +880,23 @@
   let pickerFor = null;
 
   function itemHTML(c) {
-    const en = c.en !== c.name ? `<span class="en">${esc(c.en)}</span>` : '';
-    return `<button class="c-item" type="button" data-code="${c.code}">${flagHTML(c.code)}<span>${esc(c.name)}</span>${en}</button>`;
+    const other = state.lang === 'pl' ? c.en : c.pl;
+    const alt = other !== c[state.lang] ? `<span class="alt">${esc(other)}</span>` : '';
+    return `<button class="c-item" type="button" data-code="${c.code}">${flagHTML(c.code)}<span>${esc(c[state.lang])}</span>${alt}</button>`;
   }
   function renderPicker(q) {
     const nq = norm(q.trim());
+    const all = sortedCountries();
     if (!nq) {
-      const used = [...new Set(state.trips.map(t => t.code).filter(Boolean))].map(c => BY_CODE[c]).filter(Boolean);
+      const used = [...new Set(state.trips.map(tr => tr.code).filter(Boolean))].map(c => BY_CODE[c]).filter(Boolean);
       let html = '';
-      if (used.length) html += `<h3>Użyte</h3>${used.map(itemHTML).join('')}<h3>Wszystkie kraje</h3>`;
-      pickerList.innerHTML = html + COUNTRIES.map(itemHTML).join('');
+      if (used.length) html += `<h3>${esc(t('used'))}</h3>${used.map(itemHTML).join('')}<h3>${esc(t('allCountries'))}</h3>`;
+      pickerList.innerHTML = html + all.map(itemHTML).join('');
       return;
     }
-    const res = COUNTRIES.filter(c => c.search.includes(nq))
-      .sort((a, b) => (norm(a.name).startsWith(nq) ? 0 : 1) - (norm(b.name).startsWith(nq) ? 0 : 1));
-    pickerList.innerHTML = res.length ? res.map(itemHTML).join('') : '<div class="no-results">Nie znaleziono kraju</div>';
+    const starts = c => (norm(c[state.lang]).startsWith(nq) ? 0 : 1);
+    const res = all.filter(c => c.search.includes(nq)).sort((a, b) => starts(a) - starts(b));
+    pickerList.innerHTML = res.length ? res.map(itemHTML).join('') : `<div class="no-results">${esc(t('noResults'))}</div>`;
   }
   function openPicker(id) {
     pickerFor = id;
@@ -737,8 +907,8 @@
     if (matchMedia('(pointer: fine)').matches) pickerSearch.focus();
   }
   function choose(code) {
-    const t = getTrip(pickerFor);
-    if (t) { t.code = code; save(); renderTrips(); scheduleDraw(); }
+    const tr = getTrip(pickerFor);
+    if (tr) { tr.code = code; save(); renderTrips(); scheduleDraw(); }
     picker.close();
   }
   pickerSearch.addEventListener('input', () => { renderPicker(pickerSearch.value); pickerList.scrollTop = 0; });
@@ -766,24 +936,101 @@
   document.getElementById('yearPrev').addEventListener('click', () => setYear(state.year - 1));
   document.getElementById('yearNext').addEventListener('click', () => setYear(state.year + 1));
 
-  function bindRadio(name) {
+  const customColors = document.getElementById('customColors');
+  const colorInputs = [...document.querySelectorAll('input[data-color]')];
+  function syncCustomPanel() {
+    const open = state.theme === 'custom';
+    customColors.classList.toggle('open', open);
+    customColors.setAttribute('aria-hidden', String(!open));
+    colorInputs.forEach(inp => { inp.tabIndex = open ? 0 : -1; });
+  }
+  function syncColorInputs() {
+    colorInputs.forEach(inp => {
+      inp.value = state.custom[inp.dataset.color];
+      document.querySelector(`[data-hex="${inp.dataset.color}"]`).textContent = state.custom[inp.dataset.color];
+    });
+  }
+  colorInputs.forEach(inp => {
+    inp.addEventListener('input', () => {
+      state.custom[inp.dataset.color] = inp.value;
+      document.querySelector(`[data-hex="${inp.dataset.color}"]`).textContent = inp.value;
+      save(); scheduleDraw();
+    });
+  });
+
+  function bindRadio(name, after) {
     document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
       r.checked = r.value === state[name];
       r.addEventListener('change', () => {
         if (!r.checked) return;
         state[name] = r.value;
         save();
-        if (name === 'flagStyle') renderTrips();
+        if (after) after();
         scheduleDraw();
       });
     });
   }
-  bindRadio('theme'); bindRadio('lang'); bindRadio('flagStyle');
-  document.getElementById('flagStyleRow').hidden = !NATIVE_FLAGS;
-  const markToday = document.getElementById('markToday');
-  markToday.checked = !!state.markToday;
-  markToday.addEventListener('change', () => { state.markToday = markToday.checked; save(); scheduleDraw(); });
-  yearOut.textContent = state.year;
+  document.querySelectorAll('input[name="theme"]').forEach(r => {
+    r.checked = r.value === state.theme;
+    r.addEventListener('change', () => {
+      if (!r.checked) return;
+      // Switching to Custom starts from the colours of the theme in use, so the user only tweaks what they want.
+      if (r.value === 'custom' && state.theme !== 'custom') {
+        state.custom = { ...themeColors(state.theme) };
+        syncColorInputs();
+      }
+      state.theme = r.value;
+      save(); syncCustomPanel(); scheduleDraw();
+    });
+  });
+
+  // Language menu (globe button in the header)
+  const LANGS = [
+    { code: 'pl', name: 'Polski', flag: 'PL' },
+    { code: 'en', name: 'English', flag: 'GB' },
+  ];
+  const langBtn = document.getElementById('langBtn');
+  const langMenu = document.getElementById('langMenu');
+  const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function renderLangMenu() {
+    langMenu.innerHTML = LANGS.map(l =>
+      `<button class="lang-item" type="button" role="menuitemradio" lang="${l.code}" data-lang="${l.code}" aria-checked="${l.code === state.lang}">${flagHTML(l.flag)}<span>${l.name}</span>${CHECK}</button>`
+    ).join('');
+  }
+  function openLangMenu() {
+    renderLangMenu();
+    langMenu.hidden = false;
+    langBtn.setAttribute('aria-expanded', 'true');
+    (langMenu.querySelector('[aria-checked="true"]') || langMenu.firstElementChild).focus();
+  }
+  function closeLangMenu(focusBtn) {
+    if (langMenu.hidden) return;
+    langMenu.hidden = true;
+    langBtn.setAttribute('aria-expanded', 'false');
+    if (focusBtn) langBtn.focus();
+  }
+  function setLang(lang) {
+    if (lang === state.lang) return;
+    state.lang = lang;
+    save(); applyI18n(); renderTrips(); scheduleDraw();
+  }
+  langBtn.addEventListener('click', () => (langMenu.hidden ? openLangMenu() : closeLangMenu()));
+  langMenu.addEventListener('click', e => {
+    const item = e.target.closest('[data-lang]');
+    if (!item) return;
+    setLang(item.dataset.lang);
+    closeLangMenu(true);
+  });
+  langMenu.addEventListener('keydown', e => {
+    const items = [...langMenu.querySelectorAll('.lang-item')];
+    const i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.lang')) closeLangMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLangMenu(true); });
+  bindRadio('flagStyle', renderTrips);
+  document.getElementById('advanced').hidden = !NATIVE_FLAGS;
 
   // ---------- Export ----------
   const toastEl = document.getElementById('toast');
@@ -811,10 +1058,10 @@
       a.href = url; a.download = fileName();
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
-      toast('Zapisano obraz JPG');
+      toast(t('saved'));
     } catch (e) {
       console.error(e);
-      toast('Nie udało się zapisać obrazu');
+      toast(t('saveFailed'));
     } finally {
       downloadBtn.disabled = false;
     }
@@ -830,11 +1077,15 @@
       const blob = await makeBlob();
       await navigator.share({ files: [new File([blob], fileName(), { type: 'image/jpeg' })], title: `Travel Year ${state.year}` });
     } catch (e) {
-      if (e && e.name !== 'AbortError') toast('Nie udało się udostępnić');
+      if (e && e.name !== 'AbortError') toast(t('shareFailed'));
     }
   });
 
   // ---------- Init ----------
+  yearOut.textContent = state.year;
+  applyI18n();
+  syncColorInputs();
+  syncCustomPanel();
   renderTrips();
   draw();
   updateStats();
