@@ -5,6 +5,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-05
+
 ### Fixed
 
 - **Emoji flags on some iPhones** were drawn too small and shifted half a cell to the right, over the next day's number. Flags are now placed by the pixels they actually cover instead of the system's emoji font metrics.
@@ -29,5 +31,6 @@ First public release, live at **https://travendar.app**.
 - **Hosting**: Cloudflare Pages setup (`npm run build` → `dist/`), security headers in `_headers`, `robots.txt`, `sitemap.xml`, canonical and absolute link-preview URLs; the site lives at **travendar.app**.
 - **Development**: ES modules without a build step, unit tests (`node:test`), ESLint, Prettier, GitHub Actions CI, asset and data generators in `scripts/`.
 
-[Unreleased]: https://github.com/lukazsv/Travendar/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/lukazsv/Travendar/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/lukazsv/Travendar/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/lukazsv/Travendar/releases/tag/v1.0.0
