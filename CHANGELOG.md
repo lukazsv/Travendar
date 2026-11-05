@@ -5,7 +5,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
-Everything below will ship as **1.0.0** once the site is hosted and tested on real devices.
+## [1.0.0] - 2026-11-05
+
+First public release, live at **https://travendar.app**.
 
 ### Added
 
@@ -17,8 +19,11 @@ Everything below will ship as **1.0.0** once the site is hosted and tested on re
 - **13 interface languages** — Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish, Ukrainian — chosen automatically from the browser (English otherwise) and listed alphabetically in the language menu; country names, month names and plurals in each language.
 - **Responsive layout**: three columns on wide screens, two on tablets/laptops, one on phones with settings folded behind *Customize*; on wider screens *Add trip* and *Clear trips* stay pinned below the trip list.
 - **Installable app (PWA)** that works offline after the first visit; app icon, favicon and link-preview image.
-- **Privacy**: everything stays in the browser; no accounts, analytics or third-party requests (fonts and flags are bundled). Footer with a privacy note and credits.
+- **Privacy**: everything stays in the browser; no accounts, analytics or third-party requests (fonts and flags are bundled). Footer with a privacy note, credits and the contact address help@travendar.app.
 - **Security**: strict Content Security Policy; all stored and imported data is validated.
 - **Accessibility**: WCAG AA contrast, screen-reader description of the image, keyboard-friendly dialogs and menus, reduced-motion support.
 - **Hosting**: Cloudflare Pages setup (`npm run build` → `dist/`), security headers in `_headers`, `robots.txt`, `sitemap.xml`, canonical and absolute link-preview URLs; the site lives at **travendar.app**.
 - **Development**: ES modules without a build step, unit tests (`node:test`), ESLint, Prettier, GitHub Actions CI, asset and data generators in `scripts/`.
+
+[Unreleased]: https://github.com/lukazsv/Travendar/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/lukazsv/Travendar/releases/tag/v1.0.0
