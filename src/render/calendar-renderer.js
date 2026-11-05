@@ -50,23 +50,72 @@ const BADGE = {
   textAlpha: 0.9,
 };
 
-/** Size and vertical offset that make an emoji flag fill a day cell; measured once. */
-let emojiMetrics = null;
-function getEmojiMetrics(ctx) {
-  if (emojiMetrics) return emojiMetrics;
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.font = `100px ${EMOJI_FONT}`;
-  const size = Math.floor((100 * (GRID.cellW * 0.98)) / (ctx.measureText(flagEmoji('PL')).width || 120));
+/** Visible width of an emoji flag in image pixels: a little narrower than a day cell. */
+const EMOJI_FLAG_WIDTH = GRID.cellW * 0.89;
+
+/**
+ * Emoji flags are drawn as sprites: each flag is rendered once onto its own canvas, cropped to
+ * the pixels it actually covers and centred in the cell by that box. The font metrics of emoji
+ * (measureText, text alignment) are not reliable across systems and browser versions: on some
+ * iPhones they made the flags too small and shifted them half a cell to the right.
+ * @type {Map<string, HTMLCanvasElement | null>}
+ */
+const emojiSprites = new Map();
+/** Font size that gives flags EMOJI_FLAG_WIDTH; measured once, from the pixels of 🇵🇱. */
+let emojiFontSize = 0;
+
+/**
+ * Draws `text` in the emoji font at `size` px on a scratch canvas.
+ * @returns {{ canvas: HTMLCanvasElement, x: number, y: number, w: number, h: number } | null}
+ *   The canvas and the box of its non-transparent pixels, or null when nothing was drawn.
+ */
+function rasterizeEmoji(text, size) {
+  const pad = Math.ceil(size / 2);
+  const canvas = document.createElement('canvas');
+  canvas.width = 3 * size + 2 * pad;
+  canvas.height = 2 * size + 2 * pad;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
   ctx.font = `${size}px ${EMOJI_FONT}`;
-  const m = ctx.measureText(flagEmoji('PL'));
-  const asc = m.actualBoundingBoxAscent,
-    desc = m.actualBoundingBoxDescent;
-  // Offset from the cell centre to the alphabetic baseline that centres the glyph.
-  const dy = asc !== undefined && desc !== undefined && asc + desc > 0 ? (asc - desc) / 2 : size * 0.35;
-  ctx.restore();
-  emojiMetrics = { size, dy };
-  return emojiMetrics;
+  ctx.direction = 'ltr';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, pad, pad + size);
+
+  const { width: w, height: h } = canvas;
+  const px = ctx.getImageData(0, 0, w, h).data;
+  let left = w,
+    top = h,
+    right = -1,
+    bottom = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!px[(y * w + x) * 4 + 3]) continue;
+      if (x < left) left = x;
+      if (x > right) right = x;
+      if (y < top) top = y;
+      bottom = y;
+    }
+  }
+  return right < 0 ? null : { canvas, x: left, y: top, w: right - left + 1, h: bottom - top + 1 };
+}
+
+/** Cropped canvas with the emoji flag of `code`, or null if the system drew nothing. */
+function getEmojiSprite(code) {
+  if (emojiSprites.has(code)) return emojiSprites.get(code);
+  if (!emojiFontSize) {
+    const probe = rasterizeEmoji(flagEmoji('PL'), 100);
+    emojiFontSize = probe ? Math.max(8, Math.round((100 * EMOJI_FLAG_WIDTH) / probe.w)) : 40;
+  }
+  const r = rasterizeEmoji(flagEmoji(code), emojiFontSize);
+  let sprite = null;
+  if (r) {
+    sprite = document.createElement('canvas');
+    sprite.width = r.w;
+    sprite.height = r.h;
+    sprite.getContext('2d').drawImage(r.canvas, r.x, r.y, r.w, r.h, 0, 0, r.w, r.h);
+  }
+  emojiSprites.set(code, sprite);
+  return sprite;
 }
 
 /** x coordinate for text aligned left / center / right inside [left, left + width]. */
@@ -98,7 +147,6 @@ function alignedX(align, left, width) {
  */
 export function paintCalendar(ctx, o) {
   const { padX, gapX, colW, cellW, top, blockH, titleH, rowH } = GRID;
-  const emoji = o.emojiFlags ? getEmojiMetrics(ctx) : null;
 
   ctx.setTransform(o.scale, 0, 0, o.scale, 0, 0);
   // The image is always laid out left to right, also when the page is in a right-to-left language.
@@ -136,7 +184,7 @@ export function paintCalendar(ctx, o) {
       const code = o.days.get(dayKey(month, day));
 
       if (code) {
-        drawFlag(ctx, o, code, cx, cy, emoji);
+        drawFlag(ctx, o, code, cx, cy);
         continue;
       }
       ctx.textAlign = 'center';
@@ -220,12 +268,19 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 /** Draws one flag centred on (cx, cy); leaves the context's font set to DAY_FONT. */
-function drawFlag(ctx, o, code, cx, cy, emoji) {
-  if (emoji) {
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
-    ctx.font = `${emoji.size}px ${EMOJI_FONT}`;
-    ctx.fillText(flagEmoji(code), cx, cy + emoji.dy);
+function drawFlag(ctx, o, code, cx, cy) {
+  if (o.emojiFlags) {
+    const sprite = getEmojiSprite(code);
+    if (sprite) {
+      // Never wider or taller than the cell, should a system draw something unexpected.
+      const k = Math.min(1, GRID.cellW / sprite.width, GRID.rowH / sprite.height);
+      const w = sprite.width * k,
+        h = sprite.height * k;
+      // Whole-pixel position, so at full size the sprite is copied without resampling.
+      ctx.drawImage(sprite, Math.round(cx - w / 2), Math.round(cy - h / 2), w, h);
+    } else {
+      drawCodeBadge(ctx, code, cx, cy, o.colors.text);
+    }
   } else {
     const img = o.getFlagImage(code);
     if (img.complete && img.naturalWidth) {
