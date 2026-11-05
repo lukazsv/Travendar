@@ -72,8 +72,12 @@ dialog.date-dialog {
 }
 
 .dp-grid {
+  --cell-h: 40px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  /* Always 6 week rows (the most a month can span), so the dialog keeps the same height
+     and the arrows stay put when switching between shorter and longer months. */
+  grid-template-rows: auto repeat(6, var(--cell-h));
   row-gap: 2px;
 }
 .dp-weekday {
@@ -89,7 +93,7 @@ dialog.date-dialog {
   position: relative;
   display: grid;
   place-items: center;
-  height: 40px;
+  height: var(--cell-h);
 }
 .dp-cell.in-range::before {
   content: '';
@@ -139,8 +143,8 @@ dialog.date-dialog {
   .dp-body {
     padding-bottom: calc(16px + env(safe-area-inset-bottom));
   }
-  .dp-cell {
-    height: 44px;
+  .dp-grid {
+    --cell-h: 44px;
   }
   .day {
     width: 40px;
