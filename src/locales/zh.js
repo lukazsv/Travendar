@@ -83,6 +83,7 @@ export default {
   creditContributors: '及贡献者',
   licenseNote: '代码采用 MIT 许可证',
   donateFooter: '喜欢 Travendar？请我喝杯咖啡',
+  contact: '联系方式：',
 
   // Country picker
   pickContinent: '选择大洲',

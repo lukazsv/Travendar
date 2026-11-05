@@ -83,6 +83,7 @@ export default {
   creditContributors: 'and contributors',
   licenseNote: 'code under the MIT License',
   donateFooter: 'Like Travendar? Buy me a coffee',
+  contact: 'Contact:',
 
   // Country picker
   pickContinent: 'Choose continent',

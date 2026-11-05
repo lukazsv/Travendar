@@ -84,6 +84,7 @@ export default {
   creditContributors: 'та учасники',
   licenseNote: 'код за ліцензією MIT',
   donateFooter: 'Подобається Travendar? Пригости мене кавою',
+  contact: 'Контакт:',
 
   // Country picker
   pickContinent: 'Обери континент',

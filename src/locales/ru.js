@@ -84,6 +84,7 @@ export default {
   creditContributors: 'и участники',
   licenseNote: 'код под лицензией MIT',
   donateFooter: 'Нравится Travendar? Угости меня кофе',
+  contact: 'Контакт:',
 
   // Country picker
   pickContinent: 'Выбери континент',

@@ -16,6 +16,7 @@ import { initSettings, syncSettings } from './ui/settings.js';
 import { initLanguageMenu } from './ui/language-menu.js';
 import { initExport } from './ui/export.js';
 import { initDonate } from './ui/donate.js';
+import { initFooter } from './ui/footer.js';
 import { initLightbox } from './ui/lightbox.js';
 import { initBackup } from './ui/backup.js';
 import { registerServiceWorker } from './pwa.js';
@@ -29,6 +30,7 @@ initSettings();
 initLanguageMenu();
 initExport();
 initDonate();
+initFooter();
 initLightbox();
 initBackup(syncSettings);
 

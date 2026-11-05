@@ -85,6 +85,7 @@ export default {
   creditContributors: 'und Mitwirkende',
   licenseNote: 'Code unter MIT-Lizenz',
   donateFooter: 'Gefällt dir Travendar? Spendier mir einen Kaffee',
+  contact: 'Kontakt:',
 
   // Country picker
   pickContinent: 'Kontinent wählen',

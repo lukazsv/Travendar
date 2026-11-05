@@ -14,7 +14,7 @@ The app runs entirely in the browser: no backend, no account, no build step.
 - **13 languages**: Arabic (right to left), Chinese (Simplified), English, French, German, Hindi, Italian, Japanese, Polish, Portuguese, Russian, Spanish and Ukrainian. The browser's preferred language is picked automatically (English if none is supported); country names come from the browser in the chosen language.
 - **Responsive**: three columns on wide screens, two on laptops and tablets, one on phones (settings folded behind *Customize*).
 - **Installable and offline**: add it to the home screen / install it as an app; after the first visit it also works without internet.
-- **Saved automatically** in the browser (`localStorage`). Nothing is sent anywhere and the page makes no requests to outside services (fonts and flags are bundled); the footer explains this to users and credits the flag images.
+- **Saved automatically** in the browser (`localStorage`). Nothing is sent anywhere and the page makes no requests to outside services (fonts and flags are bundled); the footer explains this to users, credits the flag images and gives the contact address (`CONTACT_EMAIL` in `src/config.js`).
 
 ## Running locally
 
@@ -101,6 +101,7 @@ src/
     language-menu.js          Globe menu in the header
     export.js                 Save JPG and Share buttons
     donate.js                 "Saved" dialog with the buycoffee.to tip request
+    footer.js                 Footer links: contact e-mail and donation page
     lightbox.js               Full-screen view of the image (tap the preview)
     backup.js                 Export / import of trips and settings as JSON
     toast.js                  Status messages
