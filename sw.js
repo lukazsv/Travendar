@@ -1,8 +1,9 @@
 /**
  * Service worker: makes the app work offline and installable.
  *
- * Strategy: network first, cache as fallback. Online, every request goes to the server
- * (so a new deployment is picked up immediately and old and new files are never mixed);
+ * Strategy: network first, cache as fallback. Online, every request is checked with the server
+ * instead of trusting the browser's HTTP cache (so a new deployment is picked up immediately and old and
+ * new files are never mixed);
  * the fresh response is also stored in the cache. Offline, the cached copy is served.
  *
  * PRECACHE lists the files needed to start the app offline after the first visit.
@@ -119,7 +120,11 @@ self.addEventListener('fetch', event => {
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
-    const response = await fetch(request);
+    // `no-cache` makes the browser revalidate its HTTP cache copy with the server (a cheap 304
+    // when unchanged). Without it a file could be served stale for as long as the host's
+    // Cache-Control allows: Cloudflare's browser cache TTL on travendar.app made that 4 hours.
+    // Page loads keep their own mode, which cannot carry other request options.
+    const response = await fetch(request, request.mode === 'navigate' ? undefined : { cache: 'no-cache' });
     if (response.ok) cache.put(request, response.clone());
     return response;
   } catch (err) {

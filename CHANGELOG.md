@@ -7,6 +7,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Fixed
 
+- **Zoom on quick taps**: tapping buttons quickly on a phone, such as the month arrows of the date picker, no longer zooms the page. Pinch zoom still works.
+- **Updates reaching users**: the service worker now revalidates every file with the server, so a new version shows up on the next visit instead of after up to 4 hours of the browser's cache.
+
 - **Emoji flags on some iPhones** were drawn too small and shifted half a cell to the right, over the next day's number. Flags are now placed by the pixels they actually cover instead of the system's emoji font metrics.
 
 ## [1.0.0] - 2026-11-05

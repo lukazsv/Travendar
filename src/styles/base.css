@@ -14,6 +14,15 @@ body {
   margin: 0;
 }
 
+/*
+ * No double-tap zoom: quick taps on buttons (e.g. the month arrows of the date picker) zoomed
+ * the page on phones. Panning and pinch zoom still work. Set on every element, because
+ * touch-action is not inherited and ancestors' values stop counting at a scroll container.
+ */
+* {
+  touch-action: manipulation;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
