@@ -11,8 +11,11 @@ import { paintCalendar } from '../render/calendar-renderer.js';
 import { usesEmojiFlags, getFlagImage, preloadFlagImages } from '../render/flags.js';
 import { byId } from '../utils/html.js';
 
-/** The site address as printed on the image: host only, e.g. "example.com". */
-const SITE_LABEL = new URL(SITE_URL).host;
+/**
+ * The site address as printed on the image, with "www." so that people read it as a website
+ * (a bare ".app" can look like something to find in an app store). www redirects to SITE_URL.
+ */
+const SITE_LABEL = `www.${new URL(SITE_URL).host}`;
 
 let canvas;
 /** @type {HTMLCanvasElement[]} */

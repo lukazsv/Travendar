@@ -11,13 +11,19 @@ import { IMAGE_WIDTH as W, IMAGE_HEIGHT as H, CANVAS_FONT, EMOJI_FONT } from '..
 import { dayKey, firstColumnOfMonth, daysInMonth } from '../core/calendar.js';
 import { flagEmoji } from '../core/countries.js';
 
+/**
+ * Space kept free below the last month row. Apps such as TikTok and Instagram cover the
+ * bottom of a vertical image with captions and buttons, so the calendar ends well above it.
+ */
+const BOTTOM_STRIP = 130;
+
 /** Grid geometry in image pixels: 3 columns × 4 rows of months, 7 × 6 day cells each. */
 const GRID = (() => {
   const padX = 34; // outer left/right margin
   const gapX = 34; // gap between month columns
   const colW = (W - 2 * padX - 2 * gapX) / 3; // width of one month
-  const top = 270; // first month row starts below the year
-  const blockH = (H - 40 - top) / 4; // height of one month row
+  const top = 245; // first month row starts below the year
+  const blockH = (H - BOTTOM_STRIP - top) / 4; // height of one month row
   const titleH = 90; // month name area above the days
   return { padX, gapX, colW, cellW: colW / 7, top, blockH, titleH, rowH: (blockH - titleH - 14) / 6 };
 })();
@@ -28,9 +34,21 @@ const MONTH_FONT = `700 62px ${CANVAS_FONT}`;
 const MONTH_BASELINE = 62; // relative to the month block
 const DAY_FONT = `600 27px ${CANVAS_FONT}`;
 const TITLE_INSET = GRID.cellW * 0.12; // keeps titles visually aligned with the day columns
-const SITE_FONT = `500 24px ${CANVAS_FONT}`;
-const SITE_BASELINE = H - 22; // in the free strip below the last month row
-const SITE_OPACITY = 0.45; // readable, but quieter than the calendar
+/**
+ * Site badge: a soft pill in the top corner, level with the year, holding the app icon and the
+ * address. It sits opposite the year when the year is aligned to that side.
+ */
+const BADGE = {
+  font: `600 26px ${CANVAS_FONT}`,
+  centerY: YEAR_BASELINE - 45, // middle of the year's digits
+  height: 50,
+  padLeft: 9, // the icon sits close to the rounded end
+  padRight: 22,
+  icon: 32,
+  gap: 11,
+  fillAlpha: 0.12, // pill background: the text colour, faint
+  textAlpha: 0.9,
+};
 
 /** Size and vertical offset that make an emoji flag fill a day cell; measured once. */
 let emojiMetrics = null;
@@ -128,17 +146,77 @@ export function paintCalendar(ctx, o) {
     }
   }
 
-  if (o.siteLabel) {
-    ctx.save();
-    ctx.globalAlpha = SITE_OPACITY;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = o.colors.text;
-    ctx.font = SITE_FONT;
-    ctx.fillText(o.siteLabel, W / 2, SITE_BASELINE);
-    ctx.restore();
-  }
+  if (o.siteLabel) drawSiteBadge(ctx, o.siteLabel, o.colors, o.yearAlign === 'right' ? 'left' : 'right');
   ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+/**
+ * The site address in a top corner: a pill in a faint tint of the text colour with the app
+ * icon and the address. Noticeable on any theme, yet quieter than the year and the months.
+ * @param {'left'|'right'} side
+ */
+function drawSiteBadge(ctx, label, colors, side) {
+  const b = BADGE;
+  ctx.save();
+  ctx.font = b.font;
+  const w = b.padLeft + b.icon + b.gap + ctx.measureText(label).width + b.padRight;
+  const x = side === 'left' ? GRID.padX : W - GRID.padX - w;
+  const top = b.centerY - b.height / 2;
+
+  ctx.globalAlpha = b.fillAlpha;
+  ctx.fillStyle = colors.text;
+  roundRect(ctx, x, top, w, b.height, b.height / 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 1;
+  drawAppIcon(ctx, x + b.padLeft, b.centerY - b.icon / 2, b.icon);
+
+  ctx.globalAlpha = b.textAlpha;
+  ctx.fillStyle = colors.text;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x + b.padLeft + b.icon + b.gap, b.centerY + 1);
+  ctx.restore();
+}
+
+/**
+ * The app icon (src/assets/icons/icon.svg, the favicon) drawn with paths at `size` px, so it
+ * needs no image loading. Coordinates are those of the SVG's 512 × 512 view box.
+ */
+function drawAppIcon(ctx, x, y, size) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 512, size / 512);
+  ctx.fillStyle = '#1a1917';
+  roundRect(ctx, 0, 0, 512, 512, 112);
+  ctx.fill();
+  ctx.fillStyle = '#e8553a';
+  roundRect(ctx, 124, 122, 168, 48, 24);
+  ctx.fill();
+  for (const cx of [190, 262, 334]) {
+    roundRect(ctx, cx, 294, 60, 44, 10);
+    ctx.fill();
+  }
+  ctx.fillStyle = '#ecebe7';
+  const dots = [148, 220, 292, 364]
+    .flatMap(cx => [
+      [cx, 244],
+      [cx, 388],
+    ])
+    .concat([[148, 316]]);
+  for (const [cx, cy] of dots) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 24, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+/** Rounded rectangle path, with a plain rectangle where roundRect() is missing (older browsers). */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+  else ctx.rect(x, y, w, h);
 }
 
 /** Draws one flag centred on (cx, cy); leaves the context's font set to DAY_FONT. */
