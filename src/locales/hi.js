@@ -84,6 +84,7 @@ export default {
   creditContributors: 'और योगदानकर्ता',
   licenseNote: 'कोड MIT लाइसेंस के तहत',
   donateFooter: 'Travendar पसंद आया? मुझे एक कॉफ़ी पिलाइए',
+  contact: 'संपर्क:',
 
   // Country picker
   pickContinent: 'महाद्वीप चुनें',

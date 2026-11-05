@@ -14,6 +14,8 @@ Report it privately through GitHub: open the repository's **Security** tab and c
 - steps or a file to reproduce it (for example a crafted backup JSON),
 - the browser and device you used.
 
+If you cannot use GitHub, e-mail **help@travendar.app** instead (please put "Security" in the subject).
+
 You should get a first answer within 7 days. Once a fix is released, you will be credited in the changelog unless you prefer otherwise.
 
 ## Scope

@@ -39,11 +39,14 @@ export function intlLocale(code) {
 }
 
 /**
- * Public address of the site, printed small at the bottom of the image (Advanced → switch).
+ * Public address of the site; shown on the image (with "www.") in the top-corner badge (Advanced → switch).
  * When the domain changes, also update index.html (og:url, og:image, canonical), robots.txt
  * and sitemap.xml — tests/site.test.js checks that they all match.
  */
 export const SITE_URL = 'https://travendar.app/';
+
+/** Contact address shown in the footer (mail is handled by iCloud+ for travendar.app). */
+export const CONTACT_EMAIL = 'help@travendar.app';
 
 /** Donation page (buycoffee.to), offered after saving the image and in the footer. */
 export const DONATE_URL = 'https://buycoffee.to/lukazsvv';

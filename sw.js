@@ -74,6 +74,7 @@ const PRECACHE = [
   'src/ui/date-range-picker.js',
   'src/ui/donate.js',
   'src/ui/export.js',
+  'src/ui/footer.js',
   'src/ui/icons.js',
   'src/ui/language-menu.js',
   'src/ui/lightbox.js',

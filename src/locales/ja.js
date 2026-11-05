@@ -83,6 +83,7 @@ export default {
   creditContributors: 'および貢献者',
   licenseNote: 'コードは MIT ライセンス',
   donateFooter: 'Travendar が気に入ったら、コーヒーをおごってください',
+  contact: 'お問い合わせ：',
 
   // Country picker
   pickContinent: '大陸を選択',

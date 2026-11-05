@@ -4,7 +4,7 @@
  * tip on buycoffee.to (DONATE_URL) and stays open until closed with the ✕ (or Esc).
  *
  * The donation page is a plain link: no third-party script runs on this site.
- * The footer links to the same page.
+ * The footer links to the same page (ui/footer.js).
  */
 
 import { DONATE_URL } from '../config.js';
@@ -17,7 +17,6 @@ let dialog;
 export function initDonate() {
   dialog = byId('donateDialog');
   byId('donateBtn').href = DONATE_URL;
-  byId('donateLink').href = DONATE_URL;
   byId('donateClose').addEventListener('click', () => dialog.close());
 }
 

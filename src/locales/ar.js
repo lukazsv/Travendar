@@ -87,6 +87,7 @@ export default {
   creditContributors: 'والمساهمون',
   licenseNote: 'الشيفرة بترخيص MIT',
   donateFooter: 'هل أعجبك Travendar؟ اشترِ لي قهوة',
+  contact: 'للتواصل:',
 
   // Country picker
   pickContinent: 'اختر قارة',
