@@ -43,7 +43,7 @@ export function intlLocale(code) {
  * When the domain changes, also update index.html (og:url, og:image, canonical), robots.txt
  * and sitemap.xml — tests/site.test.js checks that they all match.
  */
-export const SITE_URL = 'https://travendar.pages.dev/';
+export const SITE_URL = 'https://travendar.app/';
 
 /** Donation page (buycoffee.to), offered after saving the image and in the footer. */
 export const DONATE_URL = 'https://buycoffee.to/lukazsvv';

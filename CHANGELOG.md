@@ -20,5 +20,5 @@ Everything below will ship as **1.0.0** once the site is hosted and tested on re
 - **Privacy**: everything stays in the browser; no accounts, analytics or third-party requests (fonts and flags are bundled). Footer with a privacy note and credits.
 - **Security**: strict Content Security Policy; all stored and imported data is validated.
 - **Accessibility**: WCAG AA contrast, screen-reader description of the image, keyboard-friendly dialogs and menus, reduced-motion support.
-- **Hosting**: Cloudflare Pages setup (`npm run build` → `dist/`), security headers in `_headers`, `robots.txt`, `sitemap.xml`, canonical and absolute link-preview URLs for `travendar.pages.dev`.
+- **Hosting**: Cloudflare Pages setup (`npm run build` → `dist/`), security headers in `_headers`, `robots.txt`, `sitemap.xml`, canonical and absolute link-preview URLs; the site lives at **travendar.app**.
 - **Development**: ES modules without a build step, unit tests (`node:test`), ESLint, Prettier, GitHub Actions CI, asset and data generators in `scripts/`.

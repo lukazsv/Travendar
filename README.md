@@ -49,7 +49,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs `npm run check` on every pull r
 
 ## Deploying
 
-The site is hosted on **Cloudflare Pages** (free plan: unlimited bandwidth, custom headers, automatic HTTPS). Its address is in `SITE_URL` in `src/config.js`, currently `https://travendar.pages.dev/`.
+The site is hosted on **Cloudflare Pages** (free plan: unlimited bandwidth, custom headers, automatic HTTPS). Its address is in `SITE_URL` in `src/config.js`: `https://travendar.app/` (a custom domain of the Pages project; `travendar.pages.dev` and `www.travendar.app` redirect to it).
 
 `npm run build` copies only what is published into `dist/`: `index.html`, `manifest.webmanifest`, `sw.js`, `src/`, `_headers`, `robots.txt` and `sitemap.xml`. Development files (`scripts/`, `tests/`, docs, package files) stay off the site. CI runs the same build.
 
