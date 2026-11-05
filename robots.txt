@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://travendar.pages.dev/sitemap.xml
+Sitemap: https://travendar.app/sitemap.xml
