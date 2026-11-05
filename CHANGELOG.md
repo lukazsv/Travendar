@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Fixed
+
+- **Emoji flags on some iPhones** were drawn too small and shifted half a cell to the right, over the next day's number. Flags are now placed by the pixels they actually cover instead of the system's emoji font metrics.
+
 ## [1.0.0] - 2026-11-05
 
 First public release, live at **https://travendar.app**.
